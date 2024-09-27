@@ -1,4 +1,4 @@
 #!/bin/bash
-pip install -r requirements.txt
 python manage.py migrate
-gunicorn dreamphish.wsgi
+python manage.py collectstatic --noinput
+gunicorn dreamphish.wsgi:application --bind 0.0.0.0:${PORT:-8000}

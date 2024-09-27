@@ -28,6 +28,7 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']  # Cambia esto a tu dominio específico en producción
 
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
 
 # Application definition
 
@@ -137,3 +138,5 @@ AUTH_USER_MODEL = 'core.User'
 LOGIN_URL = '/login/'
 
 PORT = int(os.environ.get('PORT', 8000))
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
