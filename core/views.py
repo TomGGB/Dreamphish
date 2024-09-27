@@ -18,6 +18,8 @@ import re
 from django.templatetags.static import static
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_GET
+from django.utils import timezone
+
 
 
 # Create your views here.
@@ -27,13 +29,29 @@ def dashboard(request):
     selected_campaign_id = request.GET.get('campaign')
     selected_campaign = None
     results = None
+    chart_data = []
     if selected_campaign_id:
         selected_campaign = get_object_or_404(Campaign, id=selected_campaign_id, user=request.user)
         results = CampaignResult.objects.filter(campaign=selected_campaign)
+        
+        # Preparar datos para el gráfico
+        total_targets = results.count()
+        emails_sent = results.filter(email_sent=True).count()
+        emails_opened = results.filter(email_opened=True).count()
+        landing_pages_opened = results.filter(landing_page_opened=True).count()
+        
+        chart_data = [
+            {"y": total_targets, "label": "Objetivos Totales", "filter": "all"},
+            {"y": emails_sent, "label": "Correos Enviados", "filter": "sent"},
+            {"y": emails_opened, "label": "Correos Abiertos", "filter": "opened"},
+            {"y": landing_pages_opened, "label": "Interacciones con Landing Page", "filter": "interacted"}
+        ]
+    
     return render(request, 'core/dashboard.html', {
         'campaigns': campaigns,
         'selected_campaign': selected_campaign,
-        'results': results
+        'results': results,
+        'chart_data': chart_data
     })
 
 @login_required
@@ -158,6 +176,9 @@ def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
+    result.ip_address = request.META.get('REMOTE_ADDR')
+    result.user_agent = request.META.get('HTTP_USER_AGENT')
+    result.click_timestamp = timezone.now()
     result.save()
     return HttpResponse(page.html_content)
 

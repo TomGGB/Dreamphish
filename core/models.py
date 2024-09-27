@@ -140,5 +140,8 @@ class CampaignResult(models.Model):
     link_clicked = models.BooleanField(default=False)
     landing_page_opened = models.BooleanField(default=False)
     token = models.CharField(max_length=100, unique=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    click_timestamp = models.DateTimeField(null=True, blank=True)
 
 
