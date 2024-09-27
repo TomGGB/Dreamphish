@@ -188,7 +188,7 @@ def serve_landing_page(request, url_path, token):
     # Capturar User-Agent
     result.user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
     
-    result.click_timestamp = timezone.now()
+    result.click_timestamp = timezone.localtime()
     
     # Logging para verificar
     logger.info(f"Landing page opened - IP: {result.ip_address}, User-Agent: {result.user_agent}")
