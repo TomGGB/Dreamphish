@@ -82,36 +82,18 @@ WSGI_APPLICATION = 'dreamphish.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQLDATABASE'),
-        'USER': os.getenv('MYSQLUSER'),
-        'PASSWORD': os.getenv('MYSQLPASSWORD'),
-        'HOST': os.getenv('MYSQLHOST'),
-        'PORT': os.getenv('MYSQLPORT', '3306'),  # Usa 3306 como puerto predeterminado si no se especifica
+        'NAME': os.getenv('MYSQLDATABASE', 'railway'),
+        'USER': os.getenv('MYSQLUSER', 'root'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD', 'iHahtGLnNbdjrrAkVldIvByZzZRsTMrm'),
+        'HOST': os.getenv('MYSQLHOST', 'junction.proxy.rlwy.net'),
+        'PORT': os.getenv('MYSQLPORT', '40674'),
         'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
             'connect_timeout': 60,
         }
     }
 }
-
-# Intenta conectar a la base de datos MySQL
-try:
-    import pymysql
-    conn = pymysql.connect(
-        host=DATABASES['default']['HOST'],
-        user=DATABASES['default']['USER'],
-        password=DATABASES['default']['PASSWORD'],
-        db=DATABASES['default']['NAME'],
-        port=int(DATABASES['default']['PORT'])
-    )
-    conn.close()
-except (pymysql.Error, TypeError, ValueError):
-    # Si no se puede conectar a MySQL o hay un error de tipo, usa la base de datos SQLite
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
