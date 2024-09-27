@@ -172,13 +172,27 @@ def add_landing_page(request):
         form = LandingPageForm()
     return render(request, 'core/landing_page_form.html', {'form': form})
 
+import logging
+from django.utils import timezone
+
+logger = logging.getLogger(__name__)
+
 def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
+    
+    # Capturar IP
     result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
-    result.user_agent = request.META.get('HTTP_USER_AGENT')
+    
+    # Capturar User-Agent
+    result.user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
+    
     result.click_timestamp = timezone.now()
+    
+    # Logging para verificar
+    logger.info(f"Landing page opened - IP: {result.ip_address}, User-Agent: {result.user_agent}")
+    
     result.save()
     return HttpResponse(page.html_content)
 
