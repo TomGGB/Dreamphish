@@ -176,7 +176,7 @@ def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
-    result.ip_address = request.META.get('REMOTE_ADDR')
+    result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
     result.user_agent = request.META.get('HTTP_USER_AGENT')
     result.click_timestamp = timezone.now()
     result.save()
