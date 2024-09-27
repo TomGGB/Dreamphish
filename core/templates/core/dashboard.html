@@ -52,9 +52,9 @@
                         </tr>
                         <tr id="details-{{ result.id }}" style="display: none;">
                             <td colspan="5">
-                                <strong>IP:</strong> {{ result.ip_address|default:"N/A" }}<br>
-                                <strong>User Agent:</strong> {{ result.user_agent|default:"N/A" }}<br>
-                                <strong>Fecha de clic:</strong> {{ result.click_timestamp|default:"N/A" }}
+                                <strong>IP:</strong> {{ result.ip_address|default:"El usuario no ha hecho clic en el enlace" }}<br>
+                                <strong>User Agent:</strong> {{ result.user_agent|default:"El usuario no ha hecho clic en el enlace" }}<br>
+                                <strong>Fecha de clic:</strong> {{ result.click_timestamp|default:"El usuario no ha hecho clic en el enlace" }}
                             </td>
                         </tr>
                     {% empty %}
