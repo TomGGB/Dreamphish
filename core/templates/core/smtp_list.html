@@ -22,12 +22,37 @@
                     <td>{{ smtp.port }}</td>
                     <td>
                         <a href="{% url 'edit_smtp' smtp.id %}" class="btn btn-warning btn-sm">Editar</a>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#testSMTPModal{{ smtp.id }}">Probar</button>
                         <form method="post" action="{% url 'delete_smtp' smtp.id %}" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>
+                <!-- Modal para la prueba de SMTP -->
+                <div class="modal fade" id="testSMTPModal{{ smtp.id }}" tabindex="-1" role="dialog" aria-labelledby="testSMTPModalLabel{{ smtp.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="testSMTPModalLabel{{ smtp.id }}">Probar SMTP</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="{% url 'test_smtp' smtp.id %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="testEmail{{ smtp.id }}">Correo de prueba:</label>
+                                        <input type="email" class="form-control" id="testEmail{{ smtp.id }}" name="test_email" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Enviar correo de prueba</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% empty %}
                 <tr>
                     <td colspan="5">No hay perfiles SMTP registrados.</td>

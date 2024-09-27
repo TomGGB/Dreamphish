@@ -5,7 +5,7 @@ from .forms import SMTPForm, TestSMTPForm, EmailTemplateForm, LandingPageForm, G
 import smtplib
 from email.mime.text import MIMEText
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import inlineformset_factory
@@ -18,6 +18,7 @@ import re
 from django.templatetags.static import static
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_GET
+
 
 # Create your views here.
 
@@ -56,18 +57,13 @@ def add_smtp(request):
 
 @login_required
 def test_smtp(request, smtp_id):
-    smtp = SMTP.objects.get(id=smtp_id)
+    smtp = get_object_or_404(SMTP, id=smtp_id, user=request.user)
     if request.method == 'POST':
         form = TestSMTPForm(request.POST)
         if form.is_valid():
             test_email = form.cleaned_data['test_email']
             try:
-                # Verificar si el host es válido antes de intentar la conexión
-                import socket
-                socket.gethostbyname(smtp.host)
-                
-                server = smtplib.SMTP(smtp.host, smtp.port, timeout=10)
-                server.set_debuglevel(1)  # Habilita el modo de depuración
+                server = smtplib.SMTP(smtp.host, smtp.port, timeout=30)
                 server.starttls()
                 server.login(smtp.username, smtp.password)
                 
@@ -78,17 +74,9 @@ def test_smtp(request, smtp_id):
                 
                 server.send_message(msg)
                 server.quit()
-                messages.success(request, f'Correo de prueba enviado a {test_email}')
-            except socket.gaierror:
-                messages.error(request, f'Error: No se pudo resolver el nombre del host SMTP. Verifique la dirección del servidor.')
-            except smtplib.SMTPConnectError as e:
-                messages.error(request, f'Error de conexión SMTP: {str(e)}')
-            except smtplib.SMTPAuthenticationError as e:
-                messages.error(request, f'Error de autenticación SMTP: {str(e)}')
-            except smtplib.SMTPException as e:
-                messages.error(request, f'Error SMTP general: {str(e)}')
+                messages.success(request, f'Correo de prueba enviado con éxito a {test_email}')
             except Exception as e:
-                messages.error(request, f'Error inesperado: {str(e)}')
+                messages.error(request, f'Error al enviar el correo de prueba: {str(e)}')
         else:
             messages.error(request, 'Por favor, proporcione un correo válido.')
     return redirect('smtp_list')
@@ -302,13 +290,15 @@ def generate_unique_token():
 def send_phishing_email(smtp_config, to_email, subject, body):
     try:
         from_email = smtp_config.from_address
-        with smtplib.SMTP(smtp_config.host, smtp_config.port, timeout=10) as server:
+        with smtplib.SMTP(smtp_config.host, smtp_config.port, timeout=30) as server:
             server.starttls()
             server.login(smtp_config.username, smtp_config.password)
             msg = MIMEText(body, 'html')
             msg['Subject'] = subject
             msg['From'] = from_email
             msg['To'] = to_email
+            msg['Importance'] = 'High'  # Marcar el correo como importante
+            msg['X-Priority'] = '1'  # Prioridad alta (1 es la más alta, 5 la más baja)
             server.send_message(msg)
     except Exception as e:
         raise Exception(f"Error al enviar correo: {str(e)}")
