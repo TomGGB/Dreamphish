@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+import uuid
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class User(AbstractUser):
@@ -26,6 +29,11 @@ class User(AbstractUser):
         related_name='core_user_set',
         related_query_name='core_user',
     )
+
+@receiver(pre_save, sender=User)
+def generate_api_key(sender, instance, **kwargs):
+    if not instance.api_key:
+        instance.api_key = uuid.uuid4().hex
 
 class Role(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
