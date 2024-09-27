@@ -143,5 +143,8 @@ class CampaignResult(models.Model):
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(null=True, blank=True)
     click_timestamp = models.DateTimeField(null=True, blank=True)
+    email_sent_timestamp = models.DateTimeField(null=True, blank=True)
+    email_opened_timestamp = models.DateTimeField(null=True, blank=True)
+    landing_page_opened_timestamp = models.DateTimeField(null=True, blank=True)
 
 

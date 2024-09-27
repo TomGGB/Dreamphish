@@ -22,6 +22,7 @@ from django.utils import timezone
 
 
 
+
 # Create your views here.
 
 def dashboard(request):
@@ -32,7 +33,7 @@ def dashboard(request):
     chart_data = []
     if selected_campaign_id:
         selected_campaign = get_object_or_404(Campaign, id=selected_campaign_id, user=request.user)
-        results = CampaignResult.objects.filter(campaign=selected_campaign)
+        results = CampaignResult.objects.filter(campaign=selected_campaign).select_related('target')
         
         # Preparar datos para el gráfico
         total_targets = results.count()
@@ -181,6 +182,8 @@ def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
+    result.landing_page_opened_timestamp = timezone.localtime()
+    result.save()
     
     # Capturar IP
     result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
@@ -307,6 +310,7 @@ def start_campaign(request, campaign_id):
                     modified_email_body
                 )
                 result.email_sent = True
+                result.email_sent_timestamp = timezone.now()
                 result.save()
             except Exception as e:
                 messages.error(request, f'Error al enviar correo a {target.email}: {str(e)}')
@@ -317,7 +321,9 @@ def start_campaign(request, campaign_id):
             messages.warning(request, 'No se pudo enviar ningún correo. Verifique la configuración SMTP.')
     else:
         messages.error(request, 'La campaña ya ha sido iniciada.')
-    return redirect('campaign_detail', campaign_id=campaign.id)
+    
+    return redirect('campaign_list')  # Añade esta línea para redirigir después de iniciar la campaña
+
 
 def generate_unique_token():
     return str(uuid.uuid4())
@@ -385,17 +391,12 @@ def edit_campaign(request, campaign_id):
 
 @require_GET
 def track_email_open(request, token):
-    try:
-        result = CampaignResult.objects.get(token=token)
-        if not result.email_opened:
-            result.email_opened = True
-            result.save()
-    except CampaignResult.DoesNotExist:
-        pass
-    
-    # Devuelve una imagen de 1x1 píxel transparente
-    return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
-
+    result = get_object_or_404(CampaignResult, token=token)
+    if not result.email_opened:
+        result.email_opened = True
+        result.email_opened_timestamp = timezone.now()
+        result.save()
+    return HttpResponse(static('img/pixel.png'), content_type='image/png')
 @login_required
 def edit_landing_page(request, landing_page_id):
     landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)

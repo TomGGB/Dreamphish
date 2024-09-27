@@ -17,6 +17,9 @@ class EmailTemplateForm(forms.ModelForm):
     class Meta:
         model = EmailTemplate
         fields = ['name', 'subject', 'body']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 10, 'cols': 80}),
+        }
 
 class LandingPageForm(forms.ModelForm):
     class Meta:

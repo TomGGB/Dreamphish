@@ -1,10 +1,37 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
+    <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Plantilla de Correo</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">{% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
+        <div id="chips">
+            <button type="button" class="chip" data-value="{NOMBRE}">NOMBRE</button>
+            <button type="button" class="chip" data-value="{APELLIDO}">APELLIDO</button>
+            <button type="button" class="chip" data-value="{CARGO}">CARGO</button>
+            <button type="button" class="chip" data-value="{LINK}">LINK</button>
+        </div>
+        <button type="submit">Guardar</button>
     </form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bodyInput = document.getElementById('id_body');
+    const chips = document.querySelectorAll('.chip');
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            const chipValue = this.getAttribute('data-value');
+            const cursorPos = bodyInput.selectionStart;
+            const textBefore = bodyInput.value.substring(0, cursorPos);
+            const textAfter = bodyInput.value.substring(cursorPos);
+            bodyInput.value = textBefore + chipValue + textAfter;
+            bodyInput.focus();
+            bodyInput.setSelectionRange(cursorPos + chipValue.length, cursorPos + chipValue.length);
+        });
+    });
+});
+</script>
 {% endblock %}
