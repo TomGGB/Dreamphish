@@ -79,21 +79,27 @@ WSGI_APPLICATION = 'dreamphish.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import os
+
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+if all([os.getenv('MYSQLDATABASE'), os.getenv('MYSQLUSER'), os.getenv('MYSQLPASSWORD'), os.getenv('MYSQLHOST'), os.getenv('MYSQLPORT')]):
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQLDATABASE', 'railway'),
-        'USER': os.getenv('MYSQLUSER', 'root'),
-        'PASSWORD': os.getenv('MYSQLPASSWORD', 'iHahtGLnNbdjrrAkVldIvByZzZRsTMrm'),
-        'HOST': os.getenv('MYSQLHOST', 'junction.proxy.rlwy.net'),
-        'PORT': os.getenv('MYSQLPORT', '40674'),
+        'NAME': os.getenv('MYSQLDATABASE'),
+        'USER': os.getenv('MYSQLUSER'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD'),
+        'HOST': os.getenv('MYSQLHOST'),
+        'PORT': os.getenv('MYSQLPORT'),
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
             'connect_timeout': 60,
         }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
