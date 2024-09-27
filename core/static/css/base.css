@@ -199,7 +199,6 @@ h2 {
 /* Tablas */
 .table {
     width: 100%;
-    max-width: 1000px;
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 8px;
@@ -370,7 +369,6 @@ a {
 
 table {
     width: 100%;
-    max-width: 1000px;
 }
 
 .btn-primary {
