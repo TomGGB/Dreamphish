@@ -17,8 +17,11 @@
                     <td>{{ template.name }}</td>
                     <td>{{ template.subject }}</td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                        <a href="{% url 'edit_email_template' template.id %}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{% url 'delete_email_template' template.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta plantilla?')">Eliminar</button>
+                        </form>
                     </td>
                 </tr>
             {% empty %}

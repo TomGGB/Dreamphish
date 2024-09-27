@@ -391,3 +391,24 @@ def delete_landing_page(request, landing_page_id):
         landing_page.delete()
         messages.success(request, 'Landing page eliminada con éxito.')
     return redirect('landing_page_list')
+
+@login_required
+def edit_email_template(request, template_id):
+    template = get_object_or_404(EmailTemplate, id=template_id, user=request.user)
+    if request.method == 'POST':
+        form = EmailTemplateForm(request.POST, instance=template)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Plantilla de correo actualizada con éxito.')
+            return redirect('email_template_list')
+    else:
+        form = EmailTemplateForm(instance=template)
+    return render(request, 'core/email_template_form.html', {'form': form, 'edit_mode': True})
+
+@login_required
+def delete_email_template(request, template_id):
+    template = get_object_or_404(EmailTemplate, id=template_id, user=request.user)
+    if request.method == 'POST':
+        template.delete()
+        messages.success(request, 'Plantilla de correo eliminada con éxito.')
+    return redirect('email_template_list')
