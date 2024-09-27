@@ -255,7 +255,7 @@ def start_campaign(request, campaign_id):
                 a['href'] = landing_page_url
             
             # Añadir la imagen de tracking
-            tracking_url = f"http://{domain}{static('img/pixel.png')}?token={token}"
+            tracking_url = request.build_absolute_uri(reverse('track_email_open', args=[token]))
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
             soup.body.append(tracking_img)
             
@@ -344,16 +344,14 @@ def edit_campaign(request, campaign_id):
     return render(request, 'core/campaign_form.html', {'form': form, 'edit_mode': True})
 
 @require_GET
-def track_email_open(request):
-    token = request.GET.get('token')
-    if token:
-        try:
-            result = CampaignResult.objects.get(token=token)
-            if not result.email_opened:
-                result.email_opened = True
-                result.save()
-        except CampaignResult.DoesNotExist:
-            pass
+def track_email_open(request, token):
+    try:
+        result = CampaignResult.objects.get(token=token)
+        if not result.email_opened:
+            result.email_opened = True
+            result.save()
+    except CampaignResult.DoesNotExist:
+        pass
     
     # Devuelve una imagen de 1x1 píxel transparente
     return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')

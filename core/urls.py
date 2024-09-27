@@ -24,5 +24,5 @@ urlpatterns = [
     path('groups/<int:group_id>/edit/', views.edit_group, name='edit_group'),
     path('groups/<int:group_id>/delete/', views.delete_group, name='delete_group'),
     path('campaigns/<int:campaign_id>/delete/', views.delete_campaign, name='delete_campaign'),
-    path('track/', views.track_email_open, name='track_email_open'),
+    path('track/<str:token>/', views.track_email_open, name='track_email_open'),
 ]
