@@ -173,6 +173,19 @@ def add_landing_page(request):
         form = LandingPageForm()
     return render(request, 'core/landing_page_form.html', {'form': form})
 
+@login_required
+def edit_landing_page(request, page_id):
+    page = get_object_or_404(LandingPage, id=page_id, user=request.user)
+    if request.method == 'POST':
+        form = LandingPageForm(request.POST, instance=page)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Landing page actualizada con éxito.')
+            return redirect('landing_page_list')
+    else:
+        form = LandingPageForm(instance=page)
+    return render(request, 'core/landing_page_form.html', {'form': form, 'edit_mode': True})
+
 import logging
 from django.utils import timezone
 
@@ -298,6 +311,19 @@ def start_campaign(request, campaign_id):
             # Añadir la imagen de tracking
             tracking_url = request.build_absolute_uri(reverse('track_email_open', args=[token]))
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
+            
+            # Asegurarse de que existe una estructura HTML válida
+            if not soup.html:
+                new_html = soup.new_tag('html')
+                new_html.append(soup)
+                soup = BeautifulSoup(str(new_html), 'html.parser')
+            
+            if not soup.body:
+                new_body = soup.new_tag('body')
+                new_body.extend(soup.html.contents)
+                soup.html.clear()
+                soup.html.append(new_body)
+            
             soup.body.append(tracking_img)
             
             modified_email_body = str(soup)
@@ -322,7 +348,7 @@ def start_campaign(request, campaign_id):
     else:
         messages.error(request, 'La campaña ya ha sido iniciada.')
     
-    return redirect('campaign_list')  # Añade esta línea para redirigir después de iniciar la campaña
+    return redirect('dashboard')
 
 
 def generate_unique_token():
@@ -397,18 +423,6 @@ def track_email_open(request, token):
         result.email_opened_timestamp = timezone.now()
         result.save()
     return HttpResponse(static('img/pixel.png'), content_type='image/png')
-@login_required
-def edit_landing_page(request, landing_page_id):
-    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
-    if request.method == 'POST':
-        form = LandingPageForm(request.POST, instance=landing_page)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Landing page actualizada con éxito.')
-            return redirect('landing_page_list')
-    else:
-        form = LandingPageForm(instance=landing_page)
-    return render(request, 'core/landing_page_form.html', {'form': form, 'edit_mode': True})
 
 @login_required
 def delete_landing_page(request, landing_page_id):

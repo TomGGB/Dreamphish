@@ -45,23 +45,23 @@
                             <td>{{ result.target.email }}</td>
                             <td data-filter="sent">
                                 {% if result.email_sent %}
-                                    <span class="status-icon sent" title="{{ result.email_sent_timestamp|date:'d/m/Y H:i' }}">✉️</span>
+                                    <span class="material-icons status-icon sent" title="{{ result.email_sent_timestamp|date:'d/m/Y H:i' }}">check_circle</span>
                                 {% else %}
-                                    <span class="status-icon not-sent">❌</span>
+                                    <span class="material-icons status-icon not-sent">close</span>
                                 {% endif %}
                             </td>
                             <td data-filter="opened">
                                 {% if result.email_opened %}
-                                    <span class="status-icon opened" title="{{ result.email_opened_timestamp|date:'d/m/Y H:i' }}">👁️</span>
+                                    <span class="material-icons status-icon opened" title="{{ result.email_opened_timestamp|date:'d/m/Y H:i' }}">visibility</span>
                                 {% else %}
-                                    <span class="status-icon not-opened">❌</span>
+                                    <span class="material-icons status-icon not-opened">visibility_off</span>
                                 {% endif %}
                             </td>
                             <td data-filter="interacted">
                                 {% if result.landing_page_opened %}
-                                    <span class="status-icon interacted" title="{{ result.landing_page_opened_timestamp|date:'d/m/Y H:i' }}">🖱️</span>
+                                    <span class="material-icons status-icon interacted" title="{{ result.landing_page_opened_timestamp|date:'d/m/Y H:i' }}">touch_app</span>
                                 {% else %}
-                                    <span class="status-icon not-interacted">❌</span>
+                                    <span class="material-icons status-icon not-interacted">do_not_touch</span>
                                 {% endif %}
                             </td>
                             <td>

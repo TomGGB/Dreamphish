@@ -1,8 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Landing Pages</h2>
-    <a href="{% url 'add_landing_page' %}" class="btn btn-primary">Añadir Landing Page</a>
+    <h2><span class="material-icons">web</span> Landing Pages</h2>
+    <a href="{% url 'add_landing_page' %}" class="btn btn-primary">
+        <span class="material-icons">add</span> Añadir Landing Page
+    </a>
     <table class="table">
         <thead>
             <tr>

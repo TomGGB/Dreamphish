@@ -1,8 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Perfiles SMTP</h2>
-    <a href="{% url 'add_smtp' %}" class="btn btn-primary">Añadir Perfil SMTP</a>
+    <h2><span class="material-icons">email</span> Perfiles SMTP</h2>
+    <a href="{% url 'add_smtp' %}" class="btn btn-primary">
+        <span class="material-icons">add</span> Añadir Perfil SMTP
+    </a>
     <table class="table">
         <thead>
             <tr>

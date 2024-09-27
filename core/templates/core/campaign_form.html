@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Campaña</h2>
+    <h2><span class="material-icons">{% if form.instance.pk %}edit{% else %}add{% endif %}</span> {% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Campaña</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary"><span class="material-icons">save</span> Guardar</button>
     </form>
 {% endblock %}

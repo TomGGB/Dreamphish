@@ -1,10 +1,41 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/custom-editor.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Landing Page</h2>
+    <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Landing Page</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {{ form.url_path.label_tag }}
+        {{ form.url_path }}
+        <div id="editor-container">
+            <div class="toolbar">
+                <button type="button" data-command="bold"><i class="material-icons">format_bold</i></button>
+                <button type="button" data-command="italic"><i class="material-icons">format_italic</i></button>
+                <button type="button" data-command="underline"><i class="material-icons">format_underlined</i></button>
+                <button type="button" data-command="insertUnorderedList"><i class="material-icons">format_list_bulleted</i></button>
+                <button type="button" data-command="insertOrderedList"><i class="material-icons">format_list_numbered</i></button>
+                <button type="button" data-command="createLink"><i class="material-icons">insert_link</i></button>
+                <button type="button" data-command="insertImage"><i class="material-icons">insert_photo</i></button>
+                <button type="button" id="toggle-editor"><i class="material-icons">code</i></button>
+            </div>
+            <iframe id="editor-iframe"></iframe>
+            <textarea id="plain-text-editor" style="display: none;">{{ form.html_content.value|default_if_none:"" }}</textarea>
+        </div>
+        <textarea id="id_html_content" name="html_content" style="display: none;">{{ form.html_content.value|default_if_none:"" }}</textarea>
+        <br>
+        <md-filled-button type="submit">
+            Guardar
+            <svg slot="icon" viewBox="0 0 24 24"><path d="M5 21h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM7 3h10v5h5v11H7V3zm1 5h8v2H8V8zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
+        </md-filled-button>
     </form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/custom-editor.js' %}"></script>
 {% endblock %}

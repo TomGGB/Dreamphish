@@ -1,37 +1,54 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/custom-editor.css' %}">
+{% endblock %}
 
 {% block content %}
     <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Plantilla de Correo</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <div id="chips">
-            <button type="button" class="chip" data-value="{NOMBRE}">NOMBRE</button>
-            <button type="button" class="chip" data-value="{APELLIDO}">APELLIDO</button>
-            <button type="button" class="chip" data-value="{CARGO}">CARGO</button>
-            <button type="button" class="chip" data-value="{LINK}">LINK</button>
+        <md-outlined-text-field label="Nombre" name="name" value="{{ form.name.value|default_if_none:'' }}">
+        </md-outlined-text-field>
+        <md-outlined-text-field label="Asunto" name="subject" value="{{ form.subject.value|default_if_none:'' }}">
+        </md-outlined-text-field>
+        <div id="editor-container">
+            <div class="toolbar">
+                <button type="button" data-command="bold"><i class="material-icons">format_bold</i></button>
+                <button type="button" data-command="italic"><i class="material-icons">format_italic</i></button>
+                <button type="button" data-command="underline"><i class="material-icons">format_underlined</i></button>
+                <button type="button" data-command="insertUnorderedList"><i class="material-icons">format_list_bulleted</i></button>
+                <button type="button" data-command="insertOrderedList"><i class="material-icons">format_list_numbered</i></button>
+                <button type="button" id="toggle-editor"><i class="material-icons">code</i></button>
+            </div>
+            <iframe id="editor-iframe"></iframe>
+            <textarea id="plain-text-editor" style="display: none;">{{ form.body.value|default_if_none:"" }}</textarea>
         </div>
-        <button type="submit">Guardar</button>
+        <textarea id="id_body" name="body" style="display: none;">{{ form.body.value|default_if_none:"" }}</textarea>
+        <br>
+        <md-chip-set>
+            <md-assist-chip type="button" class="chip" data-value="{NOMBRE}" label="NOMBRE">
+                <i class="material-icons" slot="icon">person</i>
+            </md-assist-chip>
+            <md-assist-chip type="button" class="chip" data-value="{APELLIDO}" label="APELLIDO">
+                <i class="material-icons" slot="icon">family_restroom</i>
+            </md-assist-chip>
+            <md-assist-chip type="button" class="chip" data-value="{CARGO}" label="CARGO">
+                <i class="material-icons" slot="icon">work</i>
+            </md-assist-chip>
+            <md-assist-chip type="button" class="chip" data-value="{LINK}" label="LINK">
+                <i class="material-icons" slot="icon">link</i>
+            </md-assist-chip>
+        </md-chip-set>
+        <br>
+        <md-filled-button type="submit">
+            Guardar
+            <svg slot="icon" viewBox="0 0 24 24"><path d="M5 21h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM7 3h10v5h5v11H7V3zm1 5h8v2H8V8zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
+        </md-filled-button>
     </form>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const bodyInput = document.getElementById('id_body');
-    const chips = document.querySelectorAll('.chip');
-
-    chips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            const chipValue = this.getAttribute('data-value');
-            const cursorPos = bodyInput.selectionStart;
-            const textBefore = bodyInput.value.substring(0, cursorPos);
-            const textAfter = bodyInput.value.substring(cursorPos);
-            bodyInput.value = textBefore + chipValue + textAfter;
-            bodyInput.focus();
-            bodyInput.setSelectionRange(cursorPos + chipValue.length, cursorPos + chipValue.length);
-        });
-    });
-});
-</script>
+<script src="{% static 'js/custom-editor.js' %}"></script>
 {% endblock %}

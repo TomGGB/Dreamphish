@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Añadir Objetivo al Grupo: {{ group.name }}</h2>
+    <h2><span class="material-icons">person_add</span> Añadir Objetivo al Grupo: {{ group.name }}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary"><span class="material-icons">save</span> Guardar</button>
     </form>
 {% endblock %}
