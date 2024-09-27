@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-07wfz2xy3jtx&jbz*s&08sgemewb#hk5k9&i-+7vpq5xzmm1o%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'https://dreamphish-production.up.railway.app/',
+    'localhost',
+    '127.0.0.1',
+    'dreamphish-production.up.railway.app',
+    
+]
 
 
 # Application definition
