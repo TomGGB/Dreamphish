@@ -22,8 +22,23 @@ from django.views.decorators.http import require_GET
 # Create your views here.
 
 def dashboard(request):
-    smtps = SMTP.objects.all()
-    return render(request, 'core/dashboard.html', {'smtps': smtps})
+    campaigns = Campaign.objects.filter(user=request.user)
+    selected_campaign_id = request.GET.get('campaign')
+    selected_campaign = None
+    results = None
+    if selected_campaign_id:
+        selected_campaign = get_object_or_404(Campaign, id=selected_campaign_id, user=request.user)
+        results = CampaignResult.objects.filter(campaign=selected_campaign)
+    return render(request, 'core/dashboard.html', {
+        'campaigns': campaigns,
+        'selected_campaign': selected_campaign,
+        'results': results
+    })
+
+@login_required
+def smtp_list(request):
+    smtps = SMTP.objects.filter(user=request.user)
+    return render(request, 'core/smtp_list.html', {'smtps': smtps})
 
 @login_required
 def add_smtp(request):
@@ -34,7 +49,7 @@ def add_smtp(request):
             smtp.user = request.user
             smtp.save()
             messages.success(request, 'Perfil SMTP añadido con éxito.')
-            return redirect('dashboard')
+            return redirect('smtp_list')
     else:
         form = SMTPForm()
     return render(request, 'core/smtp_form.html', {'form': form})
@@ -76,7 +91,7 @@ def test_smtp(request, smtp_id):
                 messages.error(request, f'Error inesperado: {str(e)}')
         else:
             messages.error(request, 'Por favor, proporcione un correo válido.')
-    return redirect('dashboard')
+    return redirect('smtp_list')
 
 def login_view(request):
     if request.method == 'POST':
@@ -100,7 +115,7 @@ def edit_smtp(request, smtp_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Perfil SMTP actualizado con éxito.')
-            return redirect('dashboard')
+            return redirect('smtp_list')
     else:
         form = SMTPForm(instance=smtp)
     return render(request, 'core/smtp_form.html', {'form': form, 'edit_mode': True})
@@ -111,7 +126,7 @@ def delete_smtp(request, smtp_id):
     if request.method == 'POST':
         smtp.delete()
         messages.success(request, 'Perfil SMTP eliminado con éxito.')
-    return redirect('dashboard')
+    return redirect('smtp_list')
 
 @login_required
 def email_template_list(request):
@@ -210,7 +225,7 @@ def campaign_list(request):
 @login_required
 def add_campaign(request):
     if request.method == 'POST':
-        form = CampaignForm(request.POST)
+        form = CampaignForm(request.POST, user=request.user)
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.user = request.user
@@ -218,7 +233,7 @@ def add_campaign(request):
             messages.success(request, 'Campaña creada con éxito.')
             return redirect('campaign_list')
     else:
-        form = CampaignForm()
+        form = CampaignForm(user=request.user)
     return render(request, 'core/campaign_form.html', {'form': form})
 
 @login_required
@@ -355,3 +370,24 @@ def track_email_open(request, token):
     
     # Devuelve una imagen de 1x1 píxel transparente
     return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+
+@login_required
+def edit_landing_page(request, landing_page_id):
+    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+    if request.method == 'POST':
+        form = LandingPageForm(request.POST, instance=landing_page)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Landing page actualizada con éxito.')
+            return redirect('landing_page_list')
+    else:
+        form = LandingPageForm(instance=landing_page)
+    return render(request, 'core/landing_page_form.html', {'form': form, 'edit_mode': True})
+
+@login_required
+def delete_landing_page(request, landing_page_id):
+    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+    if request.method == 'POST':
+        landing_page.delete()
+        messages.success(request, 'Landing page eliminada con éxito.')
+    return redirect('landing_page_list')

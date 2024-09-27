@@ -1,42 +1,48 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Perfiles SMTP</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Host</th>
-                <th>Usuario</th>
-                <th>Puerto</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for smtp in smtps %}
+    <h2>Dashboard</h2>
+    <form method="get" class="mb-4">
+        <div class="form-group">
+            <label for="campaign">Seleccionar Campaña:</label>
+            <select name="campaign" id="campaign" class="form-control" onchange="this.form.submit()">
+                <option value="">-- Seleccione una campaña --</option>
+                {% for campaign in campaigns %}
+                    <option value="{{ campaign.id }}" {% if selected_campaign.id == campaign.id %}selected{% endif %}>
+                        {{ campaign.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    {% if selected_campaign %}
+        <h3>Resultados de la campaña: {{ selected_campaign.name }}</h3>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ smtp.name }}</td>
-                    <td>{{ smtp.host }}</td>
-                    <td>{{ smtp.username }}</td>
-                    <td>{{ smtp.port }}</td>
-                    <td>
-                        <form method="post" action="{% url 'test_smtp' smtp.id %}" class="d-inline">
-                            {% csrf_token %}
-                            <input type="email" name="test_email" placeholder="Correo de prueba" required>
-                            <button type="submit" class="btn btn-primary btn-sm">Probar</button>
-                        </form>
-                        <a href="{% url 'edit_smtp' smtp.id %}" class="btn btn-warning btn-sm">Editar</a>
-                        <form method="post" action="{% url 'delete_smtp' smtp.id %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">Eliminar</button>
-                        </form>
-                    </td>
+                    <th>Email</th>
+                    <th>Enviado</th>
+                    <th>Abierto</th>
+                    <th>Interacción</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">No hay perfiles SMTP registrados.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.target.email }}</td>
+                        <td>{% if result.email_sent %}Sí{% else %}No{% endif %}</td>
+                        <td>{% if result.email_opened %}Sí{% else %}No{% endif %}</td>
+                        <td>{% if result.landing_page_opened %}Sí{% else %}No{% endif %}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay resultados para esta campaña.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Seleccione una campaña para ver sus resultados.</p>
+    {% endif %}
 {% endblock %}

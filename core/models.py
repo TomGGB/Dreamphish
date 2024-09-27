@@ -84,6 +84,8 @@ class SMTP(models.Model):
     ignore_cert_errors = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
 
 class EmailTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -92,6 +94,8 @@ class EmailTemplate(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
 
 class LandingPage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -100,7 +104,9 @@ class LandingPage(models.Model):
     url_path = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+    def __str__(self):
+        return self.name
+
 class Campaign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)

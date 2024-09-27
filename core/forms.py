@@ -38,4 +38,19 @@ TargetFormSet = inlineformset_factory(Group, Target, form=TargetForm, extra=1, c
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ['name', 'group', 'email_template', 'landing_page', 'smtp']
+        fields = ['name', 'smtp', 'email_template', 'landing_page', 'group']
+        widgets = {
+            'smtp': forms.Select(attrs={'class': 'form-control'}),
+            'email_template': forms.Select(attrs={'class': 'form-control'}),
+            'landing_page': forms.Select(attrs={'class': 'form-control'}),
+            'group': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(CampaignForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['smtp'].queryset = SMTP.objects.filter(user=user)
+            self.fields['email_template'].queryset = EmailTemplate.objects.filter(user=user)
+            self.fields['landing_page'].queryset = LandingPage.objects.filter(user=user)
+            self.fields['group'].queryset = Group.objects.filter(user=user)
