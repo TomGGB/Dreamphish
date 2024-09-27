@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import MySQLdb
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,11 +82,37 @@ WSGI_APPLICATION = 'dreamphish.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQLDATABASE'),
+        'USER': os.getenv('MYSQLUSER'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD'),
+        'HOST': os.getenv('MYSQLHOST'),
+        'PORT': os.getenv('MYSQLPORT', '3306'),  # Usa 3306 como puerto predeterminado si no se especifica
+        'OPTIONS': {
+            'connect_timeout': 60,
+        }
     }
 }
 
+# Intenta conectar a la base de datos MySQL
+try:
+    import pymysql
+    conn = pymysql.connect(
+        host=DATABASES['default']['HOST'],
+        user=DATABASES['default']['USER'],
+        password=DATABASES['default']['PASSWORD'],
+        db=DATABASES['default']['NAME'],
+        port=int(DATABASES['default']['PORT'])
+    )
+    conn.close()
+except (pymysql.Error, TypeError, ValueError):
+    # Si no se puede conectar a MySQL o hay un error de tipo, usa la base de datos SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
