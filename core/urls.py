@@ -1,0 +1,28 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.dashboard, name='dashboard'),
+    path('add-smtp/', views.add_smtp, name='add_smtp'),
+    path('test-smtp/<int:smtp_id>/', views.test_smtp, name='test_smtp'),
+    path('login/', views.login_view, name='login'),
+    path('edit-smtp/<int:smtp_id>/', views.edit_smtp, name='edit_smtp'),
+    path('delete-smtp/<int:smtp_id>/', views.delete_smtp, name='delete_smtp'),
+    path('email-templates/', views.email_template_list, name='email_template_list'),
+    path('email-templates/add/', views.add_email_template, name='add_email_template'),
+    path('landing-pages/', views.landing_page_list, name='landing_page_list'),
+    path('landing-pages/add/', views.add_landing_page, name='add_landing_page'),
+    path('l/<str:url_path>/<str:token>/', views.serve_landing_page, name='serve_landing_page'),
+    path('groups/', views.group_list, name='group_list'),
+    path('groups/add/', views.add_group, name='add_group'),
+    path('groups/<int:group_id>/', views.group_detail, name='group_detail'),
+    path('groups/<int:group_id>/add-target/', views.add_target, name='add_target'),
+    path('campaigns/', views.campaign_list, name='campaign_list'),
+    path('campaigns/add/', views.add_campaign, name='add_campaign'),
+    path('campaigns/<int:campaign_id>/', views.campaign_detail, name='campaign_detail'),
+    path('campaigns/<int:campaign_id>/start/', views.start_campaign, name='start_campaign'),
+    path('groups/<int:group_id>/edit/', views.edit_group, name='edit_group'),
+    path('groups/<int:group_id>/delete/', views.delete_group, name='delete_group'),
+    path('campaigns/<int:campaign_id>/delete/', views.delete_campaign, name='delete_campaign'),
+    path('track/', views.track_email_open, name='track_email_open'),
+]

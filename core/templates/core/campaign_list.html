@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>Campañas</h2>
+    <a href="{% url 'add_campaign' %}" class="btn btn-primary">Crear Campaña</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campaign in campaigns %}
+                <tr>
+                    <td>{{ campaign.name }}</td>
+                    <td>{{ campaign.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'campaign_detail' campaign.id %}" class="btn btn-sm btn-info">Ver</a>
+                        {% if campaign.status == 'draft' %}
+                            <a href="{% url 'start_campaign' campaign.id %}" class="btn btn-sm btn-success">Iniciar</a>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_campaign' campaign.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta campaña?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No hay campañas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

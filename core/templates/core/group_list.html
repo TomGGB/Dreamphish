@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>Grupos</h2>
+    <a href="{% url 'add_group' %}" class="btn btn-primary">Añadir Grupo</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>{{ group.name }}</td>
+                    <td>
+                        <a href="{% url 'group_detail' group.id %}" class="btn btn-sm btn-info">Ver</a>
+                        <a href="{% url 'edit_group' group.id %}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{% url 'delete_group' group.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este grupo?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">No hay grupos.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

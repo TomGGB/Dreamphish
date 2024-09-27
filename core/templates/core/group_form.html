@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Objetivos</h3>
+        {{ formset.management_form }}
+        <div id="formset">
+            {% for form in formset %}
+                <div class="target-form">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add-form" class="btn btn-secondary">Añadir otro objetivo</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/formset.js' %}"></script>
+{% endblock %}
