@@ -415,3 +415,10 @@ md-outlined-text-field {
     max-width: 400px;
     margin-bottom: 20px;
 }
+
+/* quitar marca de agua */
+.canvasjs-chart-credit {
+    display: none;
+}
+
+
