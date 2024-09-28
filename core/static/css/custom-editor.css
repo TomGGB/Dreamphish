@@ -24,7 +24,7 @@
 
 #editor-container {
     width: 100%;
-    height: 400px; /* Altura fija */
+    height: 60vh;
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
@@ -52,4 +52,16 @@
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.toggle-editor-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.toggle-editor-button i {
+    font-size: 18px;
 }

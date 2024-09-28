@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hiddenTextarea = document.getElementById('id_body') || document.getElementById('id_html_content');
     const toggleEditorButton = document.getElementById('toggle-editor');
     const form = document.querySelector('form');
-    let isHtmlMode = true;
+    let isHtmlMode = false;
 
     function getIframeDocument() {
         return editorIframe.contentDocument || editorIframe.contentWindow.document;
@@ -22,13 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
             editorIframe.style.display = 'block';
             plainTextEditor.style.display = 'none';
             toolbar.querySelectorAll('button:not(#toggle-editor)').forEach(btn => btn.disabled = false);
+            toggleEditorButton.innerHTML = '<i class="material-icons">visibility</i> Modo Texto Plano';
         } else {
             plainTextEditor.value = getIframeDocument().body.innerHTML;
             editorIframe.style.display = 'none';
             plainTextEditor.style.display = 'block';
             toolbar.querySelectorAll('button:not(#toggle-editor)').forEach(btn => btn.disabled = true);
+            toggleEditorButton.innerHTML = '<i class="material-icons">code</i> Modo HTML';
         }
-        toggleEditorButton.querySelector('i').textContent = isHtmlMode ? 'text_fields' : 'code';
         updateHiddenTextarea();
     }
 
@@ -43,27 +44,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Inicializar el contenido del editor
-    const initialContent = hiddenTextarea.value || '<p></p>';
+    // Inicializar el contenido del editor en modo HTML
+    const initialContent = hiddenTextarea.value || '';
     getIframeDocument().designMode = 'on';
     getIframeDocument().body.innerHTML = initialContent;
-    updateHiddenTextarea();
+    editorIframe.style.display = 'none';
+    plainTextEditor.style.display = 'block';
+    isHtmlMode = false;
+    toggleEditorButton.innerHTML = '<i class="material-icons">code</i> Modo HTML';
 
+    // Asegurarse de que el contenido se cargue correctamente en el iframe
     editorIframe.addEventListener('load', function() {
+        getIframeDocument().body.innerHTML = initialContent;
         getIframeDocument().body.addEventListener('input', updateHiddenTextarea);
     });
+
+    // Habilitar los botones de la barra de herramientas
+    toolbar.querySelectorAll('button:not(#toggle-editor)').forEach(btn => btn.disabled = false);
 
     // Manejar la inserción de chips (solo para plantillas de correo)
     const chipSet = document.querySelector('md-chip-set');
     if (chipSet) {
         chipSet.addEventListener('click', function(e) {
             const chip = e.target.closest('md-assist-chip');
-            if (chip && isHtmlMode) {
+            if (chip) {
                 const value = chip.dataset.value;
-                getIframeDocument().execCommand('insertText', false, value);
+                if (isHtmlMode) {
+                    getIframeDocument().execCommand('insertText', false, value);
+                } else {
+                    insertTextAtCursor(plainTextEditor, value);
+                }
                 updateHiddenTextarea();
             }
         });
+    }
+
+    // Función para insertar texto en la posición del cursor
+    function insertTextAtCursor(textarea, text) {
+        const startPos = textarea.selectionStart;
+        const endPos = textarea.selectionEnd;
+        textarea.value = textarea.value.substring(0, startPos) + text + textarea.value.substring(endPos, textarea.value.length);
+        textarea.selectionStart = textarea.selectionEnd = startPos + text.length;
     }
 
     // Actualizar el contenido antes de enviar el formulario

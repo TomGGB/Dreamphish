@@ -285,7 +285,6 @@ h2 {
 /* Formularios */
 form {
     width: 100%;
-    max-width: 800px;
 }
 
 .form-group {
@@ -422,3 +421,64 @@ md-outlined-text-field {
 }
 
 
+/* estilos de los grupos */
+.target-row {
+    display: flex;
+    align-items: center;
+    margin: 20px 20px;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-fields {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    flex: 1;
+    width: 80%;
+}
+
+.input-fields md-outlined-text-field {
+    flex: 1 1 200px;
+    min-width: 150px;
+    margin: auto;
+}
+
+.target-row md-filled-tonal-button {
+    flex-shrink: 0;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    .target-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .target-row md-filled-tonal-button {
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+}
+
+md-filled-button,
+md-filled-tonal-button {
+    margin: 20px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+md-filled-button .material-icons,
+md-filled-tonal-button .material-icons {
+    margin-right: 8px;
+}
+
+md-filled-button *,
+md-filled-tonal-button * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

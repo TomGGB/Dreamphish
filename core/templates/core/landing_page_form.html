@@ -20,7 +20,7 @@
                 <button type="button" data-command="underline"><i class="material-icons">format_underlined</i></button>
                 <button type="button" data-command="insertUnorderedList"><i class="material-icons">format_list_bulleted</i></button>
                 <button type="button" data-command="insertOrderedList"><i class="material-icons">format_list_numbered</i></button>
-                <button type="button" id="toggle-editor"><i class="material-icons">code</i></button>
+                <button type="button" id="toggle-editor" class="toggle-editor-button"><i class="material-icons">code</i> Modo Texto Plano</button>
             </div>
             <iframe id="editor-iframe"></iframe>
             <textarea id="plain-text-editor" style="display: none;">{{ form.html_content.value|default_if_none:"" }}</textarea>
