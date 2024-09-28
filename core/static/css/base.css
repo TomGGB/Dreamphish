@@ -323,41 +323,111 @@ a {
 }
 
 /* Modal */
+/* Estilos para el modal */
 .modal {
-    background-color: var(--md-sys-color-surface);
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+    z-index: 1000;
 }
 
-.modal.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
     padding: 20px;
-    border-radius: 5px;
-    width: 80%;
+    border-radius: 8px;
+    width: 90%;
     max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
 .close-modal {
-    color: var(--text-color);
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
     position: absolute;
+    right: 10px;
     top: 10px;
-    right: 20px;
-    transition: all 0.3s ease;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--md-sys-color-on-surface);
 }
 
-.close-modal:hover {
-    color: var(--primary-color);
-    transform: rotate(90deg);
+.modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Estilos para los botones dentro del modal */
+.modal .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal .btn-secondary {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+}
+
+.modal .btn-primary {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}
+
+.modal .btn:hover {
+    opacity: 0.9;
+}
+
+/* Estilos para el formulario dentro del modal */
+.modal .form-group {
+    margin-bottom: 15px;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--md-sys-color-on-surface);
+}
+
+.modal input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 4px;
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.modal input[type="email"]:focus {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
 }
 
 .status-icon {

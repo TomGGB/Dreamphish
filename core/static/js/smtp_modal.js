@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openModal(modal) {
         if (modal == null) return;
-        modal.classList.add('active');
+        modal.classList.remove('hidden');
     }
 
     function closeModal(modal) {
         if (modal == null) return;
-        modal.classList.remove('active');
+        modal.classList.add('hidden');
     }
 });
