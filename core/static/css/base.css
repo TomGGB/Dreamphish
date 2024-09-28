@@ -197,6 +197,11 @@ h2 {
 }
 
 /* Tablas */
+
+.table-responsive {
+    width: 100%;
+}
+
 .table {
     width: 100%;
     border-collapse: separate;
@@ -217,6 +222,8 @@ h2 {
 .table thead {
     background-color: var(--md-sys-color-surface-variant);
 }
+
+
 
 .table th {
     color: var(--md-sys-color-on-surface-variant);
