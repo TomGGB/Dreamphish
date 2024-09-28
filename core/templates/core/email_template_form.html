@@ -1,58 +1,10 @@
 {% extends 'core/base.html' %}
-{% load static %}
-
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/custom-editor.css' %}">
-{% endblock %}
 
 {% block content %}
-    <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Plantilla de Correo</h2>
+    <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
     <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ form.name.value|default_if_none:'' }}">
-        </div>
-        <div class="form-group">
-            <label for="subject">Asunto</label>
-            <input type="text" class="form-control" id="subject" name="subject" value="{{ form.subject.value|default_if_none:'' }}">
-        </div>
-        <div id="editor-container">
-            <div class="toolbar">
-                <button type="button" data-command="bold"><i class="material-icons">format_bold</i></button>
-                <button type="button" data-command="italic"><i class="material-icons">format_italic</i></button>
-                <button type="button" data-command="underline"><i class="material-icons">format_underlined</i></button>
-                <button type="button" data-command="insertUnorderedList"><i class="material-icons">format_list_bulleted</i></button>
-                <button type="button" data-command="insertOrderedList"><i class="material-icons">format_list_numbered</i></button>
-                <button type="button" id="toggle-editor" class="toggle-editor-button"><i class="material-icons">code</i> Modo Texto Plano</button>
-            </div>
-            <iframe id="editor-iframe"></iframe>
-            <textarea id="plain-text-editor" style="display: none;">{{ form.body.value|default_if_none:"" }}</textarea>
-        </div>
-        <textarea id="id_body" name="body" style="display: none;">{{ form.body.value|default_if_none:"" }}</textarea>
-        <br>
-        <div class="btn-group" role="group" aria-label="Variables">
-            <button type="button" class="btn btn-secondary chip" data-value="{NOMBRE}">
-                <i class="material-icons">person</i> NOMBRE
-            </button>
-            <button type="button" class="btn btn-secondary chip" data-value="{APELLIDO}">
-                <i class="material-icons">family_restroom</i> APELLIDO
-            </button>
-            <button type="button" class="btn btn-secondary chip" data-value="{CARGO}">
-                <i class="material-icons">work</i> CARGO
-            </button>
-            <button type="button" class="btn btn-secondary chip" data-value="{LINK}">
-                <i class="material-icons">link</i> LINK
-            </button>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">
-            Guardar
-            <i class="material-icons">save</i>
-        </button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
     </form>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/custom-editor.js' %}"></script>
 {% endblock %}

@@ -1,39 +1,10 @@
 {% extends 'core/base.html' %}
-{% load static %}
-
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/custom-editor.css' %}">
-{% endblock %}
 
 {% block content %}
-    <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Landing Page</h2>
+    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Landing Page</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.name.label_tag }}
-        {{ form.name }}
-        {{ form.url_path.label_tag }}
-        {{ form.url_path }}
-        <div id="editor-container">
-            <div class="toolbar">
-                <button type="button" data-command="bold"><i class="material-icons">format_bold</i></button>
-                <button type="button" data-command="italic"><i class="material-icons">format_italic</i></button>
-                <button type="button" data-command="underline"><i class="material-icons">format_underlined</i></button>
-                <button type="button" data-command="insertUnorderedList"><i class="material-icons">format_list_bulleted</i></button>
-                <button type="button" data-command="insertOrderedList"><i class="material-icons">format_list_numbered</i></button>
-                <button type="button" id="toggle-editor" class="toggle-editor-button"><i class="material-icons">code</i> Modo Texto Plano</button>
-            </div>
-            <iframe id="editor-iframe"></iframe>
-            <textarea id="plain-text-editor" style="display: none;">{{ form.html_content.value|default_if_none:"" }}</textarea>
-        </div>
-        <textarea id="id_html_content" name="html_content" style="display: none;">{{ form.html_content.value|default_if_none:"" }}</textarea>
-        <br>
-        <button type="submit" class="btn btn-primary">
-            Guardar
-            <i class="material-icons">save</i>
-        </button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/custom-editor.js' %}"></script>
 {% endblock %}
