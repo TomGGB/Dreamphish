@@ -1,11 +1,8 @@
 {% extends 'core/base.html' %}
-{% load static %}
 
 {% block content %}
-    <h2><span class="material-icons">email</span> Perfiles SMTP</h2>
-    <a href="{% url 'add_smtp' %}" class="btn btn-primary">
-        <span class="material-icons">add</span> Añadir Perfil SMTP
-    </a>
+    <h2>Perfiles SMTP</h2>
+    <a href="{% url 'add_smtp' %}" class="btn btn-primary mb-3">Añadir Perfil SMTP</a>
     <table class="table">
         <thead>
             <tr>
@@ -24,30 +21,36 @@
                     <td>{{ smtp.username }}</td>
                     <td>{{ smtp.port }}</td>
                     <td>
-                        <a href="{% url 'edit_smtp' smtp.id %}" class="btn btn-warning">Editar</a>
-                        <button class="btn btn-info modal-trigger" data-modal-target="testSMTPModal{{ smtp.id }}">Probar</button>
-                        <form method="post" action="{% url 'delete_smtp' smtp.id %}" class="inline-form">
+                        <a href="{% url 'edit_smtp' smtp.id %}" class="btn btn-warning btn-sm">Editar</a>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#testSMTPModal{{ smtp.id }}">Probar</button>
+                        <form method="post" action="{% url 'delete_smtp' smtp.id %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>
                 <!-- Modal para la prueba de SMTP -->
-                <div class="modal hidden" id="testSMTPModal{{ smtp.id }}">
-                    <div class="modal-content">
-                        <h3>Probar SMTP</h3>
-                        <button class="close-modal">&times;</button>
-                        <form method="post" action="{% url 'test_smtp' smtp.id %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="testEmail{{ smtp.id }}">Correo de prueba:</label>
-                                <input type="email" id="testEmail{{ smtp.id }}" name="test_email" required>
+                <div class="modal fade" id="testSMTPModal{{ smtp.id }}" tabindex="-1" role="dialog" aria-labelledby="testSMTPModalLabel{{ smtp.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="testSMTPModalLabel{{ smtp.id }}">Probar SMTP</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary close-modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Enviar correo de prueba</button>
+                            <div class="modal-body">
+                                <form method="post" action="{% url 'test_smtp' smtp.id %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="testEmail{{ smtp.id }}">Correo de prueba:</label>
+                                        <input type="email" class="form-control" id="testEmail{{ smtp.id }}" name="test_email" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Enviar correo de prueba</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             {% empty %}
@@ -57,45 +60,4 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const modals = document.querySelectorAll('.modal');
-        const modalTriggers = document.querySelectorAll('.modal-trigger');
-        const closeButtons = document.querySelectorAll('.close-modal');
-
-        modalTriggers.forEach(trigger => {
-            trigger.addEventListener('click', () => {
-                const modalId = trigger.getAttribute('data-modal-target');
-                const modal = document.getElementById(modalId);
-                openModal(modal);
-            });
-        });
-
-        closeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = button.closest('.modal');
-                closeModal(modal);
-            });
-        });
-
-        modals.forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal(modal);
-                }
-            });
-        });
-
-        function openModal(modal) {
-            if (modal == null) return;
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal(modal) {
-            if (modal == null) return;
-            modal.classList.add('hidden');
-        }
-    });
-    </script>
 {% endblock %}

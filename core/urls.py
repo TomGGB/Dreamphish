@@ -27,7 +27,7 @@ urlpatterns = [
     path('groups/<int:group_id>/delete/', views.delete_group, name='delete_group'),
     path('campaigns/<int:campaign_id>/delete/', views.delete_campaign, name='delete_campaign'),
     path('track/<str:token>/', views.track_email_open, name='track_email_open'),
-    path('landing-pages/<int:page_id>/edit/', views.edit_landing_page, name='edit_landing_page'),
+    path('landing-pages/<int:landing_page_id>/edit/', views.edit_landing_page, name='edit_landing_page'),
     path('landing-pages/<int:landing_page_id>/delete/', views.delete_landing_page, name='delete_landing_page'),
     path('smtp/', views.smtp_list, name='smtp_list'),
 ]

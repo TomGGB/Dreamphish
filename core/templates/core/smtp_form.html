@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">{% if edit_mode %}edit{% else %}add{% endif %}</span> {% if edit_mode %}Editar{% else %}Añadir{% endif %} Perfil SMTP</h2>
+    <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Perfil SMTP</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary"><span class="material-icons">save</span> {% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
+        <button type="submit" class="btn btn-primary">{% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
     </form>
 {% endblock %}

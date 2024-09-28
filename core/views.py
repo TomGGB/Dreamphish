@@ -22,7 +22,6 @@ from django.utils import timezone
 
 
 
-
 # Create your views here.
 
 def dashboard(request):
@@ -33,7 +32,7 @@ def dashboard(request):
     chart_data = []
     if selected_campaign_id:
         selected_campaign = get_object_or_404(Campaign, id=selected_campaign_id, user=request.user)
-        results = CampaignResult.objects.filter(campaign=selected_campaign).select_related('target')
+        results = CampaignResult.objects.filter(campaign=selected_campaign)
         
         # Preparar datos para el gráfico
         total_targets = results.count()
@@ -173,42 +172,13 @@ def add_landing_page(request):
         form = LandingPageForm()
     return render(request, 'core/landing_page_form.html', {'form': form})
 
-@login_required
-def edit_landing_page(request, page_id):
-    page = get_object_or_404(LandingPage, id=page_id, user=request.user)
-    if request.method == 'POST':
-        form = LandingPageForm(request.POST, instance=page)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Landing page actualizada con éxito.')
-            return redirect('landing_page_list')
-    else:
-        form = LandingPageForm(instance=page)
-    return render(request, 'core/landing_page_form.html', {'form': form, 'edit_mode': True})
-
-import logging
-from django.utils import timezone
-
-logger = logging.getLogger(__name__)
-
 def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
-    result.landing_page_opened_timestamp = timezone.localtime()
-    result.save()
-    
-    # Capturar IP
-    result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
-    
-    # Capturar User-Agent
-    result.user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
-    
-    result.click_timestamp = timezone.localtime()
-    
-    # Logging para verificar
-    logger.info(f"Landing page opened - IP: {result.ip_address}, User-Agent: {result.user_agent}")
-    
+    result.ip_address = request.META.get('REMOTE_ADDR')
+    result.user_agent = request.META.get('HTTP_USER_AGENT')
+    result.click_timestamp = timezone.now()
     result.save()
     return HttpResponse(page.html_content)
 
@@ -301,7 +271,7 @@ def start_campaign(request, campaign_id):
             
             email_body = campaign.email_template.body.replace('{NOMBRE}', target.first_name)
             email_body = email_body.replace('{APELLIDO}', target.last_name)
-            email_body = email_body.replace('{CARGO}', target.position)
+            email_body = email_body.replace('{PUESTO}', target.position)
             
             # Modificar los enlaces en el cuerpo del correo
             soup = BeautifulSoup(email_body, 'html.parser')
@@ -311,19 +281,6 @@ def start_campaign(request, campaign_id):
             # Añadir la imagen de tracking
             tracking_url = request.build_absolute_uri(reverse('track_email_open', args=[token]))
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
-            
-            # Asegurarse de que existe una estructura HTML válida
-            if not soup.html:
-                new_html = soup.new_tag('html')
-                new_html.append(soup)
-                soup = BeautifulSoup(str(new_html), 'html.parser')
-            
-            if not soup.body:
-                new_body = soup.new_tag('body')
-                new_body.extend(soup.html.contents)
-                soup.html.clear()
-                soup.html.append(new_body)
-            
             soup.body.append(tracking_img)
             
             modified_email_body = str(soup)
@@ -336,7 +293,6 @@ def start_campaign(request, campaign_id):
                     modified_email_body
                 )
                 result.email_sent = True
-                result.email_sent_timestamp = timezone.now()
                 result.save()
             except Exception as e:
                 messages.error(request, f'Error al enviar correo a {target.email}: {str(e)}')
@@ -347,9 +303,7 @@ def start_campaign(request, campaign_id):
             messages.warning(request, 'No se pudo enviar ningún correo. Verifique la configuración SMTP.')
     else:
         messages.error(request, 'La campaña ya ha sido iniciada.')
-    
-    return redirect('dashboard')
-
+    return redirect('campaign_detail', campaign_id=campaign.id)
 
 def generate_unique_token():
     return str(uuid.uuid4())
@@ -417,12 +371,29 @@ def edit_campaign(request, campaign_id):
 
 @require_GET
 def track_email_open(request, token):
-    result = get_object_or_404(CampaignResult, token=token)
-    if not result.email_opened:
-        result.email_opened = True
-        result.email_opened_timestamp = timezone.now()
-        result.save()
-    return HttpResponse(static('img/pixel.png'), content_type='image/png')
+    try:
+        result = CampaignResult.objects.get(token=token)
+        if not result.email_opened:
+            result.email_opened = True
+            result.save()
+    except CampaignResult.DoesNotExist:
+        pass
+    
+    # Devuelve una imagen de 1x1 píxel transparente
+    return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+
+@login_required
+def edit_landing_page(request, landing_page_id):
+    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+    if request.method == 'POST':
+        form = LandingPageForm(request.POST, instance=landing_page)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Landing page actualizada con éxito.')
+            return redirect('landing_page_list')
+    else:
+        form = LandingPageForm(instance=landing_page)
+    return render(request, 'core/landing_page_form.html', {'form': form, 'edit_mode': True})
 
 @login_required
 def delete_landing_page(request, landing_page_id):

@@ -29,8 +29,8 @@
         <h3>Resultados de la campaña: {{ selected_campaign.name }}</h3>
         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
         <div class="table-responsive">
-            <table id="resultsTable" class="table">
-                <thead>
+            <table id="resultsTable" class="table table-striped table-hover table-bordered mt-4">
+                <thead class="table-dark">
                     <tr>
                         <th>Email</th>
                         <th>Enviado</th>
@@ -43,38 +43,18 @@
                     {% for result in results %}
                         <tr>
                             <td>{{ result.target.email }}</td>
-                            <td data-filter="sent">
-                                {% if result.email_sent %}
-                                    <span class="material-icons status-icon sent" title="{{ result.email_sent_timestamp|date:'d/m/Y H:i' }}">check_circle</span>
-                                {% else %}
-                                    <span class="material-icons status-icon not-sent">close</span>
-                                {% endif %}
-                            </td>
-                            <td data-filter="opened">
-                                {% if result.email_opened %}
-                                    <span class="material-icons status-icon opened" title="{{ result.email_opened_timestamp|date:'d/m/Y H:i' }}">visibility</span>
-                                {% else %}
-                                    <span class="material-icons status-icon not-opened">visibility_off</span>
-                                {% endif %}
-                            </td>
-                            <td data-filter="interacted">
-                                {% if result.landing_page_opened %}
-                                    <span class="material-icons status-icon interacted" title="{{ result.landing_page_opened_timestamp|date:'d/m/Y H:i' }}">touch_app</span>
-                                {% else %}
-                                    <span class="material-icons status-icon not-interacted">do_not_touch</span>
-                                {% endif %}
-                            </td>
+                            <td data-filter="sent">{% if result.email_sent %}Sí{% else %}No{% endif %}</td>
+                            <td data-filter="opened">{% if result.email_opened %}Sí{% else %}No{% endif %}</td>
+                            <td data-filter="interacted">{% if result.landing_page_opened %}Sí{% else %}No{% endif %}</td>
                             <td>
                                 <button class="btn btn-sm btn-info" onclick="toggleDetails({{ result.id }})">Ver detalles</button>
                             </td>
                         </tr>
                         <tr id="details-{{ result.id }}" style="display: none;">
                             <td colspan="5">
-                                <strong>Correo enviado:</strong> {{ result.email_sent_timestamp|date:'d/m/Y H:i'|default:"No enviado" }}<br>
-                                <strong>Correo abierto:</strong> {{ result.email_opened_timestamp|date:'d/m/Y H:i'|default:"No abierto" }}<br>
-                                <strong>Landing Page visitada:</strong> {{ result.landing_page_opened_timestamp|date:'d/m/Y H:i'|default:"No visitada" }}<br>
-                                <strong>IP:</strong> {{ result.ip_address|default:"No disponible" }}<br>
-                                <strong>User Agent:</strong> {{ result.user_agent|default:"No disponible" }}<br>
+                                <strong>IP:</strong> {{ result.ip_address|default:"El usuario no ha hecho clic en el enlace" }}<br>
+                                <strong>User Agent:</strong> {{ result.user_agent|default:"El usuario no ha hecho clic en el enlace" }}<br>
+                                <strong>Fecha de clic:</strong> {{ result.click_timestamp|default:"El usuario no ha hecho clic en el enlace" }}
                             </td>
                         </tr>
                     {% empty %}

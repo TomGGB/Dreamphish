@@ -22,9 +22,6 @@ class LandingPageForm(forms.ModelForm):
     class Meta:
         model = LandingPage
         fields = ['name', 'html_content', 'url_path']
-        widgets = {
-            'html_content': forms.Textarea(attrs={'id': 'id_body', 'style': 'display:none;'}),
-        }
 
 class GroupForm(forms.ModelForm):
     class Meta:

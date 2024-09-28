@@ -1,10 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">campaign</span> Campañas</h2>
-    <a href="{% url 'add_campaign' %}" class="btn btn-primary">
-        <span class="material-icons">add</span> Crear Campaña
-    </a>
+    <h2>Campañas</h2>
+    <a href="{% url 'add_campaign' %}" class="btn btn-primary">Crear Campaña</a>
     <table class="table">
         <thead>
             <tr>

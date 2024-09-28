@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <h2><span class="material-icons">{% if form.instance.pk %}edit{% else %}add{% endif %}</span> {% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
+    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <h3><span class="material-icons">people</span> Objetivos</h3>
+        <h3>Objetivos</h3>
         {{ formset.management_form }}
         <div id="formset">
             {% for form in formset %}
@@ -15,8 +15,8 @@
                 </div>
             {% endfor %}
         </div>
-        <button type="button" id="add-form" class="btn btn-secondary"><span class="material-icons">person_add</span> Añadir otro objetivo</button>
-        <button type="submit" class="btn btn-primary"><span class="material-icons">save</span> Guardar</button>
+        <button type="button" id="add-form" class="btn btn-secondary">Añadir otro objetivo</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 {% endblock %}
 

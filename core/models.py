@@ -97,9 +97,9 @@ class SMTP(models.Model):
 
 class EmailTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    subject = models.CharField(max_length=200)
-    body = models.TextField()  # Este campo almacenará el HTML
+    name = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255)
+    body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -143,8 +143,5 @@ class CampaignResult(models.Model):
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(null=True, blank=True)
     click_timestamp = models.DateTimeField(null=True, blank=True)
-    email_sent_timestamp = models.DateTimeField(null=True, blank=True)
-    email_opened_timestamp = models.DateTimeField(null=True, blank=True)
-    landing_page_opened_timestamp = models.DateTimeField(null=True, blank=True)
 
 

@@ -9,10 +9,14 @@
     <h2>{% if edit_mode %}Editar{% else %}Agregar{% endif %} Plantilla de Correo</h2>
     <form method="post">
         {% csrf_token %}
-        <md-outlined-text-field label="Nombre" name="name" value="{{ form.name.value|default_if_none:'' }}">
-        </md-outlined-text-field>
-        <md-outlined-text-field label="Asunto" name="subject" value="{{ form.subject.value|default_if_none:'' }}">
-        </md-outlined-text-field>
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ form.name.value|default_if_none:'' }}">
+        </div>
+        <div class="form-group">
+            <label for="subject">Asunto</label>
+            <input type="text" class="form-control" id="subject" name="subject" value="{{ form.subject.value|default_if_none:'' }}">
+        </div>
         <div id="editor-container">
             <div class="toolbar">
                 <button type="button" data-command="bold"><i class="material-icons">format_bold</i></button>
@@ -27,25 +31,25 @@
         </div>
         <textarea id="id_body" name="body" style="display: none;">{{ form.body.value|default_if_none:"" }}</textarea>
         <br>
-        <md-chip-set>
-            <md-assist-chip type="button" class="chip" data-value="{NOMBRE}" label="NOMBRE">
-                <i class="material-icons" slot="icon">person</i>
-            </md-assist-chip>
-            <md-assist-chip type="button" class="chip" data-value="{APELLIDO}" label="APELLIDO">
-                <i class="material-icons" slot="icon">family_restroom</i>
-            </md-assist-chip>
-            <md-assist-chip type="button" class="chip" data-value="{CARGO}" label="CARGO">
-                <i class="material-icons" slot="icon">work</i>
-            </md-assist-chip>
-            <md-assist-chip type="button" class="chip" data-value="{LINK}" label="LINK">
-                <i class="material-icons" slot="icon">link</i>
-            </md-assist-chip>
-        </md-chip-set>
+        <div class="btn-group" role="group" aria-label="Variables">
+            <button type="button" class="btn btn-secondary chip" data-value="{NOMBRE}">
+                <i class="material-icons">person</i> NOMBRE
+            </button>
+            <button type="button" class="btn btn-secondary chip" data-value="{APELLIDO}">
+                <i class="material-icons">family_restroom</i> APELLIDO
+            </button>
+            <button type="button" class="btn btn-secondary chip" data-value="{CARGO}">
+                <i class="material-icons">work</i> CARGO
+            </button>
+            <button type="button" class="btn btn-secondary chip" data-value="{LINK}">
+                <i class="material-icons">link</i> LINK
+            </button>
+        </div>
         <br>
-        <md-filled-button type="submit">
+        <button type="submit" class="btn btn-primary">
             Guardar
-            <svg slot="icon" viewBox="0 0 24 24"><path d="M5 21h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM7 3h10v5h5v11H7V3zm1 5h8v2H8V8zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
-        </md-filled-button>
+            <i class="material-icons">save</i>
+        </button>
     </form>
 {% endblock %}
 

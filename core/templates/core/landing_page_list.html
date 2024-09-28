@@ -1,10 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">web</span> Landing Pages</h2>
-    <md-filled-tonal-button href="{% url 'add_landing_page' %}">
-        <span class="material-icons">add</span> Añadir Landing Page
-    </md-filled-tonal-button>
+    <h2>Landing Pages</h2>
+    <a href="{% url 'add_landing_page' %}" class="btn btn-primary">Añadir Landing Page</a>
     <table class="table">
         <thead>
             <tr>
@@ -19,14 +17,10 @@
                     <td>{{ page.name }}</td>
                     <td>{{ page.url_path }}</td>
                     <td>
-                        <md-filled-tonal-button href="{% url 'edit_landing_page' page.id %}">
-                            <span class="material-icons">edit</span> Editar
-                        </md-filled-tonal-button>
+                        <a href="{% url 'edit_landing_page' page.id %}" class="btn btn-warning btn-sm">Editar</a>
                         <form method="post" action="{% url 'delete_landing_page' page.id %}" style="display:inline;">
                             {% csrf_token %}
-                            <md-filled-tonal-button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar esta landing page?')">
-                                <span class="material-icons">delete</span> Eliminar
-                            </md-filled-tonal-button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta landing page?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>

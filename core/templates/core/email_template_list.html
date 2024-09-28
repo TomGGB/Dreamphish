@@ -1,10 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">email</span> Plantillas de Correo</h2>
-    <md-filled-tonal-button href="{% url 'add_email_template' %}">
-        <span class="material-icons">add</span> Añadir Plantilla
-    </md-filled-tonal-button>
+    <h2>Plantillas de Correo</h2>
+    <a href="{% url 'add_email_template' %}" class="btn btn-primary">Añadir Plantilla</a>
     <table class="table">
         <thead>
             <tr>
@@ -19,14 +17,10 @@
                     <td>{{ template.name }}</td>
                     <td>{{ template.subject }}</td>
                     <td>
-                        <md-filled-tonal-button href="{% url 'edit_email_template' template.id %}">
-                            <span class="material-icons">edit</span> Editar
-                        </md-filled-tonal-button>
-                        <form method="post" action="{% url 'delete_email_template' template.id %}" style="display:inline;">
+                        <a href="{% url 'edit_email_template' template.id %}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{% url 'delete_email_template' template.id %}" class="d-inline">
                             {% csrf_token %}
-                            <md-filled-tonal-button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar esta plantilla?')">
-                                <span class="material-icons">delete</span> Eliminar
-                            </md-filled-tonal-button>
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta plantilla?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>

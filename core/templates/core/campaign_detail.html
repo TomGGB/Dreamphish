@@ -1,51 +1,31 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">campaign</span> Campaña: {{ campaign.name }}</h2>
-    <p><strong>Estado:</strong> {{ campaign.get_status_display }}</p>
-    <h3><span class="material-icons">analytics</span> Resultados</h3>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
+    <h2>Campaña: {{ campaign.name }}</h2>
+    <p>Estado: {{ campaign.get_status_display }}</p>
+    <h3>Resultados</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Enviado</th>
+                <th>Abierto</th>
+                <th>Interacción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
                 <tr>
-                    <th>Email</th>
-                    <th>Enviado</th>
-                    <th>Abierto</th>
-                    <th>Interacción</th>
+                    <td>{{ result.target.email }}</td>
+                    <td>{% if result.email_sent %}Sí{% else %}No{% endif %}</td>
+                    <td>{% if result.email_opened %}Sí{% else %}No{% endif %}</td>
+                    <td>{% if result.landing_page_opened %}Sí{% else %}No{% endif %}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for result in results %}
-                    <tr>
-                        <td>{{ result.target.email }}</td>
-                        <td>
-                            {% if result.email_sent %}
-                                <span class="material-icons status-icon sent">check_circle</span>
-                            {% else %}
-                                <span class="material-icons status-icon not-sent">cancel</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if result.email_opened %}
-                                <span class="material-icons status-icon opened">visibility</span>
-                            {% else %}
-                                <span class="material-icons status-icon not-opened">visibility_off</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if result.landing_page_opened %}
-                                <span class="material-icons status-icon interacted">touch_app</span>
-                            {% else %}
-                                <span class="material-icons status-icon not-interacted">do_not_touch</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4">No hay resultados aún.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay resultados aún.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

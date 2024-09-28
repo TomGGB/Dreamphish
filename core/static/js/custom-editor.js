@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const editorIframe = document.getElementById('editor-iframe');
     const plainTextEditor = document.getElementById('plain-text-editor');
     const toolbar = document.querySelector('.toolbar');
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     toggleEditorButton.addEventListener('click', toggleEditor);
 
-    toolbar.addEventListener('click', function(e) {
+    toolbar.addEventListener('click', function (e) {
         const command = e.target.closest('button')?.dataset.command;
         if (command && isHtmlMode) {
             e.preventDefault();
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleEditorButton.innerHTML = '<i class="material-icons">code</i> Modo HTML';
 
     // Asegurarse de que el contenido se cargue correctamente en el iframe
-    editorIframe.addEventListener('load', function() {
+    editorIframe.addEventListener('load', function () {
         getIframeDocument().body.innerHTML = initialContent;
         getIframeDocument().body.addEventListener('input', updateHiddenTextarea);
     });
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejar la inserción de chips (solo para plantillas de correo)
     const chipSet = document.querySelector('md-chip-set');
     if (chipSet) {
-        chipSet.addEventListener('click', function(e) {
+        chipSet.addEventListener('click', function (e) {
             const chip = e.target.closest('md-assist-chip');
             if (chip) {
                 const value = chip.dataset.value;
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Actualizar el contenido antes de enviar el formulario
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         updateHiddenTextarea();
     });
 });

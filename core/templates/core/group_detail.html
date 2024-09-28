@@ -1,32 +1,30 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2><span class="material-icons">group</span> Grupo: {{ group.name }}</h2>
-    <a href="{% url 'add_target' group.id %}" class="btn btn-primary"><span class="material-icons">person_add</span> Añadir Objetivo</a>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
+    <h2>Grupo: {{ group.name }}</h2>
+    <a href="{% url 'add_target' group.id %}" class="btn btn-primary">Añadir Objetivo</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Puesto</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for target in targets %}
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Cargo</th>
-                    <th>Email</th>
+                    <td>{{ target.first_name }}</td>
+                    <td>{{ target.last_name }}</td>
+                    <td>{{ target.position }}</td>
+                    <td>{{ target.email }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for target in targets %}
-                    <tr>
-                        <td>{{ target.first_name }}</td>
-                        <td>{{ target.last_name }}</td>
-                        <td>{{ target.position }}</td>
-                        <td>{{ target.email }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4">No hay objetivos en este grupo.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay objetivos en este grupo.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
