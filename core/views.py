@@ -281,7 +281,16 @@ def start_campaign(request, campaign_id):
             # Añadir la imagen de tracking
             tracking_url = request.build_absolute_uri(reverse('track_email_open', args=[token]))
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
-            soup.body.append(tracking_img)
+            
+            # Asegurarse de que haya un cuerpo en el HTML
+            if soup.body:
+                soup.body.append(tracking_img)
+            else:
+                # Si no hay cuerpo, crear uno y añadir el contenido original y la imagen de tracking
+                new_body = soup.new_tag('body')
+                new_body.extend(soup.contents)
+                new_body.append(tracking_img)
+                soup.append(new_body)
             
             modified_email_body = str(soup)
             
