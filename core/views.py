@@ -176,8 +176,18 @@ def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
     result.landing_page_opened = True
-    result.ip_address = request.META.get('REMOTE_ADDR')
-    result.user_agent = request.META.get('HTTP_USER_AGENT')
+    
+    # Obtener la IP pública
+    public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
+    if not public_ip:
+        public_ip = request.META.get('REMOTE_ADDR', '')
+    
+    # Obtener la IP privada
+    private_ip = request.META.get('REMOTE_ADDR', '')
+    
+    # Combinar IPs públicas y privadas
+    result.ip_address = f"{public_ip}, {private_ip}"
+    
     result.click_timestamp = timezone.now()
     result.save()
     return HttpResponse(page.html_content)
