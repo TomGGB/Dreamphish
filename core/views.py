@@ -192,7 +192,7 @@ def serve_landing_page(request, url_path, token):
     user_agent = request.META.get('HTTP_USER_AGENT', '')
     result.user_agent = user_agent
     
-    result.click_timestamp = timezone.now()
+    result.click_timestamp = timezone.localtime()
     result.save()
     return HttpResponse(page.html_content)
 
