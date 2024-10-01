@@ -3,9 +3,9 @@
 
 {% block content %}
     <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p }}  <!-- Este es el campo para el nombre del grupo -->
         <h3>Objetivos</h3>
         {{ formset.management_form }}
         <div id="formset">
@@ -16,10 +16,55 @@
             {% endfor %}
         </div>
         <button type="button" id="add-form" class="btn btn-secondary">Añadir otro objetivo</button>
+        <input type="file" id="csv-file-input" style="display: none;" accept=".csv" />
+        <button type="button" id="import-csv" class="btn btn-secondary">Importar desde CSV</button>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/formset.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const importButton = document.getElementById('import-csv');
+        const csvFileInput = document.getElementById('csv-file-input');
+        const groupNameInput = document.getElementById('id_name');  // Asegúrate de que este ID coincida con el del campo del nombre del grupo
+
+        importButton.addEventListener('click', function() {
+            if (!groupNameInput.value) {
+                alert('Por favor, ingresa el nombre del grupo antes de importar el CSV.');
+                return;  // No continuar si el nombre del grupo está vacío
+            }
+            csvFileInput.click();  // Abre el diálogo de carga de archivos
+        });
+
+        csvFileInput.addEventListener('change', function() {
+            const file = csvFileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('csv_file', file);
+                formData.append('group_name', groupNameInput.value);  // Usar el valor del campo de nombre del grupo
+
+                fetch("{% url 'import_targets_from_csv' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'  // Agregar el token CSRF
+                    }
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;  // Redirigir a la nueva URL
+                    } else if (response.ok) {
+                        window.location.reload();  // Recargar la página para ver los cambios
+                    } else {
+                        alert('Error al importar el archivo CSV.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    });
+</script>
 {% endblock %}

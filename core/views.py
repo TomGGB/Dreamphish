@@ -19,6 +19,8 @@ from django.templatetags.static import static
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_GET
 from django.utils import timezone
+import csv
+import io
 
 
 
@@ -237,7 +239,7 @@ def add_target(request, group_id):
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, id=group_id, user=request.user)
-    targets = group.targets.all()
+    targets = group.targets.all()  # Cambia esto si usas 'targets' como related_name
     return render(request, 'core/group_detail.html', {'group': group, 'targets': targets})
 
 @login_required
@@ -446,3 +448,42 @@ def delete_email_template(request, template_id):
         template.delete()
         messages.success(request, 'Plantilla de correo eliminada con éxito.')
     return redirect('email_template_list')
+
+import csv
+import io
+from django.http import JsonResponse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import Group, Target
+
+@login_required
+def import_targets_from_csv(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        csv_file = request.FILES.get('csv_file')
+
+        if not group_name:
+            return JsonResponse({'status': 'error', 'message': 'El nombre del grupo es obligatorio.'})
+
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'El archivo debe ser un CSV.')
+            return JsonResponse({'status': 'error', 'message': 'El archivo debe ser un CSV.'})
+
+        decoded_file = csv_file.read().decode('utf-8')
+        io_string = io.StringIO(decoded_file)
+        next(io_string)  # Saltar el encabezado
+
+        # Crear el grupo
+        group = Group.objects.create(name=group_name, user=request.user)
+
+        # Leer el CSV y crear los objetivos
+        for row in csv.reader(io_string, delimiter=','):
+            if len(row) < 4:
+                continue  # O maneja el error de alguna manera
+            first_name, last_name, position, email = row
+            Target.objects.create(group=group, first_name=first_name, last_name=last_name, position=position, email=email)
+
+        messages.success(request, 'Grupo y objetivos importados con éxito.')
+        return redirect('group_list')
+
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})

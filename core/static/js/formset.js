@@ -13,4 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         totalForms.setAttribute('value', formCount + 1);
     });
+
+    const importButton = document.getElementById('import-csv');
+    const csvFileInput = document.getElementById('csv-file-input');
+
+    importButton.addEventListener('click', function() {
+        csvFileInput.click();  // Abre el diálogo de carga de archivos
+    });
+
+    csvFileInput.addEventListener('change', function() {
+        // Aquí puedes manejar el archivo CSV seleccionado
+        const file = csvFileInput.files[0];
+        if (file) {
+            // Puedes hacer algo con el archivo, como enviarlo a una vista
+            console.log('Archivo seleccionado:', file.name);
+        }
+    });
 });

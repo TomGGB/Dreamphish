@@ -17,6 +17,7 @@ urlpatterns = [
     path('l/<str:url_path>/<str:token>/', views.serve_landing_page, name='serve_landing_page'),
     path('groups/', views.group_list, name='group_list'),
     path('groups/add/', views.add_group, name='add_group'),
+    path('groups/import/', views.import_targets_from_csv, name='import_targets_from_csv'),  # Agregar esta línea
     path('groups/<int:group_id>/', views.group_detail, name='group_detail'),
     path('groups/<int:group_id>/add-target/', views.add_target, name='add_target'),
     path('campaigns/', views.campaign_list, name='campaign_list'),
@@ -30,4 +31,5 @@ urlpatterns = [
     path('landing-pages/<int:landing_page_id>/edit/', views.edit_landing_page, name='edit_landing_page'),
     path('landing-pages/<int:landing_page_id>/delete/', views.delete_landing_page, name='delete_landing_page'),
     path('smtp/', views.smtp_list, name='smtp_list'),
+    path('import-targets/', views.import_targets_from_csv, name='import_targets'),
 ]

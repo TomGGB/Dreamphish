@@ -57,10 +57,10 @@ class Group(models.Model):
         return self.name
 
 class Target(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='targets')
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    position = models.CharField(max_length=255)
+    group = models.ForeignKey(Group, related_name='targets', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    position = models.CharField(max_length=100)
     email = models.EmailField()
 
 class Template(models.Model):
