@@ -193,11 +193,17 @@ def serve_landing_page(request, url_path, token):
     result.ip_address = public_ip
 
     if request.method == 'POST':
-        # Obtener datos del formulario
+        # Capturar todos los datos enviados
         post_data = request.POST.dict()
         result.post_data = post_data
         result.latitude = post_data.get('latitude')
         result.longitude = post_data.get('longitude')
+        result.landing_page_opened = True
+        result.landing_page_opened_timestamp = timezone.localtime()
+        result.save()
+
+        # Redirigir o mostrar un mensaje de éxito
+        return render(request, 'core/landing_page_success.html')
 
     # Guardar los cambios en el modelo
     result.save()
@@ -208,8 +214,7 @@ def serve_landing_page(request, url_path, token):
     # Encontrar el formulario y cambiar su acción
     form = soup.find('form')
     if form:
-        # Reemplazar el action del formulario con el URL path de la landing page
-        form['action'] = f"/{url_path}/"  # Asegúrate de que esta sea la URL correcta
+        form['action'] = request.build_absolute_uri(reverse('serve_landing_page', args=[url_path, token]))
 
     # Devolver el HTML modificado
     return HttpResponse(str(soup))
@@ -516,7 +521,7 @@ def export_campaign_results(request, campaign_id):
 
     # Crear la respuesta HTTP con el tipo de contenido CSV
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.id}.csv"'
+    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.csv"'
 
     writer = csv.writer(response)
     # Escribir la cabecera del CSV
