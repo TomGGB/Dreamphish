@@ -7,7 +7,7 @@ pymysql.install_as_MySQLdb()
 # Configuración básica
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['dreamphish-production.up.railway.app',
                  '127.0.0.1',
                  'localhost',
