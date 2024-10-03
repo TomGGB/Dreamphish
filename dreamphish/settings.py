@@ -63,9 +63,9 @@ if os.environ.get('ENV') == 'production':
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.getenv('MYSQLDATABASE', 'railway'),
             'USER': os.getenv('MYSQLUSER', 'root'),
-            'PASSWORD': os.getenv('MYSQLPASSWORD', 'iHahtGLnNbdjrrAkVldIvByZzZRsTMrm'),
+            'PASSWORD': os.getenv('MYSQLPASSWORD', 'xLxCuUkqXRonOgMogRqtaEasNzZRRVDP'),
             'HOST': os.getenv('MYSQLHOST', 'junction.proxy.rlwy.net'),
-            'PORT': os.getenv('MYSQLPORT', '40674'),
+            'PORT': os.getenv('MYSQLPORT', '17050'),
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',

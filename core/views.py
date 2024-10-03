@@ -183,12 +183,19 @@ def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = get_object_or_404(CampaignResult, campaign__landing_page=page, token=token)
     
+    
     # Verificar si la landing page ya ha sido abierta
     if not result.landing_page_opened:
         # Actualizar el estado de la landing page
         result.landing_page_opened = True
         result.landing_page_opened_timestamp = timezone.localtime()
         result.status = 'landing_page_opened'  # Actualiza el estado a 'landing_page_opened'
+        public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
+        if not public_ip:
+            public_ip = request.META.get('REMOTE_ADDR', '')
+        result.ip_address = public_ip
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        result.user_agent = user_agent
         result.save()  # Guardar los cambios en el modelo
 
     # Modificar el contenido HTML de la landing page
@@ -294,7 +301,8 @@ def start_campaign(request, campaign_id):
             
             email_body = campaign.email_template.body.replace('{NOMBRE}', target.first_name)
             email_body = email_body.replace('{APELLIDO}', target.last_name)
-            email_body = email_body.replace('{PUESTO}', target.position)
+            email_body = email_body.replace('{CARGO}', target.position)
+            email_body = email_body.replace('{LINK}', landing_page_url)
             
             # Modificar los enlaces en el cuerpo del correo
             soup = BeautifulSoup(email_body, 'html.parser')
