@@ -177,36 +177,19 @@ def add_landing_page(request):
         form = LandingPageForm()
     return render(request, 'core/landing_page_form.html', {'form': form})
 
+@login_required
 def serve_landing_page(request, url_path, token):
+    # Obtener la landing page y el resultado de la campaña
     page = get_object_or_404(LandingPage, url_path=url_path)
-    result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
+    result = get_object_or_404(CampaignResult, campaign__landing_page=page, token=token)
     
-    # Actualizar el estado de la landing page
-    result.landing_page_opened = True
-    result.landing_page_opened_timestamp = timezone.localtime()
-    
-    # Obtener la IP pública
-    public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
-    if not public_ip:
-        public_ip = request.META.get('REMOTE_ADDR', '')
-    result.user_agent = request.META.get('HTTP_USER_AGENT', '')
-    result.ip_address = public_ip
-
-    if request.method == 'POST':
-        # Capturar todos los datos enviados
-        post_data = request.POST.dict()
-        result.post_data = post_data
-        result.latitude = post_data.get('latitude')
-        result.longitude = post_data.get('longitude')
+    # Verificar si la landing page ya ha sido abierta
+    if not result.landing_page_opened:
+        # Actualizar el estado de la landing page
         result.landing_page_opened = True
         result.landing_page_opened_timestamp = timezone.localtime()
-        result.save()
-
-        # Redirigir o mostrar un mensaje de éxito
-        return render(request, 'core/landing_page_success.html')
-
-    # Guardar los cambios en el modelo
-    result.save()
+        result.status = 'landing_page_opened'  # Actualiza el estado a 'landing_page_opened'
+        result.save()  # Guardar los cambios en el modelo
 
     # Modificar el contenido HTML de la landing page
     soup = BeautifulSoup(page.html_content, 'html.parser')
@@ -347,6 +330,8 @@ def start_campaign(request, campaign_id):
                 messages.error(request, f'Error al enviar correo a {target.email}: {str(e)}')
         
         if CampaignResult.objects.filter(campaign=campaign, email_sent=True).exists():
+            CampaignResult.status = 'email_sent'
+            campaign.save()
             messages.success(request, 'Campaña iniciada. Los correos se han enviado con éxito.')
         else:
             messages.warning(request, 'No se pudo enviar ningún correo. Verifique la configuración SMTP.')
@@ -425,6 +410,7 @@ def track_email_open(request, token):
         if not result.email_opened:
             result.email_opened = True
             result.opened_timestamp = timezone.localtime()
+            result.status = 'opened'  # Actualiza el estado a 'opened'
             result.save()
     except CampaignResult.DoesNotExist:
         pass
@@ -535,7 +521,7 @@ def export_campaign_results(request, campaign_id):
             result.target.first_name,
             result.target.last_name,
             result.target.position,
-            'email-opened' if result.email_opened else 'email-sent',  # status
+            result.status,  # status
             result.ip_address,
             result.user_agent,
             '',  # post_data
@@ -569,7 +555,7 @@ def export_campaign_results_csv(request, campaign_id):
             result.target.first_name,
             result.target.last_name,
             result.target.position,
-            'email-opened' if result.email_opened else 'email-sent',  # status
+            result.status,  # status
             result.ip_address,
             result.user_agent,
             '',  # post_data
@@ -583,4 +569,3 @@ def export_campaign_results_csv(request, campaign_id):
         ])
 
     return response
-

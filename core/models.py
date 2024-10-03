@@ -140,6 +140,7 @@ class CampaignResult(models.Model):
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
     target = models.ForeignKey('Target', on_delete=models.CASCADE)
     token = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=20, default='pending')
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     user_agent = models.CharField(max_length=255, blank=True, null=True)
     landing_page_opened_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
