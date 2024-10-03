@@ -12,7 +12,6 @@ class User(AbstractUser):
     password_change_required = models.BooleanField(default=False)
     account_locked = models.BooleanField(default=False)
 
-    # Sobrescribe los campos de grupos y permisos con nombres relacionados únicos
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
@@ -52,7 +51,7 @@ class RolePermission(models.Model):
 class Group(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
     def __str__(self):
         return self.name
 
@@ -69,14 +68,14 @@ class Template(models.Model):
     subject = models.CharField(max_length=255)
     text = models.TextField()
     html = models.TextField()
-    modified_date = models.DateTimeField(auto_now=True)
+    modified_date = models.DateTimeField(auto_now=True)  # Solo auto_now
     envelope_sender = models.EmailField()
 
 class Page(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     html = models.TextField()
-    modified_date = models.DateTimeField(auto_now=True)
+    modified_date = models.DateTimeField(auto_now=True)  # Solo auto_now
     capture_credentials = models.BooleanField(default=False)
     capture_passwords = models.BooleanField(default=False)
     redirect_url = models.URLField(blank=True)
@@ -90,8 +89,8 @@ class SMTP(models.Model):
     password = models.CharField(max_length=255)
     from_address = models.EmailField()
     ignore_cert_errors = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
     def __str__(self):
         return self.name
 
@@ -100,8 +99,8 @@ class EmailTemplate(models.Model):
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
     def __str__(self):
         return self.name
 
@@ -110,38 +109,47 @@ class LandingPage(models.Model):
     name = models.CharField(max_length=255)
     html_content = models.TextField()
     url_path = models.SlugField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
     def __str__(self):
         return self.name
 
 class Campaign(models.Model):
+    STATUS_CHOICES = [
+        ('draft', 'Borrador'),
+        ('in_progress', 'En Progreso'),
+        ('completed', 'Completada'),
+        ('cancelled', 'Cancelada'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     email_template = models.ForeignKey(EmailTemplate, on_delete=models.CASCADE)
     landing_page = models.ForeignKey(LandingPage, on_delete=models.CASCADE)
     smtp = models.ForeignKey(SMTP, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    completed_date = models.DateTimeField(null=True, blank=True)
-    launch_date = models.DateTimeField(null=True, blank=True)
-    send_by_date = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=[
-        ('draft', 'Draft'),
-        ('in_progress', 'In Progress'),
-        ('completed', 'Completed')
-    ], default='draft')
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    completed_date = models.DateTimeField(null=True, blank=True)  # Sin default
+    launch_date = models.DateTimeField(null=True, blank=True)  # Sin default
+    send_by_date = models.DateTimeField(null=True, blank=True)  # Sin default
 
 class CampaignResult(models.Model):
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='results')
-    target = models.ForeignKey(Target, on_delete=models.CASCADE)
     email_sent = models.BooleanField(default=False)
     email_opened = models.BooleanField(default=False)
-    link_clicked = models.BooleanField(default=False)
     landing_page_opened = models.BooleanField(default=False)
+    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
+    target = models.ForeignKey('Target', on_delete=models.CASCADE)
     token = models.CharField(max_length=100, unique=True)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_agent = models.TextField(null=True, blank=True)
-    click_timestamp = models.DateTimeField(null=True, blank=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.CharField(max_length=255, blank=True, null=True)
+    landing_page_opened_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
+    opened_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
+    sent_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
+    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
+    post_data = models.JSONField(blank=True, null=True)  # Para almacenar datos enviados
+    latitude = models.FloatField(blank=True, null=True)  # Para almacenar latitud
+    longitude = models.FloatField(blank=True, null=True)  # Para almacenar longitud
 
-
+    def __str__(self):
+        return self.token

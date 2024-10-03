@@ -21,6 +21,9 @@ from django.views.decorators.http import require_GET
 from django.utils import timezone
 import csv
 import io
+import pandas as pd
+from django.http import HttpResponse
+from .models import CampaignResult
 
 
 
@@ -177,26 +180,39 @@ def add_landing_page(request):
 def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = CampaignResult.objects.get(campaign__landing_page=page, token=token)
+    
+    # Actualizar el estado de la landing page
     result.landing_page_opened = True
+    result.landing_page_opened_timestamp = timezone.localtime()
     
     # Obtener la IP pública
     public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
     if not public_ip:
         public_ip = request.META.get('REMOTE_ADDR', '')
-    
-    # Obtener la IP privada
-    private_ip = request.META.get('REMOTE_ADDR', '')
-    
-    # Combinar IPs públicas y privadas
-    result.ip_address = f"{public_ip}, {private_ip}"
-    
-    # Obtener el User Agent
-    user_agent = request.META.get('HTTP_USER_AGENT', '')
-    result.user_agent = user_agent
-    
-    result.click_timestamp = timezone.localtime()
+    result.user_agent = request.META.get('HTTP_USER_AGENT', '')
+    result.ip_address = public_ip
+
+    if request.method == 'POST':
+        # Obtener datos del formulario
+        post_data = request.POST.dict()
+        result.post_data = post_data
+        result.latitude = post_data.get('latitude')
+        result.longitude = post_data.get('longitude')
+
+    # Guardar los cambios en el modelo
     result.save()
-    return HttpResponse(page.html_content)
+
+    # Modificar el contenido HTML de la landing page
+    soup = BeautifulSoup(page.html_content, 'html.parser')
+
+    # Encontrar el formulario y cambiar su acción
+    form = soup.find('form')
+    if form:
+        # Reemplazar el action del formulario con el URL path de la landing page
+        form['action'] = f"/{url_path}/"  # Asegúrate de que esta sea la URL correcta
+
+    # Devolver el HTML modificado
+    return HttpResponse(str(soup))
 
 @login_required
 def group_list(request):
@@ -254,6 +270,7 @@ def add_campaign(request):
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.user = request.user
+            campaign.created_at = timezone.localtime()
             campaign.save()
             messages.success(request, 'Campaña creada con éxito.')
             return redirect('campaign_list')
@@ -280,6 +297,8 @@ def start_campaign(request, campaign_id):
         for target in campaign.group.targets.all():
             token = generate_unique_token()
             result = CampaignResult.objects.create(campaign=campaign, target=target, token=token)
+            result.sent_timestamp = timezone.localtime() 
+            result.save()
             
             landing_page_url = request.build_absolute_uri(
                 reverse('serve_landing_page', args=[campaign.landing_page.url_path, token])
@@ -400,6 +419,7 @@ def track_email_open(request, token):
         result = CampaignResult.objects.get(token=token)
         if not result.email_opened:
             result.email_opened = True
+            result.opened_timestamp = timezone.localtime()
             result.save()
     except CampaignResult.DoesNotExist:
         pass
@@ -487,3 +507,75 @@ def import_targets_from_csv(request):
         return redirect('group_list')
 
     return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})
+
+
+@login_required
+def export_campaign_results(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
+    results = CampaignResult.objects.filter(campaign=campaign)
+
+    # Crear la respuesta HTTP con el tipo de contenido CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.id}.csv"'
+
+    writer = csv.writer(response)
+    # Escribir la cabecera del CSV
+    writer.writerow(['events', 'uuid', 'email', 'first_name', 'last_name', 'work_position', 'status', 'ip_address', 'user_agent', 'post_data', 'latitude', 'longitude', 'send_date', 'reported', 'is_archived', 'created_at', 'updated_at'])
+
+    for result in results:
+        writer.writerow([
+            '',  # events (puedes agregar lógica para esto si es necesario)
+            result.token,  # uuid
+            result.target.email,
+            result.target.first_name,
+            result.target.last_name,
+            result.target.position,
+            'email-opened' if result.email_opened else 'email-sent',  # status
+            result.ip_address,
+            result.user_agent,
+            '',  # post_data
+            '',  # latitude
+            '',  # longitude
+            result.sent_timestamp,  # send_date
+            'FALSE',  # reported
+            'FALSE',  # is_archived
+            result.created_at,  # created_at
+            result.updated_at,  # updated_at
+        ])
+
+    return response
+
+@login_required
+def export_campaign_results_csv(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
+    results = CampaignResult.objects.filter(campaign=campaign)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['events', 'uuid', 'email', 'first_name', 'last_name', 'work_position', 'status', 'ip_address', 'user_agent', 'post_data', 'latitude', 'longitude', 'send_date', 'reported', 'is_archived', 'created_at', 'updated_at'])
+
+    for result in results:
+        writer.writerow([
+            '',  # events (puedes agregar lógica para esto si es necesario)
+            result.token,  # uuid
+            result.target.email,
+            result.target.first_name,
+            result.target.last_name,
+            result.target.position,
+            'email-opened' if result.email_opened else 'email-sent',  # status
+            result.ip_address,
+            result.user_agent,
+            '',  # post_data
+            '',  # latitude
+            '',  # longitude
+            result.sent_timestamp,  # send_date
+            'FALSE',  # reported
+            'FALSE',  # is_archived
+            result.created_at,  # created_at
+            result.updated_at,  # updated_at
+        ])
+
+    return response
+

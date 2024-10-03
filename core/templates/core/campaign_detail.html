@@ -3,6 +3,8 @@
 {% block content %}
     <h2>Campaña: {{ campaign.name }}</h2>
     <p>Estado: {{ campaign.get_status_display }}</p>
+    <a href="{% url 'export_campaign_results' campaign.id %}" class="btn btn-success">Exportar a Excel</a>
+    <a href="{% url 'export_campaign_results_csv' campaign.id %}" class="btn btn-primary">Exportar a CSV</a>
     <h3>Resultados</h3>
     <table class="table">
         <thead>

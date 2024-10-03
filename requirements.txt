@@ -8,3 +8,5 @@ PyJWT
 cryptography
 djangorestframework
 PyMySQL
+pandas 
+openpyxl

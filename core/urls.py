@@ -32,4 +32,6 @@ urlpatterns = [
     path('landing-pages/<int:landing_page_id>/delete/', views.delete_landing_page, name='delete_landing_page'),
     path('smtp/', views.smtp_list, name='smtp_list'),
     path('import-targets/', views.import_targets_from_csv, name='import_targets'),
+    path('campaign/<int:campaign_id>/export/', views.export_campaign_results, name='export_campaign_results'),
+    path('campaign/<int:campaign_id>/export/csv/', views.export_campaign_results_csv, name='export_campaign_results_csv'),
 ]
