@@ -24,10 +24,9 @@ import io
 import pandas as pd
 from django.http import HttpResponse
 from .models import CampaignResult
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-
-
-# Create your views here.
 
 def dashboard(request):
     campaigns = Campaign.objects.filter(user=request.user)
@@ -35,6 +34,7 @@ def dashboard(request):
     selected_campaign = None
     results = None
     chart_data = []
+    
     if selected_campaign_id:
         selected_campaign = get_object_or_404(Campaign, id=selected_campaign_id, user=request.user)
         results = CampaignResult.objects.filter(campaign=selected_campaign)
@@ -52,11 +52,18 @@ def dashboard(request):
             {"y": landing_pages_opened, "label": "Interacciones con Landing Page", "filter": "interacted"}
         ]
     
+    # Cargar post_data como un diccionario
+    if results:
+        for result in results:
+            if result.post_data:
+                result.post_data = json.loads(result.post_data)  # Cargar los datos como un diccionario
+
     return render(request, 'core/dashboard.html', {
         'campaigns': campaigns,
         'selected_campaign': selected_campaign,
         'results': results,
-        'chart_data': chart_data
+        'chart_data': chart_data,
+        'post_data': [result.post_data for result in results] if results else []  # Agrega los datos del formulario
     })
 
 @login_required
@@ -177,12 +184,18 @@ def add_landing_page(request):
         form = LandingPageForm()
     return render(request, 'core/landing_page_form.html', {'form': form})
 
+@csrf_exempt
 @login_required
 def serve_landing_page(request, url_path, token):
     # Obtener la landing page y el resultado de la campaña
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = get_object_or_404(CampaignResult, campaign__landing_page=page, token=token)
     
+    if request.method == 'POST':
+        # Capturar los datos del formulario
+        form_data = request.POST.dict()  # Captura todos los datos del formulario
+        result.post_data = json.dumps(form_data)  # Guarda los datos como un JSON
+        result.save()  # Guarda los cambios en el modelo
     
     # Verificar si la landing page ya ha sido abierta
     if not result.landing_page_opened:

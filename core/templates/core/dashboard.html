@@ -54,14 +54,24 @@
                         </tr>
                         <tr id="details-{{ result.id }}" style="display: none;">
                             <td colspan="5">
-                                <strong>IP:</strong> {{ result.ip_address|default:"El usuario no ha hecho clic en el enlace" }}<br>
-                                <strong>User Agent:</strong> {{ result.user_agent|default:"El usuario no ha hecho clic en el enlace" }}<br>
+                                <strong>Detalles del Formulario:</strong><br>
+                                <strong>IP:</strong> {{ result.ip_address|default:"No disponible" }}<br>
+                                <strong>User Agent:</strong> {{ result.user_agent|default:"No disponible" }}<br>
                                 <strong>Fecha de envío:</strong> {{ result.sent_timestamp|default:"No disponible" }}<br>
                                 <strong>Fecha de apertura:</strong> {{ result.opened_timestamp|default:"No disponible" }}<br>
                                 <strong>Fecha de apertura de landing page:</strong> {{ result.landing_page_opened_timestamp|default:"No disponible" }}<br>
-                                <p><strong>Datos Enviados:</strong> {{ result.post_data|default:"No disponible" }}</p>
-                                <p><strong>Latitud:</strong> {{ result.latitude|default:"No disponible" }}</p>
-                                <p><strong>Longitud:</strong> {{ result.longitude|default:"No disponible" }}</p>
+                                <strong>Datos Enviados:</strong><br>
+                                <ul>
+                                    {% if result.post_data %}
+                                        {% for key, value in result.post_data.items %}
+                                            <li><strong>{{ key }}:</strong> {{ value }}</li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>No hay datos enviados.</li>
+                                    {% endif %}
+                                </ul>
+                                <strong>Latitud:</strong> {{ result.latitude|default:"No disponible" }}<br>
+                                <strong>Longitud:</strong> {{ result.longitude|default:"No disponible" }}
                             </td>
                         </tr>
                     {% empty %}

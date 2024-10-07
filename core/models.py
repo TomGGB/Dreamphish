@@ -148,7 +148,7 @@ class CampaignResult(models.Model):
     sent_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
     created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
     updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
-    post_data = models.JSONField(blank=True, null=True)  # Para almacenar datos enviados
+    post_data = models.TextField(blank=True, null=True)  # Campo para almacenar los datos del formulario
     latitude = models.FloatField(blank=True, null=True)  # Para almacenar latitud
     longitude = models.FloatField(blank=True, null=True)  # Para almacenar longitud
 
