@@ -1,5 +1,5 @@
 from django import forms
-from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign
+from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, LandingGroup
 from django.forms import inlineformset_factory
 
 class SMTPForm(forms.ModelForm):
@@ -38,12 +38,12 @@ TargetFormSet = inlineformset_factory(Group, Target, form=TargetForm, extra=1, c
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ['name', 'smtp', 'email_template', 'landing_page', 'group']
+        fields = ['name', 'smtp', 'email_template','group', 'landing_group']
         widgets = {
             'smtp': forms.Select(attrs={'class': 'form-control'}),
             'email_template': forms.Select(attrs={'class': 'form-control'}),
-            'landing_page': forms.Select(attrs={'class': 'form-control'}),
             'group': forms.Select(attrs={'class': 'form-control'}),
+            'landing_group': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -52,5 +52,9 @@ class CampaignForm(forms.ModelForm):
         if user:
             self.fields['smtp'].queryset = SMTP.objects.filter(user=user)
             self.fields['email_template'].queryset = EmailTemplate.objects.filter(user=user)
-            self.fields['landing_page'].queryset = LandingPage.objects.filter(user=user)
             self.fields['group'].queryset = Group.objects.filter(user=user)
+            self.fields['landing_group'].queryset = LandingGroup.objects.filter(user=user)
+
+class LandingPageUploadForm(forms.Form):
+    name = forms.CharField(label='Nombre de la Plantilla', max_length=255)
+    zip_file = forms.FileField(label='Archivo ZIP')

@@ -104,11 +104,8 @@ USE_TZ = True
 
 # Configuración de archivos estáticos
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'core/static'),
-]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuración adicional
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -116,3 +113,7 @@ AUTH_USER_MODEL = 'core.User'
 LOGIN_URL = '/login/'
 PORT = int(os.environ.get('PORT', 8000))
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Configuración de almacenamiento de archivos
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

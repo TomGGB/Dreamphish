@@ -54,6 +54,13 @@ class Group(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
     def __str__(self):
         return self.name
+    
+class LandingGroup(models.Model):
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 class Target(models.Model):
     group = models.ForeignKey(Group, related_name='targets', on_delete=models.CASCADE)
@@ -107,10 +114,14 @@ class EmailTemplate(models.Model):
 class LandingPage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    html_content = models.TextField()
-    url_path = models.SlugField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
-    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
+    html_content = models.TextField()  # Contenido HTML de la landing page
+    url_path = models.SlugField(unique=True)  # Asegúrate de que este campo esté presente
+    order = models.IntegerField(default=0)  # Para mantener el orden de los índices
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    zip_file_name = models.CharField(max_length=255, blank=True, null=True)  # Nuevo campo para el nombre del ZIP
+    landing_group = models.ForeignKey(LandingGroup, on_delete=models.CASCADE, related_name='landing_pages')  # Cambiar a LandingGroup
+
     def __str__(self):
         return self.name
 
@@ -124,9 +135,9 @@ class Campaign(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     email_template = models.ForeignKey(EmailTemplate, on_delete=models.CASCADE)
-    landing_page = models.ForeignKey(LandingPage, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE) # Grupo de destinatarios
+    landing_group = models.ForeignKey(LandingGroup, on_delete=models.CASCADE)  # Grupo de landing pages
     smtp = models.ForeignKey(SMTP, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
     completed_date = models.DateTimeField(null=True, blank=True)  # Sin default
@@ -146,7 +157,7 @@ class CampaignResult(models.Model):
     landing_page_opened_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
     opened_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
     sent_timestamp = models.DateTimeField(blank=True, null=True)  # Sin default
-    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
+    created_at = models.DateTimeField(null=True)  # Permitir nulos temporalmente
     updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
     post_data = models.TextField(blank=True, null=True)  # Campo para almacenar los datos del formulario
     latitude = models.FloatField(blank=True, null=True)  # Para almacenar latitud
@@ -154,3 +165,4 @@ class CampaignResult(models.Model):
 
     def __str__(self):
         return self.token
+

@@ -1,34 +1,39 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Landing Pages</h2>
+    <h2>Lista de Landing Pages</h2>
     <a href="{% url 'add_landing_page' %}" class="btn btn-primary">Añadir Landing Page</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>URL Path</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for page in pages %}
+    {% for group, landing_pages in landing_pages_by_group.items %}
+        <h3>{{ group.name }}</h3>
+        <form method="post" action="{% url 'delete_landing_group' group.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este grupo y todas las landing pages asociadas?')">Eliminar Grupo</button>
+        </form>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ page.name }}</td>
-                    <td>{{ page.url_path }}</td>
-                    <td>
-                        <a href="{% url 'edit_landing_page' page.id %}" class="btn btn-warning btn-sm">Editar</a>
-                        <form method="post" action="{% url 'delete_landing_page' page.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta landing page?')">Eliminar</button>
-                        </form>
-                    </td>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">No hay landing pages registradas.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for landing_page in landing_pages %}
+                    <tr>
+                        <td>{{ landing_page.name }}</td>
+                        <td>
+                            <a href="{% url 'edit_landing_page' landing_page.id %}" class="btn btn-sm btn-warning">Editar</a>
+                            <form method="post" action="{% url 'delete_landing_page' landing_page.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta landing page?')">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="2">No hay landing pages en este grupo.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 {% endblock %}

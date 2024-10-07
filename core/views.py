@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, CampaignResult
+from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, CampaignResult, LandingGroup
 from .forms import SMTPForm, TestSMTPForm, EmailTemplateForm, LandingPageForm, GroupForm, TargetForm, CampaignForm, TargetFormSet
 import smtplib
 from email.mime.text import MIMEText
@@ -26,6 +26,15 @@ from django.http import HttpResponse
 from .models import CampaignResult
 from django.views.decorators.csrf import csrf_exempt
 import json
+import os
+import zipfile
+from django.core.files.storage import FileSystemStorage
+from .forms import LandingPageUploadForm
+from django.utils.text import slugify
+import hashlib
+from django.http import Http404
+from django.db import models
+
 
 
 def dashboard(request):
@@ -167,59 +176,94 @@ def add_email_template(request):
 
 @login_required
 def landing_page_list(request):
-    pages = LandingPage.objects.filter(user=request.user)
-    return render(request, 'core/landing_page_list.html', {'pages': pages})
+    landing_groups = LandingGroup.objects.all()  # Obtener todos los grupos de landing pages
+    landing_pages_by_group = {group: group.landing_pages.all() for group in landing_groups}  # Agrupar landing pages por grupo
+
+    return render(request, 'core/landing_page_list.html', {
+        'landing_pages_by_group': landing_pages_by_group,
+    })
 
 @login_required
 def add_landing_page(request):
     if request.method == 'POST':
-        form = LandingPageForm(request.POST)
+        form = LandingPageForm(request.POST, request.FILES)
         if form.is_valid():
-            page = form.save(commit=False)
-            page.user = request.user
-            page.save()
-            messages.success(request, 'Landing page añadida con éxito.')
-            return redirect('landing_page_list')
+            landing_page = form.save(commit=False)
+            
+            # Asignar el usuario actual a la landing page
+            landing_page.user = request.user
+            
+            # Crear un nuevo LandingGroup basado en el nombre de la plantilla
+            landing_group_name = landing_page.name
+            landing_group, created = LandingGroup.objects.get_or_create(name=landing_group_name, user=request.user)
+            
+            # Asignar el LandingGroup a la LandingPage
+            landing_page.landing_group = landing_group
+            landing_page.save()
+            
+            return redirect('landing_page_list')  # Redirigir a la lista de landing pages
     else:
         form = LandingPageForm()
+
     return render(request, 'core/landing_page_form.html', {'form': form})
 
 @csrf_exempt
 @login_required
 def serve_landing_page(request, url_path, token):
-    # Obtener la landing page y el resultado de la campaña
+    # Obtén la landing page usando el url_path
     page = get_object_or_404(LandingPage, url_path=url_path)
-    result = get_object_or_404(CampaignResult, campaign__landing_page=page, token=token)
-    
+
+    # Cambia la consulta para obtener el CampaignResult
+    result = get_object_or_404(CampaignResult, token=token, campaign__landing_group=page.landing_group)
+
     if request.method == 'POST':
         # Capturar los datos del formulario
-        form_data = request.POST.dict()  # Captura todos los datos del formulario
-        result.post_data = json.dumps(form_data)  # Guarda los datos como un JSON
-        result.save()  # Guarda los cambios en el modelo
-    
-    # Verificar si la landing page ya ha sido abierta
-    if not result.landing_page_opened:
-        # Actualizar el estado de la landing page
+        form_data = request.POST.dict()
+
+
+        
+        # Actualizar los campos del resultado existente
+        if result.post_data:
+            existing_data = json.loads(result.post_data)
+            existing_data.update(form_data)  # Agregar nuevos datos al diccionario existente
+            result.post_data = json.dumps(existing_data)  # Convertir de nuevo a JSON
+
+        else:
+            result.post_data = json.dumps(form_data)
+
+        # Actualizar otros campos si es necesario
         result.landing_page_opened = True
         result.landing_page_opened_timestamp = timezone.localtime()
-        result.status = 'landing_page_opened'  # Actualiza el estado a 'landing_page_opened'
+        result.status = 'landing_page_opened'
+        result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
+        result.user_agent = request.META.get('HTTP_USER_AGENT', '')
+
+        result.save()  # Guardar los cambios en el resultado existente
+
+        # Verificar si hay una siguiente página
+        next_page = LandingPage.objects.filter(landing_group=page.landing_group, order=page.order + 1).first()
+        if next_page:
+            return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
+
+    # Verificar si la landing page ya ha sido abierta
+    if not result.landing_page_opened:
+        result.landing_page_opened = True
+        result.landing_page_opened_timestamp = timezone.localtime()
+        result.status = 'landing_page_opened'
         public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
         if not public_ip:
             public_ip = request.META.get('REMOTE_ADDR', '')
         result.ip_address = public_ip
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         result.user_agent = user_agent
-        result.save()  # Guardar los cambios en el modelo
+        result.save()
 
     # Modificar el contenido HTML de la landing page
     soup = BeautifulSoup(page.html_content, 'html.parser')
-
-    # Encontrar el formulario y cambiar su acción
     form = soup.find('form')
     if form:
         form['action'] = request.build_absolute_uri(reverse('serve_landing_page', args=[url_path, token]))
 
-    # Devolver el HTML modificado
     return HttpResponse(str(soup))
 
 @login_required
@@ -274,13 +318,11 @@ def campaign_list(request):
 @login_required
 def add_campaign(request):
     if request.method == 'POST':
-        form = CampaignForm(request.POST, user=request.user)
+        form = CampaignForm(request.POST, user=request.user)  # Asegúrate de pasar el usuario
         if form.is_valid():
-            campaign = form.save(commit=False)
-            campaign.user = request.user
-            campaign.created_at = timezone.localtime()
-            campaign.save()
-            messages.success(request, 'Campaña creada con éxito.')
+            campaign = form.save(commit=False)  # No guardar aún
+            campaign.user = request.user  # Establecer el usuario
+            campaign.save()  # Ahora guarda la campaña
             return redirect('campaign_list')
     else:
         form = CampaignForm(user=request.user)
@@ -308,9 +350,8 @@ def start_campaign(request, campaign_id):
             result.sent_timestamp = timezone.localtime() 
             result.save()
             
-            landing_page_url = request.build_absolute_uri(
-                reverse('serve_landing_page', args=[campaign.landing_page.url_path, token])
-            )
+            landing_pages = campaign.landing_group.landing_pages.all()
+            landing_page_url = request.build_absolute_uri(reverse('serve_landing_page', args=[landing_pages[0].url_path, token]))
             
             email_body = campaign.email_template.body.replace('{NOMBRE}', target.first_name)
             email_body = email_body.replace('{APELLIDO}', target.last_name)
@@ -358,7 +399,7 @@ def start_campaign(request, campaign_id):
             messages.warning(request, 'No se pudo enviar ningún correo. Verifique la configuración SMTP.')
     else:
         messages.error(request, 'La campaña ya ha sido iniciada.')
-    return redirect('campaign_detail', campaign_id=campaign.id)
+    return redirect('dashboard')
 
 def generate_unique_token():
     return str(uuid.uuid4())
@@ -545,7 +586,7 @@ def export_campaign_results(request, campaign_id):
             result.status,  # status
             result.ip_address,
             result.user_agent,
-            '',  # post_data
+            result.post_data,
             '',  # latitude
             '',  # longitude
             result.sent_timestamp,  # send_date
@@ -579,7 +620,7 @@ def export_campaign_results_csv(request, campaign_id):
             result.status,  # status
             result.ip_address,
             result.user_agent,
-            '',  # post_data
+            result.post_data,
             '',  # latitude
             '',  # longitude
             result.sent_timestamp,  # send_date
@@ -590,3 +631,97 @@ def export_campaign_results_csv(request, campaign_id):
         ])
 
     return response
+
+@login_required
+def upload_landing_page_template(request):
+    if request.method == 'POST':
+        zip_file = request.FILES['zip_file']
+        if zip_file:
+            with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+                landing_group_name = zip_file.name.replace('.zip', '')
+                landing_group, created = LandingGroup.objects.get_or_create(name=landing_group_name, user=request.user)
+
+                # Obtener el máximo valor de order existente
+                max_order = LandingPage.objects.filter(landing_group=landing_group).aggregate(max_order=models.Max('order'))['max_order'] or 0
+
+                for extracted_file in zip_ref.namelist():
+                    if extracted_file.endswith('.html'):
+                        landing_page_name = os.path.splitext(os.path.basename(extracted_file))[0]
+                        
+                        with zip_ref.open(extracted_file) as file:
+                            html_content = file.read().decode('utf-8')
+
+                        # Generar un url_path único
+                        base_urlpath = f'{landing_page_name}'
+                        urlpath = base_urlpath
+                        counter = 1
+
+                        # Verificar unicidad del url_path
+                        while LandingPage.objects.filter(url_path=urlpath).exists():
+                            urlpath = f'{base_urlpath}-{counter}'
+                            counter += 1
+
+                        # Crear la LandingPage con el nuevo orden
+                        landing_page = LandingPage(
+                            user=request.user,
+                            name=landing_page_name,
+                            html_content=html_content,
+                            url_path=urlpath,
+                            landing_group=landing_group,
+                            order=max_order + 1  # Asignar el siguiente orden
+                        )
+                        landing_page.save()
+
+                        # Incrementar el max_order para la próxima landing page
+                        max_order += 1
+
+            return redirect('landing_page_list')
+
+    return render(request, 'core/upload_landing_page_template.html')
+
+@login_required
+def view_landing_page(request, landing_page_id):
+    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+
+    # Lógica para mostrar el contenido del índice actual
+    return render(request, 'core/view_landing_page.html', {'landing_page': landing_page})
+
+@login_required
+def next_index(request, landing_page_id):
+    current_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+    next_page = LandingPage.objects.filter(order__gt=current_page.order, user=request.user).order_by('order').first()
+
+    if next_page:
+        return redirect('view_landing_page', landing_page_id=next_page.id)
+    else:
+        messages.info(request, 'No hay más índices disponibles.')
+        return redirect('landing_page_list')
+
+def generate_short_hash(value):
+    hash_object = hashlib.sha1(value.encode())
+    return hash_object.hexdigest()[:8]  # Tomar los primeros 8 caracteres
+
+def edit_campaign(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    if request.method == 'POST':
+        form = CampaignForm(request.POST, instance=campaign)
+        if form.is_valid():
+            form.save()
+            return redirect('campaign_detail', campaign_id=campaign.id)
+    else:
+        form = CampaignForm(instance=campaign)
+
+    return render(request, 'core/campaign_form.html', {'form': form, 'campaign': campaign})
+
+def get_landing_pages_by_group(group_id):
+    group = get_object_or_404(Group, id=group_id)
+    landing_pages = LandingPage.objects.filter(group=group)
+    return landing_pages
+
+
+def delete_landing_group(request, group_id):
+    group = get_object_or_404(LandingGroup, id=group_id)
+    group.landing_pages.all().delete()  # Eliminar todas las landing pages asociadas
+    group.delete()  # Eliminar el grupo
+    messages.success(request, 'Grupo de landing pages eliminado con éxito.')
+    return redirect('landing_page_list')

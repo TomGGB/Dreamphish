@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Grupo: {{ group.name }}</h2>
+    <h2>{{ group.name }}</h2>
     <a href="{% url 'add_target' group.id %}" class="btn btn-primary">Añadir Objetivo</a>
     <table class="table">
         <thead>

@@ -2,9 +2,17 @@
 
 {% block content %}
     <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Landing Page</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
+    {% if form.instance.pk %}
+        <a href="{% url 'delete_landing_page' form.instance.pk %}" class="btn btn-danger">Eliminar</a>
+    {% else %}
+        <a href="{% url 'upload_landing_page_template' %}" class="btn btn-secondary">Subir Plantilla ZIP</a>
+    {% endif %}
+
+    
+    
 {% endblock %}
