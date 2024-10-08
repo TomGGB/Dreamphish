@@ -1,33 +1,55 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Campaña: {{ campaign.name }}</h2>
-    <p>Estado: {{ campaign.get_status_display }}</p>
-    <a href="{% url 'export_campaign_results' campaign.id %}" class="btn btn-success">Exportar a Excel</a>
-    <a href="{% url 'export_campaign_results_csv' campaign.id %}" class="btn btn-primary">Exportar a CSV</a>
-    <h3>Resultados</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Enviado</th>
-                <th>Abierto</th>
-                <th>Interacción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in results %}
+    <h2>{{ campaign.name }}</h2>
+    <button id="refresh-button" class="btn btn-secondary">Refrescar Datos</button>
+    <div id="campaign-results">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ result.target.email }}</td>
-                    <td>{% if result.email_sent %}Sí{% else %}No{% endif %}</td>
-                    <td>{% if result.email_opened %}Sí{% else %}No{% endif %}</td>
-                    <td>{% if result.landing_page_opened %}Sí{% else %}No{% endif %}</td>
+                    <th>Token</th>
+                    <th>Email</th>
+                    <th>Estado</th>
+                    <th>Fecha de Envío</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">No hay resultados aún.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.token }}</td>
+                        <td>{{ result.target.email }}</td>
+                        <td>{{ result.status }}</td>
+                        <td>{{ result.sent_timestamp }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay resultados disponibles.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
+
+<script>
+    document.getElementById('refresh-button').addEventListener('click', function() {
+        fetch("{% url 'refresh_campaign_results' campaign.id %}")
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#campaign-results tbody');
+                tbody.innerHTML = ''; // Limpiar la tabla existente
+
+                data.results.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${result.token}</td>
+                        <td>${result.target.email}</td>
+                        <td>${result.status}</td>
+                        <td>${result.sent_timestamp}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error al refrescar los datos:', error));
+    });
+</script>

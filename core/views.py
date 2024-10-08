@@ -725,3 +725,4 @@ def delete_landing_group(request, group_id):
     group.delete()  # Eliminar el grupo
     messages.success(request, 'Grupo de landing pages eliminado con éxito.')
     return redirect('landing_page_list')
+
