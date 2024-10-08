@@ -1,9 +1,0 @@
-{% extends 'core/base.html' %}
-
-{% block content %}
-    <h2>{{ landing_page.name }}</h2>
-    <div>
-        {{ landing_page.html_content|safe }}
-    </div>
-    <a href="{% url 'next_index' landing_page.id %}" class="btn btn-primary">Siguiente</a>
-{% endblock %}

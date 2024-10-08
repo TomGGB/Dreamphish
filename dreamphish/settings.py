@@ -23,6 +23,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'dashboard',
+    'campaigns',
+    'landing_pages',
+    'smtp',
+    'email_templates',
 ]
 
 # Middleware
@@ -42,7 +47,14 @@ ROOT_URLCONF = 'dreamphish.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'core' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'core' / 'templates',
+            BASE_DIR / 'dashboard' / 'templates',
+            BASE_DIR / 'campaigns' / 'templates',
+            BASE_DIR / 'landing_pages' / 'templates',
+            BASE_DIR / 'smtp' / 'templates',
+            BASE_DIR / 'groups' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
