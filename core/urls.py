@@ -9,5 +9,5 @@ urlpatterns = [
     path('groups/', include('groups.urls')),
     path('smtp/', include('smtp.urls')),
     path('login/', views.login_view, name='login'),
-    path('', redirect('dashboard')),  # Redirect to the dashboard view
+    path('', redirect('dashboard')),
 ]
