@@ -168,10 +168,11 @@ class CampaignResult(models.Model):
         return self.token
 
 class LandingPageAsset(models.Model):
-    landing_page = models.ForeignKey(LandingPage, on_delete=models.CASCADE, related_name='assets')
+    landing_page = models.ForeignKey(LandingPage, related_name='assets', on_delete=models.CASCADE)
     file_name = models.CharField(max_length=255)
-    file_type = models.CharField(max_length=50)
+    file_type = models.CharField(max_length=10)
     content = models.TextField()
+    relative_path = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.file_name} - {self.landing_page.name}"
+        return f"{self.file_name} - {self.file_type}"

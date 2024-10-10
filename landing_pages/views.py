@@ -116,7 +116,8 @@ def upload_landing_page_template(request):
                         assets[file_path] = {
                             'file_name': file_name,
                             'file_type': asset_type,
-                            'content': base64.b64encode(content).decode('utf-8') if asset_type in ['image', 'font'] else content.decode('utf-8', errors='ignore')
+                            'content': base64.b64encode(content).decode('utf-8') if asset_type in ['image', 'font'] else content.decode('utf-8', errors='ignore'),
+                            'relative_path': file_path
                         }
 
                 for landing_page_name, landing_page_data in landing_pages.items():
@@ -132,6 +133,7 @@ def upload_landing_page_template(request):
                             **asset_data
                         )
 
+            messages.success(request, 'Landing pages subidas con éxito.')
             return redirect('landing_page_list')
 
     return render(request, 'upload_landing_page_template.html')

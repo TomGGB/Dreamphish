@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import base64
 import os
+from django.db.models import Q
 
 def login_view(request):
     if request.method == 'POST':
@@ -78,7 +79,7 @@ def serve_landing_page(request, url_path, token):
         result.user_agent = request.META.get('HTTP_USER_AGENT', '')
         result.save()
 
-        next_page = LandingPage.objects.filter(landing_group=page.landing_group, order=page.order + 1).first()
+        next_page = LandingPage.objects.filter(landing_group=page.landing_group, order__gt=page.order).order_by('order').first()
         if next_page:
             return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
 
@@ -86,12 +87,8 @@ def serve_landing_page(request, url_path, token):
         result.landing_page_opened = True
         result.landing_page_opened_timestamp = timezone.localtime()
         result.status = 'landing_page_opened'
-        public_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip()
-        if not public_ip:
-            public_ip = request.META.get('REMOTE_ADDR', '')
-        result.ip_address = public_ip
-        user_agent = request.META.get('HTTP_USER_AGENT', '')
-        result.user_agent = user_agent
+        result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
+        result.user_agent = request.META.get('HTTP_USER_AGENT', '')
         result.save()
 
     soup = BeautifulSoup(page.html_content, 'html.parser')
@@ -99,24 +96,11 @@ def serve_landing_page(request, url_path, token):
     if form:
         form['action'] = request.build_absolute_uri(reverse('serve_landing_page', args=[url_path, token]))
 
-    # Insertar los assets en el HTML
-    head = soup.find('head')
-    if head:
-        for asset in page.assets.all():
-            if asset.file_type == 'css':
-                style_tag = soup.new_tag('style')
-                style_tag.string = asset.content
-                head.append(style_tag)
-            elif asset.file_type == 'js':
-                script_tag = soup.new_tag('script')
-                script_tag.string = asset.content
-                head.append(script_tag)
-
     # Reemplazar las rutas de las imágenes, CSS, JS y fuentes
     for tag in soup.find_all(['img', 'link', 'script']):
         src = tag.get('src') or tag.get('href')
         if src:
-            asset = page.assets.filter(file_name=os.path.basename(src)).first()
+            asset = page.assets.filter(Q(relative_path__endswith=src) | Q(file_name=os.path.basename(src))).first()
             if asset:
                 if asset.file_type == 'image':
                     tag['src'] = f"data:image/{os.path.splitext(asset.file_name)[1][1:]};base64,{asset.content}"
@@ -130,10 +114,9 @@ def serve_landing_page(request, url_path, token):
                     tag.replace_with(script_tag)
                 elif asset.file_type == 'font':
                     tag['href'] = f"data:font/{os.path.splitext(asset.file_name)[1][1:]};base64,{asset.content}"
-
-    # Imprime los primeros 100 caracteres del contenido de los assets
-    for asset in page.assets.all():
-        print(f"Asset: {asset.file_name}, Type: {asset.file_type}, Content: {asset.content[:100]}")  # Imprime los primeros 100 caracteres del contenido
+            else:
+                # Si no se encuentra el asset, lo registramos pero no modificamos el tag
+                print(f"Asset no encontrado: {src}")
 
     return HttpResponse(str(soup))
 

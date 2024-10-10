@@ -1,0 +1,69 @@
+#custom-editor {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.toolbar {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.toolbar button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.toolbar button:hover {
+    background-color: #ddd;
+}
+
+#editor-container {
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#editor-content,
+#plain-text-editor {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#editor-content:focus,
+#plain-text-editor:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#plain-text-editor {
+    resize: vertical;
+}
+
+#editor-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.toggle-editor-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.toggle-editor-button i {
+    font-size: 18px;
+}
