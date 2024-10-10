@@ -114,13 +114,14 @@ class EmailTemplate(models.Model):
 class LandingPage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    html_content = models.TextField()  # Contenido HTML de la landing page
-    url_path = models.SlugField(unique=True)  # Asegúrate de que este campo esté presente
-    order = models.IntegerField(default=0)  # Para mantener el orden de los índices
+    html_content = models.TextField()
+    url_path = models.SlugField(unique=True)
+    order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    zip_file_name = models.CharField(max_length=255, blank=True, null=True)  # Nuevo campo para el nombre del ZIP
-    landing_group = models.ForeignKey(LandingGroup, on_delete=models.CASCADE, related_name='landing_pages')  # Cambiar a LandingGroup
+    zip_file_name = models.CharField(max_length=255, blank=True, null=True)
+    landing_group = models.ForeignKey(LandingGroup, on_delete=models.CASCADE, related_name='landing_pages')
+    image_file_paths = models.TextField(default='[]')  # Añade esta línea
 
     def __str__(self):
         return self.name
@@ -166,3 +167,11 @@ class CampaignResult(models.Model):
     def __str__(self):
         return self.token
 
+class LandingPageAsset(models.Model):
+    landing_page = models.ForeignKey(LandingPage, on_delete=models.CASCADE, related_name='assets')
+    file_name = models.CharField(max_length=255)
+    file_type = models.CharField(max_length=50)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.file_name} - {self.landing_page.name}"

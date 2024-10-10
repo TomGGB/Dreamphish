@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from core.models import LandingPage, LandingGroup, Group, Campaign
+from core.models import LandingPage, LandingGroup, Group, Campaign, LandingPageAsset
 from core.forms import LandingPageForm, CampaignForm
 from django.contrib.auth.decorators import login_required
 import zipfile
 import os
+import json
 from django.db import models
 import hashlib
 from django.http import JsonResponse
-
+import base64
 
 @login_required
 def landing_page_list(request):
@@ -68,6 +69,7 @@ def delete_landing_group(request, group_id):
     return redirect('landing_page_list')  # O la URL que desees redirigir
 
 
+
 @login_required
 def upload_landing_page_template(request):
     if request.method == 'POST':
@@ -77,43 +79,63 @@ def upload_landing_page_template(request):
                 landing_group_name = zip_file.name.replace('.zip', '')
                 landing_group, created = LandingGroup.objects.get_or_create(name=landing_group_name, user=request.user)
 
-                # Obtener el máximo valor de order existente
                 max_order = LandingPage.objects.filter(landing_group=landing_group).aggregate(max_order=models.Max('order'))['max_order'] or 0
 
-                for extracted_file in zip_ref.namelist():
-                    if extracted_file.endswith('.html'):
-                        landing_page_name = os.path.splitext(os.path.basename(extracted_file))[0]
-                        
-                        with zip_ref.open(extracted_file) as file:
-                            html_content = file.read().decode('utf-8')
+                landing_pages = {}
+                assets = {}
 
-                        # Generar un url_path único
+                for file_info in zip_ref.infolist():
+                    if file_info.is_dir():
+                        continue
+
+                    file_path = file_info.filename
+                    file_name = os.path.basename(file_path)
+                    file_extension = os.path.splitext(file_name)[1].lower()
+                    
+                    with zip_ref.open(file_info.filename) as file:
+                        content = file.read()
+
+                    if file_name.startswith('index-'):
+                        landing_page_name = os.path.splitext(file_name)[0]
                         base_urlpath = f'{landing_page_name}'
                         urlpath = base_urlpath
                         counter = 1
 
-                        # Verificar unicidad del url_path
                         while LandingPage.objects.filter(url_path=urlpath).exists():
                             urlpath = f'{base_urlpath}-{counter}'
                             counter += 1
 
-                        # Crear la LandingPage con el nuevo orden
-                        landing_page = LandingPage(
-                            user=request.user,
-                            name=landing_page_name,
-                            html_content=html_content,
-                            url_path=urlpath,
-                            landing_group=landing_group,
-                            order=max_order + 1  # Asignar el siguiente orden
-                        )
-                        landing_page.save()
+                        landing_pages[landing_page_name] = {
+                            'name': landing_page_name,
+                            'html_content': content.decode('utf-8', errors='ignore'),
+                            'url_path': urlpath,
+                            'order': int(landing_page_name.split('-')[1]) + max_order
+                        }
+                    else:
+                        asset_type = 'css' if file_extension in ['.css'] else 'js' if file_extension in ['.js'] else 'image' if file_extension in ['.jpg', '.jpeg', '.png', '.gif', '.svg'] else 'font' if file_extension in ['.woff', '.woff2', '.ttf', '.eot'] else 'other'
+                        assets[file_path] = {
+                            'file_name': file_name,
+                            'file_type': asset_type,
+                            'content': base64.b64encode(content).decode('utf-8') if asset_type in ['image', 'font'] else content.decode('utf-8', errors='ignore')
+                        }
 
-                        # Incrementar el max_order para la próxima landing page
-                        max_order += 1
+                for landing_page_name, landing_page_data in landing_pages.items():
+                    landing_page = LandingPage.objects.create(
+                        user=request.user,
+                        landing_group=landing_group,
+                        **landing_page_data
+                    )
+
+                    for asset_path, asset_data in assets.items():
+                        LandingPageAsset.objects.create(
+                            landing_page=landing_page,
+                            **asset_data
+                        )
 
             return redirect('landing_page_list')
 
     return render(request, 'upload_landing_page_template.html')
+
 
 
 @login_required
