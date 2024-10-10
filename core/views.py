@@ -18,6 +18,8 @@ import json
 import base64
 import os
 from django.db.models import Q
+import mimetypes
+from django.conf import settings
 
 def login_view(request):
     if request.method == 'POST':
@@ -100,6 +102,9 @@ def serve_landing_page(request, url_path, token):
     for tag in soup.find_all(['img', 'link', 'script']):
         src = tag.get('src') or tag.get('href')
         if src:
+            if src.startswith(('http://', 'https://', '//')):
+                # Es un recurso externo, lo dejamos como está
+                continue
             asset = page.assets.filter(Q(relative_path__endswith=src) | Q(file_name=os.path.basename(src))).first()
             if asset:
                 if asset.file_type == 'image':
@@ -115,8 +120,25 @@ def serve_landing_page(request, url_path, token):
                 elif asset.file_type == 'font':
                     tag['href'] = f"data:font/{os.path.splitext(asset.file_name)[1][1:]};base64,{asset.content}"
             else:
-                # Si no se encuentra el asset, lo registramos pero no modificamos el tag
-                print(f"Asset no encontrado: {src}")
+                # Si no se encuentra el asset en la base de datos, buscamos en el sistema de archivos
+                file_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', page.landing_group.name, src.lstrip('/'))
+                if os.path.exists(file_path):
+                    with open(file_path, 'rb') as f:
+                        content = base64.b64encode(f.read()).decode('utf-8')
+                        mime_type, _ = mimetypes.guess_type(file_path)
+                        if mime_type:
+                            if 'css' in mime_type:
+                                style_tag = soup.new_tag('style')
+                                style_tag.string = content
+                                tag.replace_with(style_tag)
+                            elif 'javascript' in mime_type:
+                                script_tag = soup.new_tag('script')
+                                script_tag.string = content
+                                tag.replace_with(script_tag)
+                            else:
+                                tag['src'] = f"data:{mime_type};base64,{content}"
+                else:
+                    print(f"Archivo no encontrado: {file_path}")
 
     return HttpResponse(str(soup))
 

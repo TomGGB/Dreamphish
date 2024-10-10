@@ -10,6 +10,7 @@ from django.db import models
 import hashlib
 from django.http import JsonResponse
 import base64
+from django.conf import settings
 
 @login_required
 def landing_page_list(request):
@@ -84,6 +85,10 @@ def upload_landing_page_template(request):
                 landing_pages = {}
                 assets = {}
 
+                # Crear el directorio para el grupo de landing pages si no existe
+                group_dir = os.path.join(settings.MEDIA_ROOT, 'landing_pages', landing_group_name)
+                os.makedirs(group_dir, exist_ok=True)
+
                 for file_info in zip_ref.infolist():
                     if file_info.is_dir():
                         continue
@@ -94,6 +99,12 @@ def upload_landing_page_template(request):
                     
                     with zip_ref.open(file_info.filename) as file:
                         content = file.read()
+
+                    # Guardar el archivo en el sistema de archivos
+                    full_path = os.path.join(group_dir, file_path)
+                    os.makedirs(os.path.dirname(full_path), exist_ok=True)
+                    with open(full_path, 'wb') as f:
+                        f.write(content)
 
                     if file_name.startswith('index-'):
                         landing_page_name = os.path.splitext(file_name)[0]
@@ -138,25 +149,6 @@ def upload_landing_page_template(request):
 
     return render(request, 'upload_landing_page_template.html')
 
-
-
-@login_required
-def view_landing_page(request, landing_page_id):
-    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
-
-    # Lógica para mostrar el contenido del índice actual
-    return render(request, 'core/view_landing_page.html', {'landing_page': landing_page})
-
-@login_required
-def next_index(request, landing_page_id):
-    current_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
-    next_page = LandingPage.objects.filter(order__gt=current_page.order, user=request.user).order_by('order').first()
-
-    if next_page:
-        return redirect('view_landing_page', landing_page_id=next_page.id)
-    else:
-        messages.info(request, 'No hay más índices disponibles.')
-        return redirect('landing_page_list')
 
 def generate_short_hash(value):
     hash_object = hashlib.sha1(value.encode())
