@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from core.models import Group, Target
-from core.forms import GroupForm, TargetForm, TargetFormSet
+from core.forms import GroupForm, TargetForm, TargetFormSet, ImportForm
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
 import csv
@@ -77,31 +77,46 @@ def add_target(request, group_id):
 @login_required
 def import_targets_from_csv(request):
     if request.method == 'POST':
-        group_name = request.POST.get('group_name')
-        csv_file = request.FILES.get('csv_file')
+        form = ImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = request.FILES['csv_file']
+            group_name = form.cleaned_data['group_name']
+            
+            # Intenta diferentes codificaciones
+            encodings = ['utf-8', 'iso-8859-1', 'windows-1252']
+            decoded_file = None
+            
+            for encoding in encodings:
+                try:
+                    decoded_file = csv_file.read().decode(encoding)
+                    break
+                except UnicodeDecodeError:
+                    csv_file.seek(0)  # Reinicia el puntero del archivo
+                    continue
+            
+            if decoded_file is None:
+                messages.error(request, 'No se pudo decodificar el archivo CSV. Por favor, verifica la codificación.')
+                return redirect('groups')
+            
+            # Crear el grupo
+            group = Group.objects.create(name=group_name, user=request.user)
 
-        if not group_name:
-            return JsonResponse({'status': 'error', 'message': 'El nombre del grupo es obligatorio.'})
+            # Leer el CSV y crear los objetivos
+            csv_reader = csv.reader(io.StringIO(decoded_file), delimiter=',')
+            next(csv_reader)  # Saltar la primera línea (encabezados)
+            for row in csv_reader:
+                if len(row) < 4:
+                    continue  # O maneja el error de alguna manera
+                Target.objects.create(
+                    group=group,
+                    first_name=row[0],
+                    last_name=row[1],
+                    position=row[2],
+                    email=row[3]
+                )
 
-        if not csv_file.name.endswith('.csv'):
-            messages.error(request, 'El archivo debe ser un CSV.')
-            return JsonResponse({'status': 'error', 'message': 'El archivo debe ser un CSV.'})
-
-        decoded_file = csv_file.read().decode('utf-8')
-        io_string = io.StringIO(decoded_file)
-        next(io_string)  # Saltar el encabezado
-
-        # Crear el grupo
-        group = Group.objects.create(name=group_name, user=request.user)
-
-        # Leer el CSV y crear los objetivos
-        for row in csv.reader(io_string, delimiter=','):
-            if len(row) < 4:
-                continue  # O maneja el error de alguna manera
-            first_name, last_name, position, email = row
-            Target.objects.create(group=group, first_name=first_name, last_name=last_name, position=position, email=email)
-
-        messages.success(request, 'Grupo y objetivos importados con éxito.')
-        return redirect('group_list')
-
-    return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})
+            messages.success(request, f'Grupo "{group_name}" creado con éxito y objetivos importados.')
+            return redirect('group_list')
+    else:
+        form = ImportForm()
+    return render(request, 'import_csv.html', {'form': form})

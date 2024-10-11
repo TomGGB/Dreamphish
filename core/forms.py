@@ -58,3 +58,7 @@ class CampaignForm(forms.ModelForm):
 class LandingPageUploadForm(forms.Form):
     name = forms.CharField(label='Nombre de la Plantilla', max_length=255)
     zip_file = forms.FileField(label='Archivo ZIP')
+
+class ImportForm(forms.Form):
+    group_name = forms.CharField(max_length=255, label='Nombre del Grupo')
+    csv_file = forms.FileField(label='Archivo CSV')
