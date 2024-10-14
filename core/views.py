@@ -87,7 +87,10 @@ def serve_landing_page(request, url_path, token):
             return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
 
     if not result.landing_page_opened:
+        result.email_opened = True
         result.landing_page_opened = True
+        if not result.opened_timestamp:
+            result.opened_timestamp = timezone.localtime()
         result.landing_page_opened_timestamp = timezone.localtime()
         result.status = 'landing_page_opened'
         result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
@@ -138,15 +141,16 @@ def serve_landing_page(request, url_path, token):
 
 @require_GET
 def track_email_open(request, token):
-    try:
-        result = CampaignResult.objects.get(token=token)
-        if not result.email_opened:
-            result.email_opened = True
-            result.opened_timestamp = timezone.localtime()
-            result.status = 'opened'  # Actualiza el estado a 'opened'
-            result.save()
-    except CampaignResult.DoesNotExist:
-        pass
-    
-    # Devuelve una imagen de 1x1 píxel transparente
-    return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+    if request:
+        try:
+            result = CampaignResult.objects.get(token=token)
+            if not result.email_opened:
+                result.email_opened = True
+                result.opened_timestamp = timezone.localtime()
+                result.status = 'opened'  # Actualiza el estado a 'opened'
+                result.save()
+        except CampaignResult.DoesNotExist:
+            pass
+        
+        # Devuelve una imagen de 1x1 píxel transparente
+        return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')

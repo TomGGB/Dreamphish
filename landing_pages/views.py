@@ -11,6 +11,7 @@ import hashlib
 from django.http import JsonResponse
 import base64
 from django.conf import settings
+import shutil
 
 @login_required
 def landing_page_list(request):
@@ -63,12 +64,18 @@ def get_landing_pages_by_group(group_id):
 
 @login_required
 def delete_landing_group(request, group_id):
-    group = get_object_or_404(LandingGroup, id=group_id)
+    group = get_object_or_404(LandingGroup, id=group_id, user=request.user)
     if request.method == 'POST':
+        # Eliminar los recursos asociados
+        group_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', group.name)
+        if os.path.exists(group_path):
+            shutil.rmtree(group_path)
+        
+        # Eliminar el grupo de la base de datos
         group.delete()
-        messages.success(request, 'Grupo de landing page eliminado con éxito.')
-    return redirect('landing_page_list')  # O la URL que desees redirigir
-
+        
+        messages.success(request, 'Grupo de landing page y sus recursos eliminados con éxito.')
+    return redirect('landing_page_list')
 
 
 @login_required
