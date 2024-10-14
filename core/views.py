@@ -111,8 +111,10 @@ def serve_landing_page(request, url_path, token):
             
             if tag.name == 'img':
                 tag['src'] = correct_path
-            elif tag.name in ['link', 'script']:
+            elif tag.name == 'link':
                 tag['href'] = correct_path
+            elif tag.name == 'script':
+                tag['src'] = correct_path
 
     # Agregar script para solicitar la ubicación
     location_script = soup.new_tag('script')
