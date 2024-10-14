@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from core.models import Campaign, CampaignResult
 import json
 
 # Create your views here.
+@login_required
 def dashboard(request):
     # Lógica para obtener campañas y resultados
     campaigns = Campaign.objects.filter(user=request.user)

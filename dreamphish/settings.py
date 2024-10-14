@@ -125,4 +125,3 @@ AUTH_USER_MODEL = 'core.User'
 LOGIN_URL = '/login/'
 PORT = int(os.environ.get('PORT', 8000))
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-

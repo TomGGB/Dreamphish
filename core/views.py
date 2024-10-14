@@ -104,42 +104,15 @@ def serve_landing_page(request, url_path, token):
         src = tag.get('src') or tag.get('href')
         if src:
             if src.startswith(('http://', 'https://', '//')):
-                # Es un recurso externo, lo dejamos como está
                 continue
-            asset = page.assets.filter(Q(relative_path__endswith=src) | Q(file_name=os.path.basename(src))).first()
-            if asset:
-                if asset.file_type == 'image':
-                    tag['src'] = f"data:image/{os.path.splitext(asset.file_name)[1][1:]};base64,{asset.content}"
-                elif asset.file_type == 'css':
-                    style_tag = soup.new_tag('style')
-                    style_tag.string = asset.content
-                    tag.replace_with(style_tag)
-                elif asset.file_type == 'js':
-                    script_tag = soup.new_tag('script')
-                    script_tag.string = asset.content
-                    tag.replace_with(script_tag)
-                elif asset.file_type == 'font':
-                    tag['href'] = f"data:font/{os.path.splitext(asset.file_name)[1][1:]};base64,{asset.content}"
-            else:
-                # Si no se encuentra el asset en la base de datos, buscamos en el sistema de archivos
-                file_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', page.landing_group.name, src.lstrip('/'))
-                if os.path.exists(file_path):
-                    with open(file_path, 'rb') as f:
-                        content = base64.b64encode(f.read()).decode('utf-8')
-                        mime_type, _ = mimetypes.guess_type(file_path)
-                        if mime_type:
-                            if 'css' in mime_type:
-                                style_tag = soup.new_tag('style')
-                                style_tag.string = content
-                                tag.replace_with(style_tag)
-                            elif 'javascript' in mime_type:
-                                script_tag = soup.new_tag('script')
-                                script_tag.string = content
-                                tag.replace_with(script_tag)
-                            else:
-                                tag['src'] = f"data:{mime_type};base64,{content}"
-                else:
-                    print(f"Archivo no encontrado: {file_path}")
+            
+            # Construir la ruta correcta para los recursos
+            correct_path = f"/media/landing_pages/{page.landing_group.name}/{src.lstrip('/')}"
+            
+            if tag.name == 'img':
+                tag['src'] = correct_path
+            elif tag.name in ['link', 'script']:
+                tag['href'] = correct_path
 
     # Agregar script para solicitar la ubicación
     location_script = soup.new_tag('script')
@@ -175,4 +148,3 @@ def track_email_open(request, token):
     
     # Devuelve una imagen de 1x1 píxel transparente
     return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
-
