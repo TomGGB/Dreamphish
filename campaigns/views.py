@@ -61,6 +61,7 @@ def start_campaign(request, campaign_id):
             email_body = campaign.email_template.body.replace('{NOMBRE}', target.first_name)
             email_body = email_body.replace('{APELLIDO}', target.last_name)
             email_body = email_body.replace('{CARGO}', target.position)
+            email_body = email_body.replace('{EMAIL}', target.email)
             email_body = email_body.replace('{LINK}', landing_page_url)
             
             # Modificar los enlaces en el cuerpo del correo

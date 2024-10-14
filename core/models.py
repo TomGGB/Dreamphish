@@ -28,6 +28,8 @@ class User(AbstractUser):
         related_name='core_user_set',
         related_query_name='core_user',
     )
+    def __str__(self):
+        return self.username
 
 @receiver(pre_save, sender=User)
 def generate_api_key(sender, instance, **kwargs):
@@ -68,6 +70,8 @@ class Target(models.Model):
     last_name = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
     email = models.EmailField()
+    def __str__(self):
+        return self.email
 
 class Template(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -77,6 +81,8 @@ class Template(models.Model):
     html = models.TextField()
     modified_date = models.DateTimeField(auto_now=True)  # Solo auto_now
     envelope_sender = models.EmailField()
+    def __str__(self):
+        return self.name
 
 class Page(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -86,6 +92,8 @@ class Page(models.Model):
     capture_credentials = models.BooleanField(default=False)
     capture_passwords = models.BooleanField(default=False)
     redirect_url = models.URLField(blank=True)
+    def __str__(self):
+        return self.name
 
 class SMTP(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -144,6 +152,8 @@ class Campaign(models.Model):
     completed_date = models.DateTimeField(null=True, blank=True)  # Sin default
     launch_date = models.DateTimeField(null=True, blank=True)  # Sin default
     send_by_date = models.DateTimeField(null=True, blank=True)  # Sin default
+    def __str__(self):
+        return self.name
 
 class CampaignResult(models.Model):
     email_sent = models.BooleanField(default=False)

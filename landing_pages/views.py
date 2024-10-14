@@ -66,15 +66,18 @@ def get_landing_pages_by_group(group_id):
 def delete_landing_group(request, group_id):
     group = get_object_or_404(LandingGroup, id=group_id, user=request.user)
     if request.method == 'POST':
-        # Eliminar los recursos asociados
-        group_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', group.name)
-        if os.path.exists(group_path):
-            shutil.rmtree(group_path)
-        
-        # Eliminar el grupo de la base de datos
-        group.delete()
-        
-        messages.success(request, 'Grupo de landing page y sus recursos eliminados con éxito.')
+        try:
+            # Eliminar los recursos asociados
+            group_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', group.name)
+            if os.path.exists(group_path):
+                shutil.rmtree(group_path)
+            
+            # Eliminar el grupo de la base de datos
+            group.delete()
+            
+            messages.success(request, 'Grupo de landing page y sus recursos eliminados con éxito.')
+        except Exception as e:
+            messages.error(request, f'Error al eliminar el grupo de landing page: {str(e)}')
     return redirect('landing_page_list')
 
 
