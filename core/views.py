@@ -20,6 +20,7 @@ import os
 from django.db.models import Q
 import mimetypes
 from django.conf import settings
+from django.http import FileResponse
 
 def login_view(request):
     if request.method == 'POST':
@@ -154,3 +155,9 @@ def track_email_open(request, token):
         
         # Devuelve una imagen de 1x1 píxel transparente
         return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+
+def serve_media(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'))
+    return HttpResponse(status=404)
