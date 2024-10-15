@@ -135,3 +135,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Configuración para servir archivos media en producción
 SERVE_MEDIA_IN_PRODUCTION = True
+
+PUBLIC_PORT = int(os.environ.get('PUBLIC_PORT', 8000))
+PRIVATE_PORT = int(os.environ.get('PRIVATE_PORT', 8001))

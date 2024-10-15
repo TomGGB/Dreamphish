@@ -17,6 +17,7 @@ import json
 from openpyxl import Workbook
 from django.http import HttpResponse
 import io
+from django.conf import settings
 
 
 @login_required
@@ -51,7 +52,7 @@ def start_campaign(request, campaign_id):
         campaign.save()
         
         current_site = get_current_site(request)
-        domain = current_site.domain
+        domain = current_site.domain.split(':')[0]  # Elimina el puerto si está presente
         
         for target in campaign.group.targets.all():
             token = generate_unique_token()
@@ -60,7 +61,10 @@ def start_campaign(request, campaign_id):
             result.save()
             
             landing_pages = campaign.landing_group.landing_pages.all()
-            landing_page_url = request.build_absolute_uri(reverse('serve_landing_page', args=[landing_pages[0].url_path, token]))
+            public_domain = domain
+            if settings.PUBLIC_PORT and settings.PUBLIC_PORT != 80:
+                public_domain = f"{domain}:{settings.PUBLIC_PORT}"
+            landing_page_url = f"http://{public_domain}/landing/{landing_pages[0].url_path}/{token}/"
             
             email_body = campaign.email_template.body.replace('{NOMBRE}', target.first_name)
             email_body = email_body.replace('{APELLIDO}', target.last_name)
@@ -199,3 +203,5 @@ def export_campaign_results(request, campaign_id, format='csv'):
         response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.xlsx"'
 
     return response
+
+

@@ -104,7 +104,7 @@ def serve_landing_page(request, url_path, token):
     soup = BeautifulSoup(page.html_content, 'html.parser')
     form = soup.find('form')
     if form:
-        form['action'] = request.build_absolute_uri(reverse('serve_landing_page', args=[url_path, token]))
+        form['action'] = request.build_absolute_uri(f'/landing/{url_path}/{token}/')
 
     # Reemplazar las rutas de las imágenes, CSS, JS y fuentes
     for tag in soup.find_all(['img', 'link', 'script']):
@@ -114,14 +114,14 @@ def serve_landing_page(request, url_path, token):
                 continue
             
             # Construir la ruta correcta para los recursos
-            correct_path = f"/media/landing_pages/{page.landing_group.name}/{src.lstrip('/')}"
+            correct_path = f"{settings.MEDIA_URL}landing_pages/{page.landing_group.name}/{src.lstrip('/')}"
             
             if tag.name == 'img':
-                tag['src'] = correct_path
+                tag['src'] = request.build_absolute_uri(correct_path)
             elif tag.name == 'link':
-                tag['href'] = correct_path
+                tag['href'] = request.build_absolute_uri(correct_path)
             elif tag.name == 'script':
-                tag['src'] = correct_path
+                tag['src'] = request.build_absolute_uri(correct_path)
 
     # Agregar script para solicitar la ubicación
     location_script = soup.new_tag('script')
@@ -164,3 +164,6 @@ def serve_media(request, path):
     if os.path.exists(file_path):
         return FileResponse(open(file_path, 'rb'))
     return HttpResponse(status=404)
+
+
+
