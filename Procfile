@@ -1,3 +1,4 @@
-web: gunicorn dreamphish.wsgi:application --bind 0.0.0.0:$PORT
+web: python dreamphish/run_public.py runserver 0.0.0.0:$PORT
+
 
 
