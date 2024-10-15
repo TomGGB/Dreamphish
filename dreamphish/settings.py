@@ -13,9 +13,10 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
 DEBUG = False if os.environ.get('ENV') == 'production' else True
-ALLOWED_HOSTS = ['dreamphish-production.up.railway.app',
+ALLOWED_HOSTS = ['dreamphish.up.railway.app',
                  '127.0.0.1',
                  'localhost',
+                 '0.0.0.0',
                 ]
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
 
