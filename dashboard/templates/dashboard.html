@@ -27,8 +27,8 @@
 
     {% if selected_campaign %}
         <h3>Resultados de la campaña: {{ selected_campaign.name }}</h3>
-        <a href="{% url 'export_campaign_results' selected_campaign.id %}" class="btn btn-success mb-3">Exportar a Excel</a>
-        <a href="{% url 'export_campaign_results_csv' selected_campaign.id %}" class="btn btn-primary mb-3">Exportar a CSV</a>
+        <a href="{% url 'export_campaign_results' selected_campaign.id 'csv' %}" class="btn btn-info mb-3">Exportar a CSV</a>
+        <a href="{% url 'export_campaign_results' selected_campaign.id 'excel' %}" class="btn btn-success mb-3">Exportar a Excel</a>
         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
         <div class="table-responsive">
             <table id="resultsTable" class="table table-striped table-hover table-bordered mt-4">

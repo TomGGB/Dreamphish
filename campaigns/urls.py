@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:campaign_id>/delete/', views.delete_campaign, name='delete_campaign'),
     path('l/<str:url_path>/<str:token>/', serve_landing_page, name='serve_landing_page'),
     path('track_email_open/<str:token>/', track_email_open, name='track_email_open'),
+    path('export/<int:campaign_id>/<str:format>/', views.export_campaign_results, name='export_campaign_results'),
 ]

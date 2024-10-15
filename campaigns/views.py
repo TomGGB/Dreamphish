@@ -13,6 +13,10 @@ from django.views.decorators.csrf import csrf_exempt
 from bs4 import BeautifulSoup
 import uuid
 import csv
+import json
+from openpyxl import Workbook
+from django.http import HttpResponse
+import io
 
 
 @login_required
@@ -132,76 +136,66 @@ def edit_campaign(request, campaign_id):
     return render(request, 'core/campaign_form.html', {'form': form, 'edit_mode': True})
 
 
-
 @login_required
-def export_campaign_results(request, campaign_id):
+def export_campaign_results(request, campaign_id, format='csv'):
     campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
     results = CampaignResult.objects.filter(campaign=campaign)
 
-    # Crear la respuesta HTTP con el tipo de contenido CSV
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.csv"'
+    headers = ['events', 'uuid', 'email', 'first_name', 'last_name', 'work_position', 'status', 'ip_address', 'user_agent', 'post_data', 'latitude', 'longitude', 'send_date', 'reported', 'is_archived', 'created_at', 'updated_at']
 
-    writer = csv.writer(response)
-    # Escribir la cabecera del CSV
-    writer.writerow(['events', 'uuid', 'email', 'first_name', 'last_name', 'work_position', 'status', 'ip_address', 'user_agent', 'post_data', 'latitude', 'longitude', 'send_date', 'reported', 'is_archived', 'created_at', 'updated_at'])
+    if format == 'excel':
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Resultados de Campaña"
+        ws.append(headers)
+    else:  # CSV
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.csv"'
+        writer = csv.writer(response, quoting=csv.QUOTE_ALL)
+        writer.writerow(headers)
 
     for result in results:
-        writer.writerow([
-            '',  # events (puedes agregar lógica para esto si es necesario)
-            result.token,  # uuid
+        events = []
+        if result.email_opened:
+            events.append('Email abierto')
+        if result.landing_page_opened:
+            events.append('Landing page visitada')
+        if result.status == 'form_submitted':
+            events.append('Formulario enviado')
+        
+        post_data = json.loads(result.post_data) if result.post_data else {}
+        post_data_str = json.dumps(post_data)
+
+        row = [
+            ', '.join(events),
+            result.token,
             result.target.email,
             result.target.first_name,
             result.target.last_name,
             result.target.position,
-            result.status,  # status
-            result.ip_address,
-            result.user_agent,
-            result.post_data,
-            '',  # latitude
-            '',  # longitude
-            result.sent_timestamp,  # send_date
-            'FALSE',  # reported
-            'FALSE',  # is_archived
-            result.created_at,  # created_at
-            result.updated_at,  # updated_at
-        ])
+            result.status,
+            result.ip_address or '',
+            result.user_agent or '',
+            post_data_str,
+            result.latitude or '',
+            result.longitude or '',
+            result.sent_timestamp.strftime('%Y-%m-%d %H:%M:%S') if result.sent_timestamp else '',
+            'FALSE',
+            'FALSE',
+            result.created_at.strftime('%Y-%m-%d %H:%M:%S') if result.created_at else '',
+            result.updated_at.strftime('%Y-%m-%d %H:%M:%S') if result.updated_at else '',
+        ]
+
+        if format == 'excel':
+            ws.append(row)
+        else:  # CSV
+            writer.writerow(row)
+
+    if format == 'excel':
+        buffer = io.BytesIO()
+        wb.save(buffer)
+        buffer.seek(0)
+        response = HttpResponse(buffer.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.xlsx"'
 
     return response
-
-@login_required
-def export_campaign_results_csv(request, campaign_id):
-    campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
-    results = CampaignResult.objects.filter(campaign=campaign)
-
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.csv"'
-
-    writer = csv.writer(response)
-    writer.writerow(['events', 'uuid', 'email', 'first_name', 'last_name', 'work_position', 'status', 'ip_address', 'user_agent', 'post_data', 'latitude', 'longitude', 'send_date', 'reported', 'is_archived', 'created_at', 'updated_at'])
-
-    for result in results:
-        writer.writerow([
-            '',  # events (puedes agregar lógica para esto si es necesario)
-            result.token,  # uuid
-            result.target.email,
-            result.target.first_name,
-            result.target.last_name,
-            result.target.position,
-            result.status,  # status
-            result.ip_address,
-            result.user_agent,
-            result.post_data,
-            '',  # latitude
-            '',  # longitude
-            result.sent_timestamp,  # send_date
-            'FALSE',  # reported
-            'FALSE',  # is_archived
-            result.created_at,  # created_at
-            result.updated_at,  # updated_at
-        ])
-
-    return response
-
-
-
