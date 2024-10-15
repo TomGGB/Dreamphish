@@ -60,7 +60,6 @@ def send_phishing_email(smtp_config, to_email, subject, body):
 
 
 @csrf_exempt
-@login_required
 def serve_landing_page(request, url_path, token):
     page = get_object_or_404(LandingPage, url_path=url_path)
     result = get_object_or_404(CampaignResult, token=token, campaign__landing_group=page.landing_group)
@@ -68,18 +67,22 @@ def serve_landing_page(request, url_path, token):
     if request.method == 'POST':
         form_data = request.POST.dict()
         
-        # Guardar la ubicación si se proporciona
+
         if 'latitude' in form_data and 'longitude' in form_data:
             result.latitude = form_data['latitude']
             result.longitude = form_data['longitude']
             result.save()
+
+        # Cargar los datos existentes o inicializar un diccionario vacío
+        existing_data = json.loads(result.post_data) if result.post_data else {}
         
-        if result.post_data:
-            existing_data = json.loads(result.post_data)
-            existing_data.update(form_data)
-            result.post_data = json.dumps(existing_data)
-        else:
-            result.post_data = json.dumps(form_data)
+        # Actualizar solo los campos que no están vacíos
+        for key, value in form_data.items():
+            if value.strip():  # Comprobar si el valor no está vacío después de quitar espacios
+                existing_data[key] = value
+        
+        # Guardar los datos actualizados
+        result.post_data = json.dumps(existing_data)
         result.status = 'form_submitted'
         result.save()
         
