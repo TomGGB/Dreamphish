@@ -17,8 +17,9 @@ ALLOWED_HOSTS = ['dreamphish.up.railway.app',
                  '127.0.0.1',
                  'localhost',
                  '0.0.0.0',
+                 'limon.h4d.cl'
                 ]
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://limon.h4d.cl']
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
