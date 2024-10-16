@@ -4,6 +4,7 @@ from django.utils import timezone
 import uuid
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.contrib.auth import get_user_model
 
 
 class User(AbstractUser):
@@ -59,8 +60,7 @@ class Group(models.Model):
     
 class LandingGroup(models.Model):
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='landing_groups')
     def __str__(self):
         return self.name
 

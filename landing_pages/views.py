@@ -15,7 +15,7 @@ import shutil
 
 @login_required
 def landing_page_list(request):
-    landing_groups = LandingGroup.objects.all()
+    landing_groups = LandingGroup.objects.filter(user=request.user)
     landing_pages_by_group = {group: group.landing_pages.all() for group in landing_groups}
     return render(request, 'landing_page_list.html', {'landing_pages_by_group': landing_pages_by_group})
 
@@ -88,7 +88,10 @@ def upload_landing_page_template(request):
         if zip_file:
             with zipfile.ZipFile(zip_file, 'r') as zip_ref:
                 landing_group_name = zip_file.name.replace('.zip', '')
-                landing_group, created = LandingGroup.objects.get_or_create(name=landing_group_name, user=request.user)
+                landing_group, created = LandingGroup.objects.get_or_create(
+                    name=landing_group_name, 
+                    user=request.user
+                )
 
                 max_order = LandingPage.objects.filter(landing_group=landing_group).aggregate(max_order=models.Max('order'))['max_order'] or 0
 
