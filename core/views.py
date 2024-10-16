@@ -21,6 +21,9 @@ from django.db.models import Q
 import mimetypes
 from django.conf import settings
 from django.http import FileResponse
+import logging
+
+logger = logging.getLogger(__name__)
 
 def login_view(request):
     if request.method == 'POST':

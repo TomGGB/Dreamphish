@@ -64,35 +64,28 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const chipSet = document.querySelector('md-chip-set');
-    let lastFocusedInput = null;
-
-    // Guardar el último campo de texto enfocado
-    document.querySelectorAll('input[type="text"], textarea').forEach(input => {
-        input.addEventListener('focus', function() {
-            lastFocusedInput = this;
-        });
+    tinymce.init({
+        selector: '#id_body',
+        plugins: [
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        setup: function(editor) {
+            editor.on('init', function() {
+                const chipSet = document.querySelector('md-chip-set');
+                if (chipSet) {
+                    chipSet.addEventListener('click', function(e) {
+                        const chip = e.target.closest('md-assist-chip');
+                        if (chip) {
+                            const value = chip.dataset.value;
+                            editor.insertContent(value);
+                        }
+                    });
+                }
+            });
+        }
     });
-
-    // Manejar clics en los chips
-    if (chipSet) {
-        chipSet.addEventListener('click', function(e) {
-            const chip = e.target.closest('md-assist-chip');
-            if (chip && lastFocusedInput) {
-                const value = chip.dataset.value;
-                insertTextAtCursor(lastFocusedInput, value);
-            }
-        });
-    }
-
-    // Función para insertar texto en la posición del cursor
-    function insertTextAtCursor(input, text) {
-        const startPos = input.selectionStart;
-        const endPos = input.selectionEnd;
-        input.value = input.value.substring(0, startPos) + text + input.value.substring(endPos);
-        input.focus();
-        input.setSelectionRange(startPos + text.length, startPos + text.length);
-    }
 });
 </script>
 {% endblock %}
