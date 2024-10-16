@@ -2,69 +2,69 @@
 {% load static %}
 
 {% block content %}
-    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
-    <form method="post" enctype="multipart/form-data">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Este es el campo para el nombre del grupo -->
-        <h3>Objetivos</h3>
+        <div class="form-group mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+            {{ form.name }}
+        </div>
+        
+        <h3 class="mt-4 mb-3">Objetivos</h3>
         {{ formset.management_form }}
-        <div id="formset">
+        <div id="formset" class="mb-3">
             {% for form in formset %}
-                <div class="target-form">
-                    {{ form.as_p }}
+                <div class="target-form mb-3 p-3 border rounded">
+                    {% for field in form %}
+                        {% if field.name != 'DELETE' %}
+                            <div class="form-group mb-2">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if form.instance.pk %}
+                        <button type="button" class="btn btn-danger btn-sm delete-target" data-target-id="{{ form.instance.pk }}">Eliminar</button>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
-        <button type="button" id="add-form" class="btn btn-secondary">Añadir otro objetivo</button>
-        <input type="file" id="csv-file-input" style="display: none;" accept=".csv" />
-        <button type="button" id="import-csv" class="btn btn-secondary">Importar desde CSV</button>
+        
+        <div class="mb-3">
+            <button type="button" id="add-form" class="btn btn-outline-secondary">Añadir otro objetivo</button>
+            <input type="file" id="csv-file-input" class="d-none" accept=".csv" />
+            <button type="button" id="import-csv" class="btn btn-outline-info">Importar desde CSV</button>
+        </div>
+        
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/formset.js' %}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const importButton = document.getElementById('import-csv');
-        const csvFileInput = document.getElementById('csv-file-input');
-        const groupNameInput = document.getElementById('id_name');  // Asegúrate de que este ID coincida con el del campo del nombre del grupo
-
-        importButton.addEventListener('click', function() {
-            if (!groupNameInput.value) {
-                alert('Por favor, ingresa el nombre del grupo antes de importar el CSV.');
-                return;  // No continuar si el nombre del grupo está vacío
-            }
-            csvFileInput.click();  // Abre el diálogo de carga de archivos
-        });
-
-        csvFileInput.addEventListener('change', function() {
-            const file = csvFileInput.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('csv_file', file);
-                formData.append('group_name', groupNameInput.value);  // Usar el valor del campo de nombre del grupo
-
-                fetch("{% url 'import_targets_from_csv' %}", {
+document.addEventListener('DOMContentLoaded', function() {
+    const formset = document.getElementById('formset');
+    formset.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-target')) {
+            const targetId = e.target.dataset.targetId;
+            if (confirm('¿Estás seguro de que quieres eliminar este objetivo?')) {
+                fetch(`/groups/delete_target/${targetId}/`, {
                     method: 'POST',
-                    body: formData,
                     headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'  // Agregar el token CSRF
-                    }
-                })
-                .then(response => {
-                    if (response.redirected) {
-                        window.location.href = response.url;  // Redirigir a la nueva URL
-                    } else if (response.ok) {
-                        window.location.reload();  // Recargar la página para ver los cambios
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        e.target.closest('.target-form').remove();
                     } else {
-                        alert('Error al importar el archivo CSV.');
+                        alert('Error al eliminar el objetivo');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
                 });
             }
-        });
+        }
     });
+});
 </script>
 {% endblock %}

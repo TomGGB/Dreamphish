@@ -1,10 +1,98 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">{% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
-    </form>
+    <div class="container">
+        <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                {% if field.name == 'body' %}
+                    <div class="chip-container mt-3 mb-3">
+                        <md-chip-set>
+                            <md-assist-chip data-value="{NOMBRE}">
+                                <i class="material-icons">person</i>
+                                NOMBRE
+                            </md-assist-chip>
+                            <md-assist-chip data-value="{APELLIDO}">
+                                <i class="material-icons">person_outline</i>
+                                APELLIDO
+                            </md-assist-chip>
+                            <md-assist-chip data-value="{EMAIL}">
+                                <i class="material-icons">email</i>
+                                EMAIL
+                            </md-assist-chip>
+                            <md-assist-chip data-value="{LINK}">
+                                <i class="material-icons">link</i>
+                                LINK
+                            </md-assist-chip>
+                            <md-assist-chip data-value="{CARGO}">
+                                <i class="material-icons">work</i>
+                                CARGO
+                            </md-assist-chip>
+                        </md-chip-set>
+                    </div>
+                    <div class="documentation mt-3">
+                        <h5>Documentación de variables:</h5>
+                        <ul>
+                            <li><strong>{NOMBRE}</strong>: Nombre del destinatario</li>
+                            <li><strong>{APELLIDO}</strong>: Apellido del destinatario</li>
+                            <li><strong>{EMAIL}</strong>: Dirección de correo electrónico del destinatario</li>
+                            <li><strong>{LINK}</strong>: Enlace personalizado para el destinatario</li>
+                            <li><strong>{CARGO}</strong>: Cargo o posición del destinatario</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">{% if edit_mode %}Actualizar{% else %}Guardar{% endif %}</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chipSet = document.querySelector('md-chip-set');
+    let lastFocusedInput = null;
+
+    // Guardar el último campo de texto enfocado
+    document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+        input.addEventListener('focus', function() {
+            lastFocusedInput = this;
+        });
+    });
+
+    // Manejar clics en los chips
+    if (chipSet) {
+        chipSet.addEventListener('click', function(e) {
+            const chip = e.target.closest('md-assist-chip');
+            if (chip && lastFocusedInput) {
+                const value = chip.dataset.value;
+                insertTextAtCursor(lastFocusedInput, value);
+            }
+        });
+    }
+
+    // Función para insertar texto en la posición del cursor
+    function insertTextAtCursor(input, text) {
+        const startPos = input.selectionStart;
+        const endPos = input.selectionEnd;
+        input.value = input.value.substring(0, startPos) + text + input.value.substring(endPos);
+        input.focus();
+        input.setSelectionRange(startPos + text.length, startPos + text.length);
+    }
+});
+</script>
 {% endblock %}

@@ -13,13 +13,13 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
 DEBUG = False if os.environ.get('ENV') == 'production' else True
-ALLOWED_HOSTS = ['dreamphish.up.railway.app',
+ALLOWED_HOSTS = [
                  '127.0.0.1',
                  'localhost',
                  '0.0.0.0',
                  'limon.h4d.cl'
                 ]
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://limon.h4d.cl']
+CSRF_TRUSTED_ORIGINS = ['https://limon.h4d.cl']
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [

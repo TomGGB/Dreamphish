@@ -8,6 +8,6 @@ urlpatterns = [
     path('add-target/<int:group_id>/', views.add_target, name='add_target'),
     path('delete/<int:group_id>/', views.delete_group, name='delete_group'),
     path('edit/<int:group_id>/', views.edit_group, name='edit_group'),
-    path('import/', views.import_targets_from_csv, name='import_targets_from_csv'),
+    path('import_csv/', views.import_targets_from_csv, name='import_csv'),
+    path('delete_target/<int:target_id>/', views.delete_target, name='delete_target'),
 ]
-

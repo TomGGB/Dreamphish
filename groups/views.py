@@ -82,41 +82,38 @@ def import_targets_from_csv(request):
             csv_file = request.FILES['csv_file']
             group_name = form.cleaned_data['group_name']
             
-            # Intenta diferentes codificaciones
-            encodings = ['utf-8', 'iso-8859-1', 'windows-1252']
-            decoded_file = None
-            
-            for encoding in encodings:
+            try:
+                decoded_file = csv_file.read().decode('utf-8')
+            except UnicodeDecodeError:
                 try:
-                    decoded_file = csv_file.read().decode(encoding)
-                    break
+                    csv_file.seek(0)
+                    decoded_file = csv_file.read().decode('iso-8859-1')
                 except UnicodeDecodeError:
-                    csv_file.seek(0)  # Reinicia el puntero del archivo
-                    continue
+                    return JsonResponse({'success': False, 'error': 'No se pudo decodificar el archivo CSV.'})
             
-            if decoded_file is None:
-                messages.error(request, 'No se pudo decodificar el archivo CSV. Por favor, verifica la codificación.')
-                return redirect('groups')
-            
-            # Crear el grupo
             group = Group.objects.create(name=group_name, user=request.user)
 
-            # Leer el CSV y crear los objetivos
-            csv_reader = csv.reader(io.StringIO(decoded_file), delimiter=',')
-            next(csv_reader)  # Saltar la primera línea (encabezados)
+            csv_reader = csv.reader(io.StringIO(decoded_file))
+            next(csv_reader, None)  # Saltar la primera línea (encabezados)
             for row in csv_reader:
-                if len(row) < 4:
-                    continue  # O maneja el error de alguna manera
-                Target.objects.create(
-                    group=group,
-                    first_name=row[0],
-                    last_name=row[1],
-                    position=row[2],
-                    email=row[3]
-                )
+                if len(row) >= 4:
+                    Target.objects.create(
+                        group=group,
+                        first_name=row[0],
+                        last_name=row[1],
+                        position=row[2],
+                        email=row[3]
+                    )
 
-            messages.success(request, f'Grupo "{group_name}" creado con éxito y objetivos importados.')
-            return redirect('group_list')
+            return JsonResponse({'success': True})
     else:
         form = ImportForm()
     return render(request, 'import_csv.html', {'form': form})
+
+@login_required
+def delete_target(request, target_id):
+    if request.method == 'POST':
+        target = get_object_or_404(Target, id=target_id, group__user=request.user)
+        target.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
