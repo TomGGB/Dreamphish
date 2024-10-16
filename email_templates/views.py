@@ -3,6 +3,7 @@ from django.contrib import messages
 from core.models import EmailTemplate
 from core.forms import EmailTemplateForm
 from django.contrib.auth.decorators import login_required
+from django import forms
 
 # Create your views here.
 
@@ -45,3 +46,11 @@ def delete_email_template(request, template_id):
         template.delete()
         messages.success(request, 'Plantilla de correo eliminada con éxito.')
     return redirect('email_template_list')
+
+class EmailTemplateForm(forms.ModelForm):
+    class Meta:
+        model = EmailTemplate
+        fields = ['name', 'subject', 'body']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 10, 'class': 'form-control'}),
+        }
