@@ -114,7 +114,7 @@ def serve_landing_page(request, url_path, token):
                 continue
             
             # Construir la ruta correcta para los recursos
-            correct_path = f"{settings.MEDIA_URL}landing_pages/{page.landing_group.name}/{src.lstrip('/')}"
+            correct_path = f"{settings.MEDIA_URL}landing_pages/{page.landing_group.user.id}/{page.landing_group.name}/{src.lstrip('/')}"
             
             if tag.name == 'img':
                 tag['src'] = request.build_absolute_uri(correct_path)
@@ -164,6 +164,7 @@ def serve_media(request, path):
     if os.path.exists(file_path):
         return FileResponse(open(file_path, 'rb'))
     return HttpResponse(status=404)
+
 
 
 

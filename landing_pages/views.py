@@ -67,8 +67,8 @@ def delete_landing_group(request, group_id):
     group = get_object_or_404(LandingGroup, id=group_id, user=request.user)
     if request.method == 'POST':
         try:
-            # Eliminar los recursos asociados
-            group_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', group.name)
+            # Eliminar los recursos asociados solo para este usuario
+            group_path = os.path.join(settings.MEDIA_ROOT, 'landing_pages', str(request.user.id), group.name)
             if os.path.exists(group_path):
                 shutil.rmtree(group_path)
             
@@ -99,7 +99,7 @@ def upload_landing_page_template(request):
                 assets = {}
 
                 # Crear el directorio para el grupo de landing pages si no existe
-                group_dir = os.path.join(settings.MEDIA_ROOT, 'landing_pages', landing_group_name)
+                group_dir = os.path.join(settings.MEDIA_ROOT, 'landing_pages', str(request.user.id), landing_group_name)
                 os.makedirs(group_dir, exist_ok=True)
 
                 for file_info in zip_ref.infolist():
@@ -178,3 +178,5 @@ def edit_campaign(request, campaign_id):
         form = CampaignForm(instance=campaign)
 
     return render(request, 'core/campaign_form.html', {'form': form, 'campaign': campaign})
+
+
