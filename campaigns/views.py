@@ -78,7 +78,7 @@ def start_campaign(request, campaign_id):
                 a['href'] = landing_page_url
             
             # Añadir la imagen de tracking
-            tracking_url = request.build_absolute_uri(reverse('track_email_open', args=[token]))
+            tracking_url = f"http://{public_domain}/track/{token}/"
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
             
             # Asegurarse de que haya un cuerpo en el HTML
@@ -203,5 +203,6 @@ def export_campaign_results(request, campaign_id, format='csv'):
         response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.xlsx"'
 
     return response
+
 
 
