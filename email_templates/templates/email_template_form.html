@@ -6,58 +6,22 @@
         <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
         <form method="post">
             {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {% if field.name == 'body' %}
-                        <textarea name="{{ field.name }}" id="{{ field.auto_id }}" class="form-control" rows="10">{{ field.value|default_if_none:'' }}</textarea>
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
-                    {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <small class="form-text text-danger">{{ error }}</small>
-                    {% endfor %}
-                </div>
-                {% if field.name == 'body' %}
-                    <div class="chip-container mt-3 mb-3">
-                        <md-chip-set>
-                            <md-assist-chip data-value="{NOMBRE}">
-                                <i class="material-icons">person</i>
-                                NOMBRE
-                            </md-assist-chip>
-                            <md-assist-chip data-value="{APELLIDO}">
-                                <i class="material-icons">person_outline</i>
-                                APELLIDO
-                            </md-assist-chip>
-                            <md-assist-chip data-value="{EMAIL}">
-                                <i class="material-icons">email</i>
-                                EMAIL
-                            </md-assist-chip>
-                            <md-assist-chip data-value="{LINK}">
-                                <i class="material-icons">link</i>
-                                LINK
-                            </md-assist-chip>
-                            <md-assist-chip data-value="{CARGO}">
-                                <i class="material-icons">work</i>
-                                CARGO
-                            </md-assist-chip>
-                        </md-chip-set>
-                    </div>
-                    <div class="documentation mt-3">
-                        <h5>Documentación de variables:</h5>
-                        <ul>
-                            <li><strong>{NOMBRE}</strong>: Nombre del destinatario</li>
-                            <li><strong>{APELLIDO}</strong>: Apellido del destinatario</li>
-                            <li><strong>{EMAIL}</strong>: Dirección de correo electrónico del destinatario</li>
-                            <li><strong>{LINK}</strong>: Enlace personalizado para el destinatario</li>
-                            <li><strong>{CARGO}</strong>: Cargo o posición del destinatario</li>
-                        </ul>
-                    </div>
-                {% endif %}
-            {% endfor %}
+            {{ form.media }}
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.subject.label_tag }}
+            {{ form.subject }}
+            {{ form.body.label_tag }}
+            {{ form.body }}
+            <div class="chip-container mt-3 mb-3">
+                <md-chip-set>
+                    <md-assist-chip data-value="{NOMBRE}">NOMBRE</md-assist-chip>
+                    <md-assist-chip data-value="{APELLIDO}">APELLIDO</md-assist-chip>
+                    <md-assist-chip data-value="{EMAIL}">EMAIL</md-assist-chip>
+                    <md-assist-chip data-value="{LINK}">LINK</md-assist-chip>
+                    <md-assist-chip data-value="{CARGO}">CARGO</md-assist-chip>
+                </md-chip-set>
+            </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
     </div>
@@ -69,22 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
         selector: '#id_body',
         plugins: [
-            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown'
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
         ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
         setup: function(editor) {
             editor.on('init', function() {
-                const chipSet = document.querySelector('md-chip-set');
-                if (chipSet) {
-                    chipSet.addEventListener('click', function(e) {
-                        const chip = e.target.closest('md-assist-chip');
-                        if (chip) {
-                            const value = chip.dataset.value;
-                            editor.insertContent(value);
-                        }
+                var chips = document.querySelectorAll('md-assist-chip');
+                chips.forEach(function(chip) {
+                    chip.addEventListener('click', function() {
+                        editor.insertContent(this.getAttribute('data-value'));
                     });
-                }
+                });
             });
         }
     });

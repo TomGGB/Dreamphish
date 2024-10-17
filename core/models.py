@@ -5,6 +5,7 @@ import uuid
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from tinymce.models import HTMLField
 
 
 class User(AbstractUser):
@@ -113,9 +114,9 @@ class EmailTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
-    body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)  # Solo auto_now_add
-    updated_at = models.DateTimeField(auto_now=True)  # Solo auto_now
+    body = HTMLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 

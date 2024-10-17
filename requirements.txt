@@ -10,3 +10,4 @@ djangorestframework
 PyMySQL
 pandas 
 openpyxl
+django-tinymce

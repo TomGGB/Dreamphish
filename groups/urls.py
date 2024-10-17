@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -11,3 +13,6 @@ urlpatterns = [
     path('import_csv/', views.import_targets_from_csv, name='import_csv'),
     path('delete_target/<int:target_id>/', views.delete_target, name='delete_target'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,10 +1,23 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
     <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Landing Page</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.media }}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
     {% if form.instance.pk %}
@@ -12,9 +25,6 @@
     {% else %}
         <a href="{% url 'upload_landing_page_template' %}" class="btn btn-secondary">Subir Plantilla ZIP</a>
     {% endif %}
-
-    
-    
 {% endblock %}
 
 {% block extra_js %}
@@ -22,13 +32,32 @@
 document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
         selector: '#id_html_content',
-        plugins: [
-            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown'
-        ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        ...TINYMCE_DEFAULT_CONFIG,
         height: 500,
+        content_css: false,
+        content_style: "body { font-family: Arial, sans-serif; font-size: 14px; }",
+        plugins: 'code fullpage',
+        toolbar: 'code fullpage',
+        fullpage_default_doctype: '<!DOCTYPE html>',
+        fullpage_default_encoding: 'UTF-8',
+        fullpage_default_font_size: '14px',
+        fullpage_default_font_family: 'Arial,Helvetica,sans-serif',
+        fullpage_default_language: 'es',
+        fullpage_default_title: '',
+        fullpage_default_text_color: '#000000',
+        fullpage_default_xml_pi: false,
+        valid_elements: '*[*]',
+        extended_valid_elements: '*[*]',
+        valid_children: '+body[style],+html[body]',
+        force_root_block: false,
+        verify_html: false,
+        cleanup: false,
         setup: function(editor) {
+            editor.on('init', function() {
+                editor.setContent(editor.getElement().value, {format: 'raw'});
+            });
+        },
+        init_instance_callback: function(editor) {
             editor.on('change', function() {
                 editor.save();
             });

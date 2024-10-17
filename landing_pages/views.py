@@ -12,6 +12,10 @@ from django.http import JsonResponse
 import base64
 from django.conf import settings
 import shutil
+from bs4 import BeautifulSoup
+import logging
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def landing_page_list(request):
@@ -41,6 +45,10 @@ def edit_landing_page(request, landing_page_id):
     if request.method == 'POST':
         form = LandingPageForm(request.POST, instance=landing_page)
         if form.is_valid():
+            html_content = form.cleaned_data['html_content']
+            
+            # Preservar la estructura completa del HTML sin modificaciones
+            form.instance.html_content = html_content
             form.save()
             messages.success(request, 'Landing page actualizada con éxito.')
             return redirect('landing_page_list')
@@ -178,5 +186,9 @@ def edit_campaign(request, campaign_id):
         form = CampaignForm(instance=campaign)
 
     return render(request, 'core/campaign_form.html', {'form': form, 'campaign': campaign})
+
+
+
+
 
 

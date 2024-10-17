@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'landing_pages',
     'smtp',
     'email_templates',
+    'tinymce',
 ]
 
 # Middleware
@@ -142,3 +143,42 @@ SERVE_MEDIA_IN_PRODUCTION = True
 
 PUBLIC_PORT = int(os.environ.get('PUBLIC_PORT', 8000))
 PRIVATE_PORT = int(os.environ.get('PRIVATE_PORT', 8001))
+
+
+# Configuración para TinyMCE
+TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY')
+TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/{}/tinymce/7/tinymce.min.js'.format(TINYMCE_API_KEY)
+TINYMCE_COMPRESSOR = False
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': 'auto',
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'theme': 'silver',
+    'plugins': '''
+            advlist autolink lists link image charmap print preview anchor
+            searchreplace visualblocks code fullscreen
+            insertdatetime media table paste code help wordcount
+            ''',
+    'toolbar': 'undo redo | formatselect | '
+               'bold italic backcolor | alignleft aligncenter '
+               'alignright alignjustify | bullist numlist outdent indent | '
+               'removeformat | help',
+    'content_css': 'default',
+    'language': 'es',
+    'branding': False,
+    'autosave_ask_before_unload': True,
+    'autosave_interval': '30s',
+    'autosave_prefix': '{path}{query}-{id}-',
+    'autosave_restore_when_empty': False,
+    'autosave_retention': '2m',
+    'image_advtab': True,
+    'importcss_append': True,
+    'image_caption': True,
+    'quickbars_selection_toolbar': 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+    'noneditable_noneditable_class': 'mceNonEditable',
+    'toolbar_mode': 'sliding',
+    'contextmenu': 'link image imagetools table',
+    'entity_encoding': 'raw',
+}

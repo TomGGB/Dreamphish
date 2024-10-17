@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 from core.views import serve_landing_page, track_email_open
 
@@ -12,3 +14,6 @@ urlpatterns = [
     path('track_email_open/<str:token>/', track_email_open, name='track_email_open'),
     path('export/<int:campaign_id>/<str:format>/', views.export_campaign_results, name='export_campaign_results'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

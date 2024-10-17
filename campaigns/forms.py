@@ -1,6 +1,7 @@
 from django import forms
 from core.models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, LandingGroup
 from django.forms import inlineformset_factory
+from tinymce.widgets import TinyMCE
 
 class SMTPForm(forms.ModelForm):
     class Meta:
@@ -14,11 +15,15 @@ class TestSMTPForm(forms.Form):
     test_email = forms.EmailField(label='Correo de prueba')
 
 class EmailTemplateForm(forms.ModelForm):
+    body = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    
     class Meta:
         model = EmailTemplate
         fields = ['name', 'subject', 'body']
 
 class LandingPageForm(forms.ModelForm):
+    html_content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    
     class Meta:
         model = LandingPage
         fields = ['name', 'html_content', 'url_path']

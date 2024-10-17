@@ -13,11 +13,10 @@ urlpatterns = [
     path('campaigns/', include('campaigns.urls')),
     path('landing-pages/', include('landing_pages.urls')),
     path('email-templates/', include('email_templates.urls')),
+    path('tinymce/', include('tinymce.urls')),
     path('groups/', include('groups.urls')),
     path('smtp/', include('smtp.urls')),
 ]
 
-if settings.DEBUG or settings.SERVE_MEDIA_IN_PRODUCTION:
-    urlpatterns += [
-        path('media/<path:path>', serve_media, name='serve_media'),
-    ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
