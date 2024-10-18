@@ -11,3 +11,4 @@ PyMySQL
 pandas 
 openpyxl
 django-tinymce
+requests
