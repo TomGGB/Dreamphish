@@ -174,6 +174,7 @@ class CampaignResult(models.Model):
     post_data = models.TextField(blank=True, null=True)  # Campo para almacenar los datos del formulario
     latitude = models.FloatField(blank=True, null=True)  # Para almacenar latitud
     longitude = models.FloatField(blank=True, null=True)  # Para almacenar longitud
+    webhook_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.token
@@ -187,3 +188,15 @@ class LandingPageAsset(models.Model):
 
     def __str__(self):
         return f"{self.file_name} - {self.file_type}"
+
+class Webhook(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    url = models.URLField()
+    is_active = models.BooleanField(default=True)
+    secret = models.CharField(max_length=64, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

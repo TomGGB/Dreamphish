@@ -18,6 +18,8 @@ from openpyxl import Workbook
 from django.http import HttpResponse
 import io
 from django.conf import settings
+import requests
+from core.utils import generate_unique_token
 
 
 @login_required
@@ -115,8 +117,6 @@ def start_campaign(request, campaign_id):
         messages.error(request, 'La campaña ya ha sido iniciada.')
     return redirect('dashboard')
 
-def generate_unique_token():
-    return str(uuid.uuid4())
 
 @login_required
 def delete_campaign(request, campaign_id):
@@ -203,6 +203,7 @@ def export_campaign_results(request, campaign_id, format='csv'):
         response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.xlsx"'
 
     return response
+
 
 
 

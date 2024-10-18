@@ -1,5 +1,5 @@
 from django import forms
-from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, LandingGroup
+from .models import SMTP, EmailTemplate, LandingPage, Group, Target, Campaign, LandingGroup, Webhook
 from django.forms import inlineformset_factory
 from tinymce.widgets import TinyMCE
 
@@ -67,3 +67,11 @@ class LandingPageUploadForm(forms.Form):
 class ImportForm(forms.Form):
     group_name = forms.CharField(max_length=255, label='Nombre del Grupo')
     csv_file = forms.FileField(label='Archivo CSV')
+
+class WebhookForm(forms.ModelForm):
+    class Meta:
+        model = Webhook
+        fields = ['name', 'url', 'is_active', 'secret']
+        widgets = {
+            'secret': forms.PasswordInput(),
+        }

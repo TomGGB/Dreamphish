@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'smtp',
     'email_templates',
     'tinymce',
+    'webhooks',
 ]
 
 # Middleware
@@ -62,6 +63,7 @@ TEMPLATES = [
             BASE_DIR / 'landing_pages' / 'templates',
             BASE_DIR / 'smtp' / 'templates',
             BASE_DIR / 'groups' / 'templates',
+            BASE_DIR / 'webhooks' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

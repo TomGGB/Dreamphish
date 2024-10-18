@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Probar Webhook</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Enviar prueba de webhook</button>
+    </form>
+</div>
+{% endblock %}
+

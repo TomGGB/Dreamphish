@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import SMTP,LandingPage, CampaignResult
+from .models import SMTP,LandingPage, CampaignResult, Webhook
 from .forms import SMTPForm, TestSMTPForm
 import smtplib
 from email.mime.text import MIMEText
@@ -22,6 +22,10 @@ import mimetypes
 from django.conf import settings
 from django.http import FileResponse
 import logging
+import hmac
+import hashlib
+import requests
+from webhooks.views import send_webhook
 
 logger = logging.getLogger(__name__)
 
@@ -70,27 +74,38 @@ def serve_landing_page(request, url_path, token):
         logger.debug(f"Landing page found: {page.name}")
         result = get_object_or_404(CampaignResult, token=token, campaign__landing_group=page.landing_group)
 
+        # Verificar si es la primera landing page
+        is_first_page = not LandingPage.objects.filter(
+            landing_group=page.landing_group, 
+            order__lt=page.order
+        ).exists()
+
+        # Verificar si es la última landing page
+        is_last_page = not LandingPage.objects.filter(
+            landing_group=page.landing_group, 
+            order__gt=page.order
+        ).exists()
+
         if request.method == 'POST':
             form_data = request.POST.dict()
             
-
             if 'latitude' in form_data and 'longitude' in form_data:
                 result.latitude = form_data['latitude']
                 result.longitude = form_data['longitude']
                 result.save()
 
-            # Cargar los datos existentes o inicializar un diccionario vacío
             existing_data = json.loads(result.post_data) if result.post_data else {}
             
-            # Actualizar solo los campos que no están vacíos
             for key, value in form_data.items():
-                if value.strip():  # Comprobar si el valor no está vacío después de quitar espacios
+                if value.strip():
                     existing_data[key] = value
             
-            # Guardar los datos actualizados
             result.post_data = json.dumps(existing_data)
             result.status = 'form_submitted'
             result.save()
+            
+            # Enviar webhook cada vez que se envía un formulario
+            send_webhook(result.campaign.id, result.id, 'form_submitted', result.target.email, result.post_data)
             
             next_page = LandingPage.objects.filter(landing_group=page.landing_group, order__gt=page.order).order_by('order').first()
             if next_page:
@@ -106,7 +121,14 @@ def serve_landing_page(request, url_path, token):
             result.ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', '')
             result.user_agent = request.META.get('HTTP_USER_AGENT', '')
             result.save()
+            
+            # Enviar webhook solo si es la primera página y aún no se ha enviado
+            if is_first_page and not result.webhook_sent:
+                send_webhook(result.campaign.id, result.id, 'landing_opened', result.target.email)
+                result.webhook_sent = True
+                result.save()
 
+        # Resto del código para servir la landing page...
         soup = BeautifulSoup(page.html_content, 'html.parser')
         form = soup.find('form')
         if form:
@@ -160,7 +182,7 @@ def serve_landing_page(request, url_path, token):
         return HttpResponse(str(soup))
     except Exception as e:
         logger.error(f"Error serving landing page {url_path}: {str(e)}")
-        return HttpResponse("Error al cargar la página", status=500)
+        return HttpResponse("Error", status=500)
 
 @require_GET
 def track_email_open(request, token):
@@ -170,12 +192,14 @@ def track_email_open(request, token):
             if not result.email_opened:
                 result.email_opened = True
                 result.opened_timestamp = timezone.localtime()
-                result.status = 'opened'  # Actualiza el estado a 'opened'
+                result.status = 'opened'
                 result.save()
+                
+                # Enviar webhook
+                send_webhook(result.campaign.id, result.id, 'email_opened', result.target.email)
         except CampaignResult.DoesNotExist:
             pass
         
-        # Devuelve una imagen de 1x1 píxel transparente
         return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
 
 def serve_media(request, path):
