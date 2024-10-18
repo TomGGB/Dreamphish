@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = 'dreamphish.wsgi.application'
 
-# Configuraci��n de la base de datos
+# Configuracin de la base de datos
 if os.environ.get('ENV') == 'production':
     DATABASES = {
         'default': {
@@ -186,3 +186,19 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/dreamphish_user/Dreamphish/logs/django.log',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'DEBUG',
+    },
+}
