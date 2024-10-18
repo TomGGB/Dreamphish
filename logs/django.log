@@ -1,0 +1,95 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /email-templates/add/
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py", line 24, in add_email_template
+    return render(request, 'email_templates/add_email_template.html', {'form': form})
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: email_templates/add_email_template.html
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\forms.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\forms.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\forms.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\forms.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\email_templates\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\landing_pages\views.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dreamphish\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader

@@ -11,6 +11,12 @@ load_dotenv()
 
 # Configuración básica
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+
+# Asegúrate de que el directorio de logs exista
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
 DEBUG = False if os.environ.get('ENV') == 'production' else True
 ALLOWED_HOSTS = [
@@ -148,8 +154,7 @@ PRIVATE_PORT = int(os.environ.get('PRIVATE_PORT', 8001))
 
 
 # Configuración para TinyMCE
-TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY')
-TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/{}/tinymce/7/tinymce.min.js'.format(TINYMCE_API_KEY)
+TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/pwplmzcrujru8rf7rhgttcxzhpm27f7p9h9bdash7r5e0ezr/tinymce/7/tinymce.min.js'
 TINYMCE_COMPRESSOR = False
 TINYMCE_DEFAULT_CONFIG = {
     'height': 360,
@@ -159,9 +164,9 @@ TINYMCE_DEFAULT_CONFIG = {
     'selector': 'textarea',
     'theme': 'silver',
     'plugins': '''
-            advlist autolink lists link image charmap print preview anchor
+            advlist autolink lists link image charmap preview anchor
             searchreplace visualblocks code fullscreen
-            insertdatetime media table paste code help wordcount
+            insertdatetime media table code help wordcount
             ''',
     'toolbar': 'undo redo | formatselect | '
                'bold italic backcolor | alignleft aligncenter '
@@ -194,7 +199,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/dreamphish_user/Dreamphish/logs/django.log',
+            'filename': os.path.join(LOGS_DIR, 'django.log'),
         },
     },
     'root': {

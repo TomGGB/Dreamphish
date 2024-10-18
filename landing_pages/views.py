@@ -13,6 +13,7 @@ import base64
 from django.conf import settings
 import shutil
 from bs4 import BeautifulSoup
+from dreamphish.settings import TINYMCE_DEFAULT_CONFIG
 import logging
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,9 @@ def add_landing_page(request):
 
 @login_required
 def edit_landing_page(request, landing_page_id):
+    context = {
+        'TINYMCE_DEFAULT_CONFIG': TINYMCE_DEFAULT_CONFIG
+    }
     landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
     if request.method == 'POST':
         form = LandingPageForm(request.POST, instance=landing_page)
@@ -54,7 +58,7 @@ def edit_landing_page(request, landing_page_id):
             return redirect('landing_page_list')
     else:
         form = LandingPageForm(instance=landing_page)
-    return render(request, 'landing_page_form.html', {'form': form, 'edit_mode': True})
+    return render(request, 'landing_page_form.html', {'form': form, 'context': context})
 
 @login_required
 def delete_landing_page(request, landing_page_id):

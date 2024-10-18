@@ -32,7 +32,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
         selector: '#id_html_content',
-        ...TINYMCE_DEFAULT_CONFIG,
+        ...{{ context.TINYMCE_DEFAULT_CONFIG }},
         height: 500,
         content_css: false,
         content_style: "body { font-family: Arial, sans-serif; font-size: 14px; }",

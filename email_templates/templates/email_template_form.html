@@ -32,23 +32,43 @@
 document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
         selector: '#id_body',
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-        ],
+        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
         toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        height: 300,
         setup: function(editor) {
-            editor.on('init', function() {
-                var chips = document.querySelectorAll('md-assist-chip');
-                chips.forEach(function(chip) {
-                    chip.addEventListener('click', function() {
-                        editor.insertContent(this.getAttribute('data-value'));
-                    });
-                });
+            editor.on('change', function () {
+                editor.save();
             });
         }
     });
+
+    // Manejar clics en los chips
+    var chips = document.querySelectorAll('md-assist-chip');
+    chips.forEach(function(chip) {
+        chip.addEventListener('click', function() {
+            var value = this.getAttribute('data-value');
+            tinymce.activeEditor.insertContent(value);
+        });
+    });
+
+    // Manejar el envío del formulario
+    var form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            tinymce.triggerSave();
+            
+            var name = document.getElementById('id_name').value;
+            var subject = document.getElementById('id_subject').value;
+            var body = tinymce.get('id_body').getContent();
+
+            if (name.trim() === '' || subject.trim() === '' || body.trim() === '') {
+                alert('Por favor, complete todos los campos requeridos.');
+            } else {
+                this.submit();
+            }
+        });
+    }
 });
 </script>
 {% endblock %}

@@ -15,7 +15,7 @@ class TestSMTPForm(forms.Form):
     test_email = forms.EmailField(label='Correo de prueba')
 
 class EmailTemplateForm(forms.ModelForm):
-    body = forms.CharField(widget=forms.Textarea(attrs={'rows': 10, 'cols': 80}))
+    body = forms.CharField(widget=forms.Textarea(attrs={'id': 'id_body'}), required=True)
     
     class Meta:
         model = EmailTemplate
