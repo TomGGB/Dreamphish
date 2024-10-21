@@ -3,34 +3,53 @@
 {% block content %}
 <div class="container">
     <h2>Webhooks</h2>
-    <a href="{% url 'add_webhook' %}" class="btn btn-primary mb-3" style="height: 38px; width: 150px;">Añadir Webhook</a>
+    <md-filled-button class="mb-4" onclick="location.href='{% url 'add_webhook' %}'">
+        <span class="material-icons">add</span>
+        Añadir Webhook
+    </md-filled-button>
     
     {% if webhooks %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>URL</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for webhook in webhooks %}
-                <tr>
-                    <td>{{ webhook.name }}</td>
-                    <td>{{ webhook.url }}</td>
-                    <td>{% if webhook.is_active %}Activo{% else %}Inactivo{% endif %}</td>
-                    <td>
-                        <a href="{% url 'edit_webhook' webhook.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-                        <a href="{% url 'delete_webhook' webhook.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este webhook?')">Eliminar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>URL</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for webhook in webhooks %}
+                    <tr>
+                        <td>{{ webhook.name }}</td>
+                        <td>{{ webhook.url }}</td>
+                        <td>{% if webhook.is_active %}<span class="badge bg-success">Activo</span>{% else %}<span class="badge bg-secondary">Inactivo</span>{% endif %}</td>
+                        <td>
+                            <md-filled-tonal-button class="btn-sm" onclick="location.href='{% url 'edit_webhook' webhook.id %}'">
+                                <span class="material-icons">edit</span>
+                                Editar
+                            </md-filled-tonal-button>
+                            <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteWebhook({{ webhook.id }})">
+                                <span class="material-icons">delete</span>
+                                Eliminar
+                            </md-filled-tonal-button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p>No hay webhooks configurados.</p>
     {% endif %}
 </div>
+
+<script>
+function deleteWebhook(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar este webhook?')) {
+        location.href = '{% url 'delete_webhook' 0 %}'.replace('0', id);
+    }
+}
+</script>
 {% endblock %}

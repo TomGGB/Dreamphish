@@ -19,39 +19,42 @@
         <div class="row">
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="position-sticky">
+                    <div class="logo-container">
+                        <img src="https://dreamlab.net/global/img/logo.svg" alt="DreamLab Logo" class="navbar-logo">
+                    </div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'email_template_list' %}">
+                            <a class="nav-link {% if request.path == '/email-templates/' %}active{% endif %}" href="{% url 'email_template_list' %}">
                                 Plantillas de Correo
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'landing_page_list' %}">
+                            <a class="nav-link {% if request.path == '/landing-pages/' %}active{% endif %}" href="{% url 'landing_page_list' %}">
                                 Landing Pages
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'group_list' %}">
+                            <a class="nav-link {% if request.path == '/groups/' %}active{% endif %}" href="{% url 'group_list' %}">
                                 Grupos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'campaign_list' %}">
+                            <a class="nav-link {% if request.path == '/campaigns/' %}active{% endif %}" href="{% url 'campaign_list' %}">
                                 Campañas
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'smtp_list' %}">
+                            <a class="nav-link {% if request.path == '/smtp/' %}active{% endif %}" href="{% url 'smtp_list' %}">
                                 Perfiles SMTP
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'webhook_list' %}">
+                            <a class="nav-link {% if request.path == '/webhooks/' %}active{% endif %}" href="{% url 'webhook_list' %}">
                                 Webhooks
                             </a>
                         </li>
@@ -59,7 +62,7 @@
                 </div>
             </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="main-content">
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">

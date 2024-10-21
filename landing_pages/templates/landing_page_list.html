@@ -1,41 +1,60 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>Lista de Landing Pages</h2>
-    <a href="{% url 'upload_landing_page_template' %}" class="btn btn-primary">Subir Landing Page</a>
-    {% for group, landing_pages in landing_pages_by_group.items %}
-        <h3>{{ group.name }}</h3>
-        <form method="post" action="{% url 'delete_landing_group' group.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este grupo y todas las landing pages asociadas?')">Eliminar Grupo</button>
-        </form>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for landing_page in landing_pages %}
-                    <tr>
-                        <td>{{ landing_page.name }}</td>
-                        <td>
-                            <a href="{% url 'edit_landing_page' landing_page.id %}" class="btn btn-sm btn-warning">Editar</a>
-                            <form method="post" action="{% url 'delete_landing_page' landing_page.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta landing page?')">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="2">No hay landing pages en este grupo.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% empty %}
-        <p>No hay grupos de landing pages.</p>
-    {% endfor %}
+    <h2 class="mb-4">LANDING PAGES</h2>
+    <md-filled-button class="mb-4" onclick="location.href='{% url 'upload_landing_page_template' %}'">
+        <span class="material-icons">add</span>
+        SUBIR LANDING PAGE
+    </md-filled-button>
+
+    <div class="container">
+        <div class="landing-groups">
+            {% for group, landing_pages in landing_pages_by_group.items %}
+                <div class="landing-group-card">
+                    <div class="group-header">
+                        <h3>{{ group.name }}</h3>
+                        <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteGroup('{{ group.id }}')">
+                            <span class="material-icons">delete</span>
+                            Eliminar Grupo
+                        </md-filled-tonal-button>
+                    </div>
+                    <div class="landing-list">
+                        {% for landing_page in landing_pages %}
+                            <div class="landing-item">
+                                <span>{{ landing_page.name }}</span>
+                                <div class="landing-actions">
+                                    <md-filled-tonal-button class="btn-sm" onclick="location.href='{% url 'edit_landing_page' landing_page.id %}'">
+                                        <span class="material-icons">edit</span>
+                                        Editar
+                                    </md-filled-tonal-button>
+                                    <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteLandingPage('{{ landing_page.id }}')">
+                                        <span class="material-icons">delete</span>
+                                        Eliminar
+                                    </md-filled-tonal-button>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No hay landing pages en este grupo.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay grupos de landing pages.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+<script>
+function deleteGroup(groupId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este grupo y todas las landing pages asociadas?')) {
+        location.href = '{% url 'delete_landing_group' 0 %}'.replace('0', groupId);
+    }
+}
+
+function deleteLandingPage(landingPageId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta landing page?')) {
+        location.href = '{% url 'delete_landing_page' 0 %}'.replace('0', landingPageId);
+    }
+}
+</script>
 {% endblock %}
