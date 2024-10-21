@@ -1,60 +1,104 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2 class="mb-4">LANDING PAGES</h2>
-    <md-filled-button class="mb-4" onclick="location.href='{% url 'upload_landing_page_template' %}'">
-        <span class="material-icons">add</span>
-        SUBIR LANDING PAGE
-    </md-filled-button>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Landing Pages</h2>
+        <md-filled-button class="button-add" onclick="location.href='{% url 'upload_landing_page_template' %}'">
+            <span class="material-icons">add</span>
+            Subir Landing Page
+        </md-filled-button>
+    </div>
 
-    <div class="container">
-        <div class="landing-groups">
-            {% for group, landing_pages in landing_pages_by_group.items %}
+    <div class="row">
+        {% for group, landing_pages in landing_pages_by_group.items %}
+            <div class="col-md-12 mb-4">
                 <div class="landing-group-card">
-                    <div class="group-header">
-                        <h3>{{ group.name }}</h3>
-                        <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteGroup('{{ group.id }}')">
-                            <span class="material-icons">delete</span>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ group.name }}</h3>
+                        <md-filled-tonal-button class="button-delete" onclick="deleteGroup('{{ group.id }}')">
+                            <span class="material-icons me-2">delete</span>
                             Eliminar Grupo
                         </md-filled-tonal-button>
                     </div>
-                    <div class="landing-list">
+                    <div class="card-body">
                         {% for landing_page in landing_pages %}
-                            <div class="landing-item">
+                            <div class="landing-item d-flex justify-content-between align-items-center mb-2">
                                 <span>{{ landing_page.name }}</span>
                                 <div class="landing-actions">
-                                    <md-filled-tonal-button class="btn-sm" onclick="location.href='{% url 'edit_landing_page' landing_page.id %}'">
-                                        <span class="material-icons">edit</span>
-                                        Editar
-                                    </md-filled-tonal-button>
-                                    <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteLandingPage('{{ landing_page.id }}')">
-                                        <span class="material-icons">delete</span>
+                                    <md-filled-tonal-button class="button-delete" onclick="deleteLandingPage('{{ landing_page.id }}')">
+                                        <span class="material-icons me-2">delete</span>
                                         Eliminar
                                     </md-filled-tonal-button>
                                 </div>
                             </div>
                         {% empty %}
-                            <p>No hay landing pages en este grupo.</p>
+                            <p class="text-muted">No hay landing pages en este grupo.</p>
                         {% endfor %}
                     </div>
                 </div>
-            {% empty %}
-                <p>No hay grupos de landing pages.</p>
-            {% endfor %}
-        </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    No hay grupos de landing pages. ¡Crea uno nuevo!
+                </div>
+            </div>
+        {% endfor %}
     </div>
+</div>
 
+{% block extra_js %}
 <script>
 function deleteGroup(groupId) {
     if (confirm('¿Estás seguro de que quieres eliminar este grupo y todas las landing pages asociadas?')) {
-        location.href = '{% url 'delete_landing_group' 0 %}'.replace('0', groupId);
+        fetch(`{% url 'delete_landing_group' 0 %}`.replace('0', groupId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            location.reload();
+        });
     }
 }
 
 function deleteLandingPage(landingPageId) {
     if (confirm('¿Estás seguro de que quieres eliminar esta landing page?')) {
-        location.href = '{% url 'delete_landing_page' 0 %}'.replace('0', landingPageId);
+        fetch(`{% url 'delete_landing_page' 0 %}`.replace('0', landingPageId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            location.reload();
+        });
     }
 }
 </script>
+{% endblock %}
+
 {% endblock %}

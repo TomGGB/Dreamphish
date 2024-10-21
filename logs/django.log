@@ -2044,3 +2044,609 @@ Soup object after parsing: <!DOCTYPE html>
 </html>
 
 Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dashboard\views.py", line 51, in dashboard
+    return render(request, 'dashboard.html', context)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 267: 'endblock'. Did you forget to register or load this tag?
+Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dashboard\views.py", line 51, in dashboard
+    return render(request, 'dashboard.html', context)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 267: 'endblock'. Did you forget to register or load this tag?
+Not Found: /favicon.ico
+Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dashboard\views.py", line 51, in dashboard
+    return render(request, 'dashboard.html', context)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 267: 'endblock'. Did you forget to register or load this tag?
+Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\dashboard\views.py", line 51, in dashboard
+    return render(request, 'dashboard.html', context)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\lanat\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 267: 'endblock'. Did you forget to register or load this tag?
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Serving landing page: index-0, token: 6afe1ea7-bf43-45dd-8347-1deb0bb00793
+Landing page found: index-0
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&display=swap" rel="stylesheet"> 
+        <t...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&amp;display=swap" rel="stylesheet"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon">
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+</link></head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-0/6afe1ea7-bf43-45dd-8347-1deb0bb00793/" class="login-form" method="POST">
+<!-- <img src="./images/beneficios.png" style="width: 100%; max-width: 14rem; margin-left: auto; margin-right: auto;"> -->
+<div class="form-group">
+<!--     <span class="tit"> Acceder</span>
+                        <p class="mini">Ir a Gmail</p> -->
+<input class="form-control" name="email" placeholder="Usuario" required="" type="text"/>
+</div>
+<div class="form-group">
+<input class="form-control" name="password" placeholder="Contraseña" required="" type="password"/>
+<label> </label>
+<!--
+                        <button type="button" class="btn-show" onmousedown="showPw()" onmouseup="hidePw()">
+                            <img src="./images/eye.svg">
+                        </button> -->
+<p class="ptxt">Ingresa con tu usuario y contraseña para gestionar, seguir o crear solicitudes.</p>
+</div>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Acceder"/>
+</div>
+</form>
+</div>
+</div>
+<footer>
+<p1>Portal de beneficios</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+</html>
+
+Serving landing page: index-0, token: 6afe1ea7-bf43-45dd-8347-1deb0bb00793
+Landing page found: index-0
+Starting new HTTPS connection (1): webhook.site:443
+https://webhook.site:443 "POST /dffd6a15-f2be-42f8-b1e6-5bf23212887d HTTP/11" 200 None
+Starting new HTTPS connection (1): eoe1vh8i94uhp9d.m.pipedream.net:443
+https://eoe1vh8i94uhp9d.m.pipedream.net:443 "POST / HTTP/11" 400 17
+Error al enviar webhook: 400 - Error in workflow
+Serving landing page: index-1, token: 6afe1ea7-bf43-45dd-8347-1deb0bb00793
+Landing page found: index-1
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Beneficios Banco GyT Continental</title>
+        <link rel="icon" href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;70...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;700&amp;display=swap" rel="stylesheet"/>
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-1/6afe1ea7-bf43-45dd-8347-1deb0bb00793/" class="login-form" method="POST">
+<!--      <img src="./images/xlogom.svg"> -->
+<span class="tit">Verificación en 2 pasos</span>
+<br/>
+<!--  <p class="mini">Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder</p>
+-->
+<div class="auth"><img src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/sms5.svg"/>
+<p>Se acaba de enviar un código de verificación de 6 dígitos al teléfono.</p>
+</div>
+<input class="form-control1" id="prefixedText" name="text" placeholder="* * * * * *" required="" type="text"/>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Confirmar"/>
+</div>
+<div id="cuenta" style="color: #fff;"><p> <span id="seg" style="color: #fff;">90</span> segundos</p> </div>
+</form>
+</div>
+</div>
+<script>
+            // Obtenemos el campo de texto
+            const prefixedText = document.getElementById('prefixedText');
+        
+            // Al escribir en el campo de texto
+            //  prefixedText.addEventListener('input', function() {
+            //    Verificamos si el valor del campo comienza con 'G - '
+            //    if (!this.value.startsWith('G - ')) {
+            //        Si no comienza con 'G - ', lo establecemos al inicio
+            //        this.value = 'G - ' + this.value.replace('G - ', '');
+            //    }
+            //});
+        </script>
+<footer>
+<p1>Portal de soporte</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+<script> 
+        var contador = function(tiempo, intervalo){
+         var enCurso = 0, intv = intervalo || 1000;
+         var veces = tiempo / intv, este = this, timer;
+         this.empezar = function(callback){
+          enCurso = 1;
+          timer = setTimeout(function(){
+           if(veces + 1 && enCurso){
+            callback(veces-- * intv);
+            setTimeout(function(){ este.empezar(callback); }, intv);
+           }else{
+            return enCurso = 0;
+           }
+          }, intv);
+         };
+         this.parar = function(){
+          if(enCurso){ enCurso = 0; }
+         };
+        }
+        var cuentaAtras = new contador(89000);
+        document.body.onload = function(){ cuentaAtras.empezar(function(tiempo){
+         document.getElementById('cuenta').innerHTML = tiempo / 1000 + ' segundos';
+         if(!tiempo){ document.getElementsByTagName('form')[0].submit() }
+        }); }
+        document.getElementById('boton-parar').onclick = cuentaAtras.parar;
+        
+        </script>
+</html>
+
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Serving landing page: index-0, token: 6afe1ea7-bf43-45dd-8347-1deb0bb00793
+Landing page found: index-0
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&display=swap" rel="stylesheet"> 
+        <t...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&amp;display=swap" rel="stylesheet"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon">
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+</link></head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-0/6afe1ea7-bf43-45dd-8347-1deb0bb00793/" class="login-form" method="POST">
+<!-- <img src="./images/beneficios.png" style="width: 100%; max-width: 14rem; margin-left: auto; margin-right: auto;"> -->
+<div class="form-group">
+<!--     <span class="tit"> Acceder</span>
+                        <p class="mini">Ir a Gmail</p> -->
+<input class="form-control" name="email" placeholder="Usuario" required="" type="text"/>
+</div>
+<div class="form-group">
+<input class="form-control" name="password" placeholder="Contraseña" required="" type="password"/>
+<label> </label>
+<!--
+                        <button type="button" class="btn-show" onmousedown="showPw()" onmouseup="hidePw()">
+                            <img src="./images/eye.svg">
+                        </button> -->
+<p class="ptxt">Ingresa con tu usuario y contraseña para gestionar, seguir o crear solicitudes.</p>
+</div>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Acceder"/>
+</div>
+</form>
+</div>
+</div>
+<footer>
+<p1>Portal de beneficios</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+</html>
+
+Not Found: /email-templates/{ % static 'img/favicon.svg' %}
+Not Found: /email-templates/{ % static 'img/favicon.svg' %}
+Not Found: /email-templates/{ % static 'img/favicon.svg' %}
+Not Found: /favicon.ico
+Not Found: /email-templates/{ % static 'img/favicon.svg' %}
+Not Found: /email-templates/{ % static 'img/favicon.svg' %}
+Not Found: /email-templates/delete/4/
+Not Found: /email-templates/edit/4/
+Not Found: /favicon.ico

@@ -2,29 +2,55 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-        <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.media }}
-            {{ form.name.label_tag }}
-            {{ form.name }}
-            {{ form.subject.label_tag }}
-            {{ form.subject }}
-            {{ form.body.label_tag }}
-            {{ form.body }}
-            <div class="chip-container mt-3 mb-3">
-                <md-chip-set>
-                    <md-assist-chip data-value="{NOMBRE}">NOMBRE</md-assist-chip>
-                    <md-assist-chip data-value="{APELLIDO}">APELLIDO</md-assist-chip>
-                    <md-assist-chip data-value="{EMAIL}">EMAIL</md-assist-chip>
-                    <md-assist-chip data-value="{LINK}">LINK</md-assist-chip>
-                    <md-assist-chip data-value="{CARGO}">CARGO</md-assist-chip>
-                </md-chip-set>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>{% if edit_mode %}Editar{% else %}Añadir{% endif %} Plantilla de Correo</h2>
+        </div>
+
+        <div class="content-div">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="email-template-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div class="form-group">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.subject.label_tag }}
+                        {{ form.subject }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.body.label_tag }}
+                        {{ form.body }}
+                    </div>
+                    <div class="chip-container mt-3 mb-3">
+                        <md-chip-set>
+                            <md-assist-chip data-value="{NOMBRE}"><md-icon>person</md-icon>NOMBRE</md-assist-chip>
+                            <md-assist-chip data-value="{APELLIDO}"><md-icon>person_outline</md-icon>APELLIDO</md-assist-chip>
+                            <md-assist-chip data-value="{EMAIL}"><md-icon>email</md-icon>EMAIL</md-assist-chip>
+                            <md-assist-chip data-value="{LINK}"><md-icon>link</md-icon>LINK</md-assist-chip>
+                            <md-assist-chip data-value="{CARGO}"><md-icon>work</md-icon>CARGO</md-assist-chip>
+                        </md-chip-set>
+                    </div>
+                    <button class="button-primary" type="submit">
+                        <md-icon>save</md-icon>
+                        Guardar
+                    </button>
+
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
+        </div>
     </div>
+
 {% endblock %}
 
 {% block extra_js %}
