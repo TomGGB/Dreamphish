@@ -1,33 +1,73 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>Grupos</h2>
-    <a href="{% url 'add_group' %}" class="btn btn-primary">Añadir Grupo</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for group in groups %}
-                <tr>
-                    <td>{{ group.name }}</td>
-                    <td>
-                        <a href="{% url 'group_detail' group.id %}" class="btn btn-sm btn-info">Ver</a>
-                        <a href="{% url 'edit_group' group.id %}" class="btn btn-sm btn-warning">Editar</a>
-                        <form method="post" action="{% url 'delete_group' group.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este grupo?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="2">No hay grupos.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Grupos</h2>
+        <md-filled-button class="button-add" onclick="location.href='{% url 'add_group' %}'">
+            <span class="material-icons">add</span>
+            Añadir Grupo
+        </md-filled-button>
+    </div>
+
+    <div class="row">
+        {% for group in groups %}
+            <div class="col-md-12 mb-4">
+                <div class="group-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ group.name }}</h3>
+                        <div class="group-actions">
+                            <md-filled-tonal-button class="button-view button-preview" onclick="location.href='{% url 'group_detail' group.id %}'">
+                                <span class="material-icons me-2">visibility</span>
+                                Ver
+                            </md-filled-tonal-button>
+                            <md-filled-tonal-button class="button-delete" onclick="deleteGroup('{{ group.id }}')">
+                                <span class="material-icons me-2">delete</span>
+                                Eliminar
+                            </md-filled-tonal-button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>Número de objetivos: {{ group.targets.count }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    No hay grupos. ¡Crea uno nuevo!
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function deleteGroup(groupId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este grupo y todos sus objetivos?')) {
+        fetch(`{% url 'delete_group' 0 %}`.replace('0', groupId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            location.reload();
+        });
+    }
+}
+</script>
 {% endblock %}

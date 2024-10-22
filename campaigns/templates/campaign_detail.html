@@ -1,55 +1,53 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>{{ campaign.name }}</h2>
-    <button id="refresh-button" class="btn btn-secondary">Refrescar Datos</button>
-    <div id="campaign-results">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Token</th>
-                    <th>Email</th>
-                    <th>Estado</th>
-                    <th>Fecha de Envío</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for result in results %}
-                    <tr>
-                        <td>{{ result.token }}</td>
-                        <td>{{ result.target.email }}</td>
-                        <td>{{ result.status }}</td>
-                        <td>{{ result.sent_timestamp }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4">No hay resultados disponibles.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>{{ campaign.name }}</h2>
+        <button id="refresh-button" class="button-primary" onclick="location.href='{% url 'refresh_campaign_results' campaign.id %}'">
+            <span class="material-icons">refresh</span>
+            Refrescar Datos
+        </button>
     </div>
+
+    <div class="campaign-details">
+        <div class="campaign-info">
+            <p><strong>Estado:</strong> <span class="campaign-status {{ campaign.status }}">{{ campaign.get_status_display }}</span></p>
+            <p><strong>Grupo:</strong> {{ campaign.group.name }}</p>
+            <p><strong>Plantilla de correo:</strong> {{ campaign.email_template.name }}</p>
+            <p><strong>Fecha de creación:</strong> {{ campaign.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <div class="campaign-results">
+        <h3>Resultados de la Campaña</h3>
+        <div class="table-responsive">
+            <table class="md-table">
+                <thead>
+                    <tr>
+                        <th>Token</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Fecha de Envío</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                        <tr>
+                            <td>{{ result.token }}</td>
+                            <td>{{ result.target.email }}</td>
+                            <td>{{ result.status }}</td>
+                            <td>{{ result.sent_timestamp|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">No hay resultados disponibles.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}
-
-<script>
-    document.getElementById('refresh-button').addEventListener('click', function() {
-        fetch("{% url 'refresh_campaign_results' campaign.id %}")
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.querySelector('#campaign-results tbody');
-                tbody.innerHTML = ''; // Limpiar la tabla existente
-
-                data.results.forEach(result => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${result.token}</td>
-                        <td>${result.target.email}</td>
-                        <td>${result.status}</td>
-                        <td>${result.sent_timestamp}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error al refrescar los datos:', error));
-    });
-</script>

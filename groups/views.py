@@ -117,3 +117,17 @@ def delete_target(request, target_id):
         target.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
+
+@login_required
+def edit_target(request, group_id, target_id):
+    group = get_object_or_404(Group, id=group_id, user=request.user)
+    target = get_object_or_404(Target, id=target_id, group=group)
+    if request.method == 'POST':
+        form = TargetForm(request.POST, instance=target)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Objetivo actualizado con éxito.')
+            return redirect('group_detail', group_id=group.id)
+    else:
+        form = TargetForm(instance=target)
+    return render(request, 'target_form.html', {'form': form, 'group': group, 'edit_mode': True})

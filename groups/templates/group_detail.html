@@ -1,30 +1,70 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>{{ group.name }}</h2>
-    <a href="{% url 'add_target' group.id %}" class="btn btn-primary">Añadir Objetivo</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Puesto</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for target in targets %}
-                <tr>
-                    <td>{{ target.first_name }}</td>
-                    <td>{{ target.last_name }}</td>
-                    <td>{{ target.position }}</td>
-                    <td>{{ target.email }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">No hay objetivos en este grupo.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>{{ group.name }}</h2>
+        <md-filled-button class="button-primary" onclick="location.href='{% url 'add_target' group.id %}'">
+            <span class="material-icons">add</span>
+            Añadir Objetivo
+        </md-filled-button>
+    </div>
+
+    <div class="group-card">
+        <div class="card-body">
+            {% if targets %}
+                <div class="targets-grid">
+                    {% for target in targets %}
+                        <div class="target-card">
+                            <div class="target-header">
+                                <h3>{{ target.first_name }} {{ target.last_name }}</h3>
+                            </div>
+                            <div class="target-info">
+                                <p><strong>Puesto:</strong> {{ target.position }}</p>
+                                <p><strong>Email:</strong> {{ target.email }}</p>
+                            </div>
+                            <div class="target-actions">
+                                <md-filled-tonal-button class="button-edit" onclick="location.href='{% url 'edit_target' group.id target.id %}'">
+                                    <span class="material-icons">edit</span>
+                                    Editar
+                                </md-filled-tonal-button>
+                                <md-filled-tonal-button class="button-delete" onclick="deleteTarget('{{ target.id }}')">
+                                    <span class="material-icons">delete</span>
+                                    Eliminar
+                                </md-filled-tonal-button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    No hay objetivos en este grupo.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function deleteTarget(targetId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este objetivo?')) {
+        fetch(`/groups/delete_target/${targetId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error al eliminar el objetivo');
+            }
+        });
+    }
+}
+</script>
 {% endblock %}

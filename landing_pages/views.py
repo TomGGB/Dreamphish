@@ -8,7 +8,7 @@ import os
 import json
 from django.db import models
 import hashlib
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import base64
 from django.conf import settings
 import shutil
@@ -191,6 +191,30 @@ def edit_campaign(request, campaign_id):
 
     return render(request, 'core/campaign_form.html', {'form': form, 'campaign': campaign})
 
+@login_required
+def preview_landing_page(request, landing_page_id):
+    landing_page = get_object_or_404(LandingPage, id=landing_page_id, user=request.user)
+    
+    soup = BeautifulSoup(landing_page.html_content, 'html.parser')
+    
+    # Reemplazar las rutas de las imágenes, CSS, JS y fuentes
+    for tag in soup.find_all(['img', 'link', 'script']):
+        src = tag.get('src') or tag.get('href')
+        if src:
+            if src.startswith(('http://', 'https://', '//')):
+                continue
+            
+            # Construir la ruta correcta para los recursos
+            correct_path = f"/media/landing_pages/{landing_page.landing_group.user.id}/{landing_page.landing_group.name}/{src.lstrip('/')}"
+            
+            if tag.name == 'img':
+                tag['src'] = request.build_absolute_uri(correct_path)
+            elif tag.name == 'link':
+                tag['href'] = request.build_absolute_uri(correct_path)
+            elif tag.name == 'script':
+                tag['src'] = request.build_absolute_uri(correct_path)
+    
+    return HttpResponse(str(soup))
 
 
 

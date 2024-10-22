@@ -2,42 +2,65 @@
 {% load static %}
 
 {% block content %}
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
-    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-        {% csrf_token %}
-        <div class="form-group mb-3">
-            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
-            {{ form.name }}
-        </div>
-        
-        <h3 class="mt-4 mb-3">Objetivos</h3>
-        {{ formset.management_form }}
-        <div id="formset" class="mb-3">
-            {% for form in formset %}
-                <div class="target-form mb-3 p-3 border rounded">
-                    {% for field in form %}
-                        {% if field.name != 'DELETE' %}
-                            <div class="form-group mb-2">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    {% if form.instance.pk %}
-                        <button type="button" class="btn btn-danger btn-sm delete-target" data-target-id="{{ form.instance.pk }}">Eliminar</button>
-                    {% endif %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Grupo</h2>
+    </div>
+
+    <div class="group-card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
                 </div>
-            {% endfor %}
+                
+                <h3 class="form-title">Objetivos</h3>
+                {{ formset.management_form }}
+                <div id="formset" class="mb-3">
+                    {% for form in formset %}
+                        <div class="target-form mb-3 p-3 border rounded">
+                            <div class="row">
+                                {% for field in form %}
+                                    {% if field.name != 'DELETE' and field.name != 'id' and field.name != 'group' %}
+                                        <div class="col-md-3 mb-2">
+                                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if form.instance.pk %}
+                                <md-filled-tonal-button class="button-delete delete-target" data-target-id="{{ form.instance.pk }}">
+                                    <span class="material-icons">delete</span>
+                                    Eliminar
+                                </md-filled-tonal-button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mb-3">
+                    <md-filled-tonal-button class="button-primary" id="add-form">
+                        <span class="material-icons">add</span>
+                        Añadir otro objetivo
+                    </md-filled-tonal-button>
+                    <input type="file" id="csv-file-input" class="d-none" accept=".csv" />
+                    <md-filled-tonal-button class="button-primary" id="import-csv">
+                        <span class="material-icons">upload_file</span>
+                        Importar desde CSV
+                    </md-filled-tonal-button>
+                </div>
+                
+                <md-filled-button class="button-primary" type="submit">
+                    <span class="material-icons">save</span>
+                    Guardar
+                </md-filled-button>
+            </form>
         </div>
-        
-        <div class="mb-3">
-            <button type="button" id="add-form" class="btn btn-outline-secondary">Añadir otro objetivo</button>
-            <input type="file" id="csv-file-input" class="d-none" accept=".csv" />
-            <button type="button" id="import-csv" class="btn btn-outline-info">Importar desde CSV</button>
-        </div>
-        
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -59,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         e.target.closest('.target-form').remove();
                     } else {
-                        alert('Error al eliminar el objetivo');
+                        location.reload();
                     }
                 });
             }

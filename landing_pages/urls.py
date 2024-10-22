@@ -8,4 +8,5 @@ urlpatterns = [
     path('delete/<int:landing_page_id>/', views.delete_landing_page, name='delete_landing_page'),
     path('deletelandinggroup/<int:group_id>/', views.delete_landing_group, name='delete_landing_group'),
     path('upload_landing_page_template/', views.upload_landing_page_template, name='upload_landing_page_template'),
+    path('preview/<int:landing_page_id>/', views.preview_landing_page, name='preview_landing_page'),
 ]

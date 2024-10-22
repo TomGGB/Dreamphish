@@ -14,7 +14,7 @@
     <div class="row">
         {% for group, landing_pages in landing_pages_by_group.items %}
             <div class="col-md-12 mb-4">
-                <div class="landing-group-card">
+                <div class="group-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">{{ group.name }}</h3>
                         <md-filled-tonal-button class="button-delete" onclick="deleteGroup('{{ group.id }}')">
@@ -27,6 +27,10 @@
                             <div class="landing-item d-flex justify-content-between align-items-center mb-2">
                                 <span>{{ landing_page.name }}</span>
                                 <div class="landing-actions">
+                                    <md-filled-tonal-button class="button-preview" onclick="previewLandingPage('{{ landing_page.id }}')">
+                                        <span class="material-icons me-2">visibility</span>
+                                        Previsualizar
+                                    </md-filled-tonal-button>
                                     <md-filled-tonal-button class="button-delete" onclick="deleteLandingPage('{{ landing_page.id }}')">
                                         <span class="material-icons me-2">delete</span>
                                         Eliminar
@@ -97,6 +101,10 @@ function deleteLandingPage(landingPageId) {
             location.reload();
         });
     }
+}
+
+function previewLandingPage(landingPageId) {
+    window.open(`{% url 'preview_landing_page' 0 %}`.replace('0', landingPageId), '_blank');
 }
 </script>
 {% endblock %}

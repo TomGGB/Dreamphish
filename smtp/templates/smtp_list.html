@@ -1,63 +1,77 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>Perfiles SMTP</h2>
-    <a href="{% url 'add_smtp' %}" class="btn btn-primary mb-3">Añadir Perfil SMTP</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Host</th>
-                <th>Usuario</th>
-                <th>Puerto</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for smtp in smtps %}
-                <tr>
-                    <td>{{ smtp.name }}</td>
-                    <td>{{ smtp.host }}</td>
-                    <td>{{ smtp.username }}</td>
-                    <td>{{ smtp.port }}</td>
-                    <td>
-                        <a href="{% url 'edit_smtp' smtp.id %}" class="btn btn-warning btn-sm">Editar</a>
-                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#testSMTPModal{{ smtp.id }}">Probar</button>
-                        <form method="post" action="{% url 'delete_smtp' smtp.id %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                <!-- Modal para la prueba de SMTP -->
-                <div class="modal fade" id="testSMTPModal{{ smtp.id }}" tabindex="-1" role="dialog" aria-labelledby="testSMTPModalLabel{{ smtp.id }}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="testSMTPModalLabel{{ smtp.id }}">Probar SMTP</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Perfiles SMTP</h2>
+        <md-filled-button class="button-add" onclick="location.href='{% url 'add_smtp' %}'">
+            <span class="material-icons">add</span>
+            Añadir Perfil SMTP
+        </md-filled-button>
+    </div>
+
+    <div class="content-div">
+        <div class="card">
+            <div class="card-body">
+                {% if smtp_profiles %}
+                    <p>Número de perfiles SMTP: {{ smtp_profiles|length }}</p>
+                    {% for smtp in smtp_profiles %}
+                        <div class="smtp-profile">
+                            <div class="smtp-info">
+                                <h3>{{ smtp.name }}</h3>
+                                <p><strong>Host:</strong> {{ smtp.host }}</p>
+                                <p><strong>Puerto:</strong> {{ smtp.port }}</p>
+                                <p><strong>Usuario:</strong> {{ smtp.username }}</p>
                             </div>
-                            <div class="modal-body">
-                                <form method="post" action="{% url 'test_smtp' smtp.id %}">
+                            <div class="smtp-actions">
+                                <button class="button-secondary" onclick="location.href='{% url 'edit_smtp' smtp.id %}'">
+                                    <span class="material-icons">edit</span>
+                                    Editar
+                                </button>
+                                <button class="button-secondary" data-bs-toggle="modal" data-bs-target="#testSMTPModal{{ smtp.id }}">
+                                    <span class="material-icons">send</span>
+                                    Probar
+                                </button>
+                                <form method="post" action="{% url 'delete_smtp' smtp.id %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="testEmail{{ smtp.id }}">Correo de prueba:</label>
-                                        <input type="email" class="form-control" id="testEmail{{ smtp.id }}" name="test_email" required>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-primary">Enviar correo de prueba</button>
-                                    </div>
+                                    <button type="submit" class="button-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este perfil SMTP?')">
+                                        <span class="material-icons">delete</span>
+                                        Eliminar
+                                    </button>
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No hay perfiles SMTP configurados.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for smtp in smtp_profiles %}
+    <!-- Modal para la prueba de SMTP -->
+    <div class="modal fade" id="testSMTPModal{{ smtp.id }}" tabindex="-1" role="dialog" aria-labelledby="testSMTPModalLabel{{ smtp.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="testSMTPModalLabel{{ smtp.id }}">Probar SMTP</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            {% empty %}
-                <tr>
-                    <td colspan="5">No hay perfiles SMTP registrados.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'test_smtp' smtp.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="test_email">Correo de prueba:</label>
+                            <input type="email" class="form-control" id="test_email" name="test_email" required>
+                        </div>
+                        <button type="submit" class="button-primary mt-3">Enviar correo de prueba</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
 {% endblock %}

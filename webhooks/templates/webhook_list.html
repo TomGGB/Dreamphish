@@ -1,48 +1,51 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container">
-    <h2>Webhooks</h2>
-    <md-filled-button class="mb-4" onclick="location.href='{% url 'add_webhook' %}'">
-        <span class="material-icons">add</span>
-        Añadir Webhook
-    </md-filled-button>
-    
-    {% if webhooks %}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>URL</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Webhooks</h2>
+        <md-filled-button class="button-add" onclick="location.href='{% url 'add_webhook' %}'">
+            <span class="material-icons">add</span>
+            Añadir Webhook
+        </md-filled-button>
+    </div>
+
+    <div class="content-div">
+        <div class="card">
+            <div class="card-body">
+                {% if webhooks %}
                     {% for webhook in webhooks %}
-                    <tr>
-                        <td>{{ webhook.name }}</td>
-                        <td>{{ webhook.url }}</td>
-                        <td>{% if webhook.is_active %}<span class="badge bg-success">Activo</span>{% else %}<span class="badge bg-secondary">Inactivo</span>{% endif %}</td>
-                        <td>
-                            <md-filled-tonal-button class="btn-sm" onclick="location.href='{% url 'edit_webhook' webhook.id %}'">
-                                <span class="material-icons">edit</span>
-                                Editar
-                            </md-filled-tonal-button>
-                            <md-filled-tonal-button class="btn-sm btn-danger" onclick="deleteWebhook({{ webhook.id }})">
-                                <span class="material-icons">delete</span>
-                                Eliminar
-                            </md-filled-tonal-button>
-                        </td>
-                    </tr>
+                        <div class="webhook-item">
+                            <div class="webhook-info">
+                                <h3>{{ webhook.name }}</h3>
+                                <p><strong>URL:</strong> {{ webhook.url }}</p>
+                                <p><strong>Estado:</strong> 
+                                    {% if webhook.is_active %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="webhook-actions">
+                                <button class="button-secondary" onclick="location.href='{% url 'edit_webhook' webhook.id %}'">
+                                    <span class="material-icons">edit</span>
+                                    Editar
+                                </button>
+                                <button class="button-delete" onclick="deleteWebhook({{ webhook.id }})">
+                                    <span class="material-icons">delete</span>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
                     {% endfor %}
-                </tbody>
-            </table>
+                {% else %}
+                    <p>No hay webhooks configurados.</p>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <p>No hay webhooks configurados.</p>
-    {% endif %}
+    </div>
 </div>
 
 <script>

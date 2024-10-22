@@ -1,37 +1,56 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>Campañas</h2>
-    <a href="{% url 'add_campaign' %}" class="btn btn-primary">Crear Campaña</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for campaign in campaigns %}
-                <tr>
-                    <td>{{ campaign.name }}</td>
-                    <td>{{ campaign.get_status_display }}</td>
-                    <td>
-                        <a href="{% url 'campaign_detail' campaign.id %}" class="btn btn-sm btn-info">Ver</a>
-                        {% if campaign.status == 'draft' %}
-                            <a href="{% url 'start_campaign' campaign.id %}" class="btn btn-sm btn-success">Iniciar</a>
-                        {% endif %}
-                        <form method="post" action="{% url 'delete_campaign' campaign.id %}" style="display:inline;">
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Campañas</h2>
+        <md-filled-button class="button-add" onclick="location.href='{% url 'add_campaign' %}'">
+            <span class="material-icons">add</span>
+            Añadir Campaña
+        </md-filled-button>
+    </div>
+
+    <div class="campaigns-grid">
+        {% for campaign in campaigns %}
+            <div class="campaign-card">
+                <div class="campaign-header">
+                    <h3>{{ campaign.name }}</h3>
+                    <span class="campaign-status {{ campaign.status }}">{{ campaign.get_status_display }}</span>
+                </div>
+                <div class="campaign-info">
+                    <p><strong>Grupo:</strong> {{ campaign.group.name }}</p>
+                    <p><strong>Plantilla de correo:</strong> {{ campaign.email_template.name }}</p>
+                    <p><strong>Fecha de creación:</strong> {{ campaign.created_at|date:"d/m/Y" }}</p>
+                </div>
+                <div class="campaign-actions">
+                    {% if campaign.status == 'draft' %}
+                        <form method="post" action="{% url 'start_campaign' campaign.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta campaña?')">Eliminar</button>
+                            <button type="submit" class="button-primary" onclick="return confirm('¿Estás seguro de que quieres iniciar esta campaña?');">
+                                <span class="material-icons">play_arrow</span>
+                                <span class="button-text">Iniciar</span>
+                            </button>
                         </form>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">No hay campañas.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% endif %}
+                    <button class="button-secondary" onclick="location.href='{% url 'campaign_detail' campaign.id %}'">
+                        <span class="material-icons">visibility</span>
+                        <span class="button-text">Ver</span>
+                    </button>
+                    <form method="post" action="{% url 'delete_campaign' campaign.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar esta campaña?');">
+                            <span class="material-icons">delete</span>
+                            <span class="button-text">Eliminar</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-campaigns">
+                <p>No hay campañas creadas aún.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

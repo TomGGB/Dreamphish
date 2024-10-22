@@ -115,7 +115,7 @@ def start_campaign(request, campaign_id):
             messages.warning(request, 'No se pudo enviar ningún correo. Verifique la configuración SMTP.')
     else:
         messages.error(request, 'La campaña ya ha sido iniciada.')
-    return redirect('dashboard')
+    return redirect('campaign_list')
 
 
 @login_required
@@ -203,6 +203,13 @@ def export_campaign_results(request, campaign_id, format='csv'):
         response['Content-Disposition'] = f'attachment; filename="resultados_campana_{campaign.name}.xlsx"'
 
     return response
+
+
+@login_required
+def refresh_campaign_results(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
+    results = CampaignResult.objects.filter(campaign=campaign)
+    return render(request, 'campaign_detail.html', {'campaign': campaign, 'results': results})
 
 
 

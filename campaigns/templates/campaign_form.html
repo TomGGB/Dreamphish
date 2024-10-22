@@ -1,10 +1,36 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Campaña</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>{% if form.instance.pk %}Editar{% else %}Añadir{% endif %} Campaña</h2>
+    </div>
+
+    <div class="content-div">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="button-primary">
+                        <span class="material-icons">save</span>
+                        Guardar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('edit/<int:group_id>/', views.edit_group, name='edit_group'),
     path('import_csv/', views.import_targets_from_csv, name='import_csv'),
     path('delete_target/<int:target_id>/', views.delete_target, name='delete_target'),
+    path('edit_target/<int:group_id>/<int:target_id>/', views.edit_target, name='edit_target'),
 ]
 
 if settings.DEBUG:

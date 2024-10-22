@@ -8,8 +8,8 @@ from email.mime.text import MIMEText
 
 @login_required
 def smtp_list(request):
-    smtps = SMTP.objects.filter(user=request.user)
-    return render(request, 'smtp_list.html', {'smtps': smtps})
+    smtp_profiles = SMTP.objects.filter(user=request.user)
+    return render(request, 'smtp_list.html', {'smtp_profiles': smtp_profiles})
 
 @login_required
 def add_smtp(request):
