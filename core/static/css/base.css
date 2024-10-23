@@ -123,12 +123,14 @@ body {
 
 #sidebar .nav-link:hover,
 #sidebar .nav-link.active {
-    background-color: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
     transform: translateX(5px);
 }
 
 #sidebar .nav-link.active {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
     font-weight: 700;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -146,7 +148,6 @@ main {
     margin-left: 19dvw;
     height: calc(100dvh - 40px);
     position: relative;
-    border: 2px solid var(--md-sys-color-primary);
 }
 
 
@@ -497,7 +498,7 @@ md-assist-chip {
 }
 
 md-assist-chip:hover {
-    background-color: var(--md-sys-color-primary-container);
+    opacity: 0.8;
 }
 
 md-assist-chip .material-icons {
@@ -527,49 +528,6 @@ md-assist-chip .material-icons {
     gap: 10px;
     flex: 1;
     width: 80%;
-}
-
-.input-fields md-outlined-text-field {
-    flex: 1 1 200px;
-    min-width: 150px;
-    margin: auto;
-}
-
-.target-row md-filled-tonal-button {
-    flex-shrink: 0;
-    margin: auto;
-}
-
-@media (max-width: 768px) {
-    .target-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .target-row md-filled-tonal-button {
-        align-self: flex-end;
-        margin-top: 10px;
-    }
-}
-
-md-filled-button,
-md-filled-tonal-button {
-    margin: 20px 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-md-filled-button .material-icons,
-md-filled-tonal-button .material-icons {
-    margin-right: 8px;
-}
-
-md-filled-button *,
-md-filled-tonal-button * {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* Estilos para los detalles de los targets */
@@ -1032,11 +990,11 @@ md-filled-tonal-button * {
     text-decoration: none;
     text-transform: uppercase;
     transition: all 0.3s ease;
-    height: 5dvh;
-    font-size: 14px;
+    height: 36px;
+    font-size: 10px;
     letter-spacing: 0.5px;
     margin: 10px;
-    width: 7dvw;
+    width: 8dvw;
 }
 
 
@@ -1053,7 +1011,7 @@ md-filled-tonal-button * {
 .button-add {
     background-color: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
-    border-radius: 20px;
+    width: 15%;
 }
 
 .button-delete {
