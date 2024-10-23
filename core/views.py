@@ -4,6 +4,7 @@ from .models import SMTP,LandingPage, CampaignResult, Webhook
 from .forms import SMTPForm, TestSMTPForm
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -46,19 +47,27 @@ def login_view(request):
     return render(request, 'core/login.html', {'form': form})
 
 
-def send_phishing_email(smtp_config, to_email, subject, body):
+def send_phishing_email(smtp_config, to_email, subject, body, token):
     try:
         from_email = smtp_config.from_address
         with smtplib.SMTP(smtp_config.host, smtp_config.port, timeout=30) as server:
             server.starttls()
             server.login(smtp_config.username, smtp_config.password)
-            msg = MIMEText(body, 'html')
+            msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
             msg['From'] = from_email
             msg['To'] = to_email
-            msg['Importance'] = 'High'  # Marcar el correo como importante
-            msg['X-Priority'] = '1'  # Prioridad alta (1 es la más alta, 5 la más baja)
+
+            # Crear versiones de texto y HTML del mensaje
+            text_part = MIMEText(f"Este es un mensaje de texto plano. Si ve esto, su cliente de correo no soporta HTML.", 'plain')
+            html_part = MIMEText(body, 'html')
+
+            # Añadir ambas versiones al mensaje
+            msg.attach(text_part)
+            msg.attach(html_part)
+
             server.send_message(msg)
+        return True
     except Exception as e:
         raise Exception(f"Error al enviar correo: {str(e)}")
 
@@ -190,22 +199,21 @@ def track_email_open(request, token):
         try:
             result = CampaignResult.objects.get(token=token)
             if not result.email_opened:
-                # Verificar si el User-Agent es de un proxy de correo conocido
-                user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
-                known_proxies = ['googleimageproxy', 'outlook-ios', 'yahoo']
+                result.email_opened = True
+                result.opened_timestamp = timezone.localtime()
+                result.status = 'opened'
+                result.save()
                 
-                if not any(proxy in user_agent for proxy in known_proxies):
-                    result.email_opened = True
-                    result.opened_timestamp = timezone.localtime()
-                    result.status = 'opened'
-                    result.save()
-                    
-                    # Enviar webhook
-                    send_webhook(result.campaign.id, result.id, 'email_opened', result.target.email)
+                # Enviar webhook
+                send_webhook(result.campaign.id, result.id, 'email_opened', result.target.email)
         except CampaignResult.DoesNotExist:
             pass
         
-        return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+        # Devolver una respuesta apropiada según el tipo de solicitud
+        if 'image' in request.GET:
+            return HttpResponse(b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B', content_type='image/gif')
+        else:
+            return HttpResponse('OK')
 
 def serve_media(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

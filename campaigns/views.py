@@ -79,19 +79,23 @@ def start_campaign(request, campaign_id):
             for a in soup.find_all('a', href=True):
                 a['href'] = landing_page_url
             
-            # Añadir la imagen de tracking
+            # Añadir múltiples métodos de tracking
             tracking_url = f"http://{public_domain}/track/{token}/"
             tracking_img = soup.new_tag('img', src=tracking_url, width="1", height="1", style="display:none;")
+            tracking_link = soup.new_tag('a', href=tracking_url, style="display:none;")
+            tracking_link.string = "Tracking Link"
             
             # Asegurarse de que haya un cuerpo en el HTML
             if soup.body:
                 soup.body.append(tracking_img)
+                soup.body.append(tracking_link)
             else:
-                # Si no hay cuerpo, crear uno y añadir el contenido original y la imagen de tracking
                 new_body = soup.new_tag('body')
                 new_body.extend(soup.contents)
                 new_body.append(tracking_img)
-                soup.append(new_body)
+                new_body.append(tracking_link)
+                soup = BeautifulSoup('<html></html>', 'html.parser')
+                soup.html.append(new_body)
             
             modified_email_body = str(soup)
             
@@ -100,7 +104,8 @@ def start_campaign(request, campaign_id):
                     campaign.smtp,
                     target.email,
                     campaign.email_template.subject,
-                    modified_email_body
+                    modified_email_body,
+                    token
                 )
                 result.email_sent = True
                 result.save()
@@ -210,6 +215,8 @@ def refresh_campaign_results(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
     results = CampaignResult.objects.filter(campaign=campaign)
     return render(request, 'campaign_detail.html', {'campaign': campaign, 'results': results})
+
+
 
 
 
