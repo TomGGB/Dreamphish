@@ -15,6 +15,7 @@ from core.models import CampaignResult
 from core.utils import generate_unique_token
 from django.utils import timezone
 import logging
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -150,14 +151,29 @@ def send_webhook(campaign_id, result_id, event_type, email, form_data=None):
         webhooks = Webhook.objects.filter(user=campaign.user, is_active=True)
 
         for webhook in webhooks:
+            # Determinar el timestamp correcto basado en el tipo de evento
+            if event_type == 'email_opened':
+                event_timestamp = result.opened_timestamp
+            elif event_type == 'landing_page_opened':
+                event_timestamp = result.landing_page_opened_timestamp
+            else:
+                event_timestamp = result.sent_timestamp
+
+            # Si no hay timestamp específico, usar la hora actual
+            if not event_timestamp:
+                event_timestamp = timezone.now()
+
+            # Asegurarse de que el timestamp esté en UTC
+            event_timestamp = event_timestamp.astimezone(pytz.UTC)
+
             payload = {
                 'campaign_id': campaign_id,
                 'campaign_name': campaign.name,
                 'target_id': target.id,
                 'target_email': email,
                 'event_type': event_type,
-                'timestamp': timezone.now().isoformat(),
-                'ip_address': result.ip_address  # Añadimos la IP del target
+                'timestamp': event_timestamp.isoformat(),
+                'ip_address': result.ip_address
             }
             
             if form_data:
