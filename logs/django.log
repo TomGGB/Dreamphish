@@ -4407,3 +4407,65 @@ C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\smtp\views.py 
 Watching for file changes with StatReloader
 Watching for file changes with StatReloader
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Starting new HTTPS connection (1): webhook.site:443
+https://webhook.site:443 "POST /dffd6a15-f2be-42f8-b1e6-5bf23212887d HTTP/10" 429 None
+Error al enviar webhook: 429 - <!DOCTYPE html>
+<html>
+<head>
+    <title>Error: Request limit exceeded. Sign up to unlock more requests. - Webhook.site</title>
+    <link href="https://cdn.webhook.site/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="padding: 50px">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><img src="https://cdn.webhook.site/icon.png" alt="Webhook.site Logo" style="width:40px; margin-top: -5px">
+                Webhook.site Error</h1>
+
+            <p class="lead">Request limit exceeded. Sign up to unlock more requests.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4 text-center">
+                            <p>
+                        You have been rate limited due to too many requests to this URL.
+    This is either because you have not purchased
+    a Webhook.site subscription, or the endpoint has a rate limit.<br>
+    <br>
+    To remove the request limit limit, you can upgrade to a Webhook.site subscription.
+    <br><br>
+    If you are already subscribed and getting this error, please <a href="https://support.webhook.site">contact Webhook.site Support</a>.
+    <br><br>
+            <a class="btn btn-lg btn-success"  href="/register">Sign Up Now</a>
+                    </p>
+                    </div>
+    </div>
+    <div class="row" style="margin-top: 40px">
+        <div class="col-sm-12 text-center">
+            <p class="small"><a href="/">
+                    <i class="bi-house-fill"></i> Home</a>
+                &emsp;
+                <a href="/control-panel">
+                    <i class="bi-gear-fill"></i> Control Panel</a>
+                &emsp;
+                <a href="/register">
+                    <i class="bi-person-add"></i> Create Account</a>
+                &emsp;
+
+                <a href="/login">
+                    <i class="bi-door-open-fill"></i> Login</a></p>
+            <br>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+Starting new HTTPS connection (1): eoe1vh8i94uhp9d.m.pipedream.net:443
+https://eoe1vh8i94uhp9d.m.pipedream.net:443 "POST / HTTP/11" 200 408
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+C:\Users\lanat\OneDrive\Escritorio\DreamLab\Dreamphish\dreamphish\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader

@@ -190,13 +190,18 @@ def track_email_open(request, token):
         try:
             result = CampaignResult.objects.get(token=token)
             if not result.email_opened:
-                result.email_opened = True
-                result.opened_timestamp = timezone.localtime()
-                result.status = 'opened'
-                result.save()
+                # Verificar si el User-Agent es de un proxy de correo conocido
+                user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+                known_proxies = ['googleimageproxy', 'outlook-ios', 'yahoo']
                 
-                # Enviar webhook
-                send_webhook(result.campaign.id, result.id, 'email_opened', result.target.email)
+                if not any(proxy in user_agent for proxy in known_proxies):
+                    result.email_opened = True
+                    result.opened_timestamp = timezone.localtime()
+                    result.status = 'opened'
+                    result.save()
+                    
+                    # Enviar webhook
+                    send_webhook(result.campaign.id, result.id, 'email_opened', result.target.email)
         except CampaignResult.DoesNotExist:
             pass
         
